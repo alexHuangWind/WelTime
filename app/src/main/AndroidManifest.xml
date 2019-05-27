@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".TimeTableActivity"
+            android:name=".activities.TimeTableActivity"
             android:label="@string/title_activity_time_table"
             android:theme="@style/AppTheme.NoActionBar"> <intent-filter>
             <action android:name="android.intent.action.MAIN" />
