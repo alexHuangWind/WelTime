@@ -8,11 +8,11 @@
         android:checkableBehavior="none">
         <item
             android:id="@+id/schoolwebsitemenu"
-            android:icon="@drawable/baseline_open_in_browser_black_18"
+            android:icon="@drawable/home"
             android:title="@string/school_website" />
         <item
             android:id="@+id/moodlewebsitemenu"
-            android:icon="@drawable/baseline_open_in_browser_black_18"
+            android:icon="@drawable/moodleweltec"
             android:title="@string/moodle_website" />
     </group>
 

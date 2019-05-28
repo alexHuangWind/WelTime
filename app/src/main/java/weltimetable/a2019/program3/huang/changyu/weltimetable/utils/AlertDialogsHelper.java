@@ -1,7 +1,6 @@
 package weltimetable.a2019.program3.huang.changyu.weltimetable.utils;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -30,13 +29,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.adapters.FragmentsTabAdapter;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.adapters.WeekAdapter;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.models.FragmentsTabAdapter;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.models.WeekAdapter;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.models.Week;
 
 
 /**
- * Created by Ulan on 22.10.2018.
+ * Created by changyu on 20.05.2019.
+ * email：alexchyandroid@gmail.com
  */
 public class AlertDialogsHelper {
 
@@ -147,14 +147,14 @@ public class AlertDialogsHelper {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(TextUtils.isEmpty(subject.getText()) || TextUtils.isEmpty(teacher.getText()) || TextUtils.isEmpty(room.getText())) {
+                if (TextUtils.isEmpty(subject.getText()) || TextUtils.isEmpty(teacher.getText()) || TextUtils.isEmpty(room.getText())) {
                     for (Map.Entry<Integer, EditText> entry : editTextHashs.entrySet()) {
-                        if(TextUtils.isEmpty(entry.getValue().getText())) {
+                        if (TextUtils.isEmpty(entry.getValue().getText())) {
                             entry.getValue().setError(activity.getResources().getString(entry.getKey()) + " " + activity.getResources().getString(R.string.field_error));
                             entry.getValue().requestFocus();
                         }
                     }
-                } else if(!from_time.getText().toString().matches(".*\\d+.*") || !to_time.getText().toString().matches(".*\\d+.*")) {
+                } else if (!from_time.getText().toString().matches(".*\\d+.*") || !to_time.getText().toString().matches(".*\\d+.*")) {
                     Snackbar.make(alertLayout, R.string.time_error, Snackbar.LENGTH_LONG).show();
                 } else {
                     DbHelper db = new DbHelper(activity);
@@ -202,7 +202,9 @@ public class AlertDialogsHelper {
                             }
                         }, mHour, mMinute, true);
                 timePickerDialog.setTitle(R.string.choose_time);
-                timePickerDialog.show(); }});
+                timePickerDialog.show();
+            }
+        });
 
         to_time.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -274,14 +276,14 @@ public class AlertDialogsHelper {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(TextUtils.isEmpty(subject.getText()) || TextUtils.isEmpty(teacher.getText()) || TextUtils.isEmpty(room.getText())) {
+                if (TextUtils.isEmpty(subject.getText()) || TextUtils.isEmpty(teacher.getText()) || TextUtils.isEmpty(room.getText())) {
                     for (Map.Entry<Integer, EditText> entry : editTextHashs.entrySet()) {
-                        if(TextUtils.isEmpty(entry.getValue().getText())) {
+                        if (TextUtils.isEmpty(entry.getValue().getText())) {
                             entry.getValue().setError(activity.getResources().getString(entry.getKey()) + " " + activity.getResources().getString(R.string.field_error));
                             entry.getValue().requestFocus();
                         }
                     }
-                } else if(!from_time.getText().toString().matches(".*\\d+.*") || !to_time.getText().toString().matches(".*\\d+.*")) {
+                } else if (!from_time.getText().toString().matches(".*\\d+.*") || !to_time.getText().toString().matches(".*\\d+.*")) {
                     Snackbar.make(alertLayout, R.string.time_error, Snackbar.LENGTH_LONG).show();
                 } else {
                     DbHelper dbHelper = new DbHelper(activity);
@@ -289,6 +291,7 @@ public class AlertDialogsHelper {
                     ColorDrawable buttonColor = (ColorDrawable) select_color.getBackground();
                     week.setSubject(subject.getText().toString());
                     week.setFragment(fragment.find() ? fragment.group() : null);
+                    fragment.group();
                     week.setTeacher(teacher.getText().toString());
                     week.setRoom(room.getText().toString());
                     week.setColor(buttonColor.getColor());

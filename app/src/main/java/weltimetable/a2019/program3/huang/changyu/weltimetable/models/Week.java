@@ -1,14 +1,16 @@
 package weltimetable.a2019.program3.huang.changyu.weltimetable.models;
 
 /**
- * Created by Ulan on 07.09.2018.
+ * Created by changyu on 20.05.2019.
+ * email：alexchyandroid@gmail.com
  */
 public class Week {
 
     private String subject, fragment, teacher, room, fromtime, totime, time;
     private int id, color;
 
-    public Week() {}
+    public Week() {
+    }
 
     public Week(String subject, String teacher, String room, String fromtime, String totime, int color) {
         this.subject = subject;

@@ -9,12 +9,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.WebViewActivity"
+            android:name=".component.ActivityWebView"
             android:label="@string/title_activity_web_view"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".activities.TimeTableActivity"
+            android:name=".component.ActivityTimeTable"
             android:label="@string/title_activity_time_table"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

@@ -13,11 +13,12 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.adapters.WeekAdapter;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.models.WeekAdapter;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.models.Week;
 
 /**
- * Created by Ulan on 03.12.2018.
+ * Created by changyu on 20.05.2019.
+ * email：alexchyandroid@gmail.com
  */
 public class FragmentHelper {
 
@@ -25,9 +26,9 @@ public class FragmentHelper {
         return new AbsListView.MultiChoiceModeListener() {
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                final int checkedCount  = listView.getCheckedItemCount();
-                mode.setTitle(checkedCount  + " " + activity.getResources().getString(R.string.selected));
-                if(checkedCount == 0) mode.finish();
+                final int checkedCount = listView.getCheckedItemCount();
+                mode.setTitle(checkedCount + " " + activity.getResources().getString(R.string.selected));
+                if (checkedCount == 0) mode.finish();
             }
 
             @Override

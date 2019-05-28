@@ -3,16 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".component.MondayFragment">
+    tools:context=".component.FragmentSunday">
+
     <ListView
-        android:id="@+id/mondaylist"
+        android:id="@+id/sundaylist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:listSelector="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@null"
         />
-
-
 
 </FrameLayout>

@@ -1,4 +1,4 @@
-package weltimetable.a2019.program3.huang.changyu.weltimetable.fragments;
+package weltimetable.a2019.program3.huang.changyu.weltimetable.component;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,23 +7,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.adapters.WeekAdapter;
+
+
+;import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.models.WeekAdapter;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.DbHelper;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.FragmentHelper;
 
 
-public class SaturdayFragment extends Fragment {
+/**
+ * Created by Ulan on 06.09.2018.
+ */
+public class SundayFragment extends Fragment {
 
-    public static final String KEY_SATURDAY_FRAGMENT = "Saturday";
+    public static final String KEY_SUNDAY_FRAGMENT = "Sunday";
     private DbHelper db;
     private ListView listView;
     private WeekAdapter adapter;
-
+    private int listposition = 0;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.f_saturday, container, false);
+        View view = inflater.inflate(R.layout.f_sunday, container, false);
         setupAdapter(view);
         setupListViewMultiSelect();
         return view;
@@ -31,8 +36,8 @@ public class SaturdayFragment extends Fragment {
 
     private void setupAdapter(View view) {
         db = new DbHelper(getActivity());
-        listView = view.findViewById(R.id.fragmentlist);
-        adapter = new WeekAdapter(getActivity(), listView, R.layout.listview_week_adapter, db.getWeek(KEY_SATURDAY_FRAGMENT));
+        listView = view.findViewById(R.id.sundaylist);
+        adapter = new WeekAdapter(getActivity(), listView, R.layout.listview_week_adapter, db.getWeek(KEY_SUNDAY_FRAGMENT));
         listView.setAdapter(adapter);
     }
 

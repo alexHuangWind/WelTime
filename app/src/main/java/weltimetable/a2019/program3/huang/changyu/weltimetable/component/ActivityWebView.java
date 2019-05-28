@@ -1,10 +1,8 @@
-package weltimetable.a2019.program3.huang.changyu.weltimetable.activities;
+package weltimetable.a2019.program3.huang.changyu.weltimetable.component;
 
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -15,10 +13,15 @@ import android.webkit.WebViewClient;
 
 import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
 
-public class WebViewActivity extends AppCompatActivity {
+/**
+ * Created by changyu on 20.05.2019.
+ * email：alexchyandroid@gmail.com
+ */
+public class ActivityWebView extends AppCompatActivity {
 
     private WebView webView;
     private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,19 +35,20 @@ public class WebViewActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(webView.canGoBack()){
+                if (webView.canGoBack()) {
                     webView.goBack();
-                }else{
+                } else {
                     finish();//返回
                 }
             }
         });
-        String url = (String)getIntent().getExtras().getSerializable(getString(R.string.weltime_url));
+        String url = (String) getIntent().getExtras().getSerializable(getString(R.string.weltime_url));
         toolbar.setTitle(url);
         initWebView(url);
     }
+
     private void initWebView(String url) {
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

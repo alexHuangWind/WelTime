@@ -3,10 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.FridayFragment">
-    <include
-        layout="@layout/f_list_layout"
+    tools:context=".component.FridayFragment">
+    <ListView
+        android:id="@+id/fridaylist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:listSelector="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@null"
+        />
 
 </FrameLayout>

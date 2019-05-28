@@ -1,4 +1,4 @@
-package weltimetable.a2019.program3.huang.changyu.weltimetable.adapters;
+package weltimetable.a2019.program3.huang.changyu.weltimetable.models;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -20,13 +20,13 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.Week;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.AlertDialogsHelper;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.DbHelper;
 
 
 /**
- * Created by Ulan on 08.09.2018.
+ * Created by changyu on 20.05.2019.
+ * email：alexchyandroid@gmail.com
  */
 public class WeekAdapter extends ArrayAdapter<Week> {
 
@@ -67,10 +67,10 @@ public class WeekAdapter extends ArrayAdapter<Week> {
         week = new Week(subject, teacher, room, time_from, time_to, color);
         final ViewHolder holder;
 
-        if(convertView == null){
+        if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(mActivity);
             convertView = inflater.inflate(mResource, parent, false);
-            holder= new ViewHolder();
+            holder = new ViewHolder();
             holder.subject = convertView.findViewById(R.id.subject);
             holder.teacher = convertView.findViewById(R.id.teacher);
             holder.time = convertView.findViewById(R.id.time);
@@ -78,8 +78,7 @@ public class WeekAdapter extends ArrayAdapter<Week> {
             holder.popup = convertView.findViewById(R.id.popupbtn);
             holder.cardView = convertView.findViewById(R.id.week_cardview);
             convertView.setTag(holder);
-        }
-        else{
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
@@ -137,7 +136,7 @@ public class WeekAdapter extends ArrayAdapter<Week> {
                 int key = checkedItems.keyAt(i);
                 if (checkedItems.get(key)) {
                     holder.popup.setVisibility(View.INVISIBLE);
-                    }
+                }
             }
         } else {
             holder.popup.setVisibility(View.VISIBLE);
