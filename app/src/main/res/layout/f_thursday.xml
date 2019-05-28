@@ -5,13 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ThursdayFragment">
 
-    <ListView
-        android:id="@+id/thursdaylist"
+    <include
+        layout="@layout/f_list_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:listSelector="@android:color/transparent"
-        android:cacheColorHint="@android:color/transparent"
-        android:divider="@null"
-        />
+        android:layout_height="match_parent" />
+
 
 </FrameLayout>

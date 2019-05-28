@@ -63,4 +63,7 @@
     <string name="do_not_have_lessons">You do not have lessons!</string>
     <string name="title_activity_web_view">WebViewActivity</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

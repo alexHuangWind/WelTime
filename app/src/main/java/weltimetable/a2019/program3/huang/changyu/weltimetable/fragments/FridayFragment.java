@@ -26,7 +26,7 @@ public class FridayFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_friday, container, false);
+        View view = inflater.inflate(R.layout.f_friday, container, false);
         setupAdapter(view);
         setupListViewMultiSelect();
         return view;
@@ -34,7 +34,7 @@ public class FridayFragment extends Fragment {
 
     private void setupAdapter(View view) {
         db = new DbHelper(getActivity());
-        listView = view.findViewById(R.id.fridaylist);
+        listView = view.findViewById(R.id.fragmentlist);
         adapter = new WeekAdapter(getActivity(), listView, R.layout.listview_week_adapter, db.getWeek(KEY_FRIDAY_FRAGMENT));
         listView.setAdapter(adapter);
     }
