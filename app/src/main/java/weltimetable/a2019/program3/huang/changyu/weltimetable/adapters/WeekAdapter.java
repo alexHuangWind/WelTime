@@ -103,7 +103,6 @@ public class WeekAdapter extends ArrayAdapter<Week> {
                                 weeklist.remove(position);
                                 notifyDataSetChanged();
                                 return true;
-
                             case R.id.edit_popup:
                                 final View alertLayout = mActivity.getLayoutInflater().inflate(R.layout.dialog_add_subject, null);
                                 AlertDialogsHelper.getEditSubjectDialog(mActivity, alertLayout, weeklist, mListView, position);

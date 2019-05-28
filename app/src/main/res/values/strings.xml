@@ -29,6 +29,9 @@
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="school_website">School website</string>
+    <string name="moodle_website">moodle website</string>
+    <string name="weltec_website">https://moodle.weltec.ac.nz/login/index.php</string>
+
     <string name="school_website_snackbar">Please, set URL of your school website in settings.</string>
 
     <string name="add_subject">Add subject</string>
@@ -48,16 +51,16 @@
     <string name="choose_time">Choose time</string>
     <string name="choose_date">Choose date</string>
     <string name="choose_color">Choose color</string>
-
+    <string name="weltime_url">weltime_url</string>
 
 
     <!-- Settings Activity strings -->
-    <string name="sevendays_setting">Enable 7 Days of the Week</string>
     <string name="school_website_setting">Change school website</string>
     <string name="school_website_setting_summary">Change URL of your school website</string>
 
     <!-- Notification -->
     <string name="notification_title">Today\'s lessons</string>
     <string name="do_not_have_lessons">You do not have lessons!</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
 
 </resources>

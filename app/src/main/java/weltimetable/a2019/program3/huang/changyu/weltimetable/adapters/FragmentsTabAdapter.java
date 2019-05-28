@@ -44,12 +44,5 @@ public class FragmentsTabAdapter extends FragmentStatePagerAdapter {
         return POSITION_NONE;
     }
 
-    public List<Fragment> getFragmentList() {
-        return mFragmentList;
-    }
 
-    public void removeFragment(Fragment fragment, int position) {
-        mFragmentList.remove(position);
-        mFragmentTitleList.remove(position);
-    }
 }
