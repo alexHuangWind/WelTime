@@ -1,4 +1,4 @@
-package weltimetable.a2019.program3.huang.changyu.weltimetable.component;
+package weltimetable.a2019.program3.huang.changyu.weltimetable.components;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

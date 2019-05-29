@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="weltimetable.a2019.program3.huang.changyu.weltimetable">
 <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,12 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".component.ActivityWebView"
+            android:name=".components.ActivityWebView"
             android:label="@string/title_activity_web_view"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".component.ActivityTimeTable"
+            android:name=".components.ActivityTimeTable"
             android:label="@string/title_activity_time_table"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

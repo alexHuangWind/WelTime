@@ -1,4 +1,4 @@
-package weltimetable.a2019.program3.huang.changyu.weltimetable.component;
+package weltimetable.a2019.program3.huang.changyu.weltimetable.components;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,17 +16,17 @@ import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.FragmentHelp
  * Created by changyu on 20.05.2019.
  * email：alexchyandroid@gmail.com
  */
-public class SaturdayFragment extends Fragment {
+public class TuesdayFragment extends Fragment {
 
-    public static final String KEY_SATURDAY_FRAGMENT = "Saturday";
-    private DbHelper db;
-    private ListView listView;
+    public static final String KEY_TUESDAY_FRAGMENT = "Tuesday";
     private WeekAdapter adapter;
+    private ListView listView;
+    private DbHelper db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.f_saturday, container, false);
+        View view = inflater.inflate(R.layout.f_tuesday, container, false);
         setupAdapter(view);
         setupListViewMultiSelect();
         return view;
@@ -34,8 +34,8 @@ public class SaturdayFragment extends Fragment {
 
     private void setupAdapter(View view) {
         db = new DbHelper(getActivity());
-        listView = view.findViewById(R.id.saturdaylist);
-        adapter = new WeekAdapter(getActivity(), listView, R.layout.listview_week_adapter, db.getWeek(KEY_SATURDAY_FRAGMENT));
+        listView = view.findViewById(R.id.tuesdaylist);
+        adapter = new WeekAdapter(getActivity(), listView, R.layout.listview_week_adapter, db.getWeek(KEY_TUESDAY_FRAGMENT));
         listView.setAdapter(adapter);
     }
 

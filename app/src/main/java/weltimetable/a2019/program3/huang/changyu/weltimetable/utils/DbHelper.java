@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.models.Week;
 
 /**
- * Created by Ulan on 07.09.2018.
+ * Created by changyu on 20.05.2019.
+ * email：alexchyandroid@gmail.com
  */
 public class DbHelper extends SQLiteOpenHelper{
 

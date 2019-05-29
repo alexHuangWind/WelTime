@@ -1,4 +1,4 @@
-package weltimetable.a2019.program3.huang.changyu.weltimetable.component;
+package weltimetable.a2019.program3.huang.changyu.weltimetable.components;
 
 
 import android.os.Bundle;
@@ -14,7 +14,14 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
@@ -40,6 +47,12 @@ public class ActivityTimeTable extends AppCompatActivity implements NavigationVi
     }
 
     private void init() {
+        initView();
+        initFireBase();
+        initCustomDialog();
+    }
+
+    private void initView() {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -50,28 +63,46 @@ public class ActivityTimeTable extends AppCompatActivity implements NavigationVi
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        setupFragments(toolbar);
-        setupCustomDialog();
+        initFragments(toolbar);
+    }
+
+    private void initFireBase() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("message");
+        myRef.setValue("Hello, World!");
+        // Read from the database
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String value = dataSnapshot.getValue(String.class);
+                Toast.makeText(getApplicationContext(),value,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
     }
 
 
-    private void setupCustomDialog() {
+    private void initCustomDialog() {
         final View alertLayout = getLayoutInflater().inflate(R.layout.dialog_add_subject, null);
         AlertDialogsHelper.getAddSubjectDialog(ActivityTimeTable.this, alertLayout, mAdapter, mViewPager);
     }
 
-    private void setupFragments(Toolbar toolbar) {
+    private void initFragments(Toolbar toolbar) {
         mAdapter = new FragmentsTabAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.viewPager);
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         mAdapter.addFragment(new MondayFragment(), getResources().getString(R.string.monday));
         mAdapter.addFragment(new TuesdayFragment(), getResources().getString(R.string.tuesday));
         mAdapter.addFragment(new WednesdayFragment(), getResources().getString(R.string.wednesday));
         mAdapter.addFragment(new ThursdayFragment(), getResources().getString(R.string.thursday));
         mAdapter.addFragment(new FridayFragment(), getResources().getString(R.string.friday));
         mAdapter.addFragment(new SaturdayFragment(), getResources().getString(R.string.saturday));
-        mAdapter.addFragment(new FragmentSunday(), getResources().getString(R.string.sunday));
+        mAdapter.addFragment(new SundayFragment(), getResources().getString(R.string.sunday));
         mViewPager.setAdapter(mAdapter);
         mViewPager.setPageTransformer(true, new PageTransformer3D());
         mViewPager.setCurrentItem(day == 1 ? 6 : day - 2, true);

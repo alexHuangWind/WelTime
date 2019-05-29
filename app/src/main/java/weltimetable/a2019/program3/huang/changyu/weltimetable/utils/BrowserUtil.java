@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.component.ActivityWebView;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.components.ActivityWebView;
 
 /**
  * Created by changyu on 20.05.2019.
