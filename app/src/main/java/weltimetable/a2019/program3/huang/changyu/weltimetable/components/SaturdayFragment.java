@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.WeekAdapter;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.models.ConstentValue;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TTInfoAdapter;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.DbHelper;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.FragmentHelper;
 
@@ -16,31 +17,15 @@ import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.FragmentHelp
  * Created by changyu on 20.05.2019.
  * email：alexchyandroid@gmail.com
  */
-public class SaturdayFragment extends Fragment {
+public class SaturdayFragment extends BaseFragment {
+    @Override
+    public int getLayoutID() {
+        return R.layout.f_saturday;
+    }
 
-    public static final String KEY_SATURDAY_FRAGMENT = "Saturday";
-    private DbHelper db;
-    private ListView listView;
-    private WeekAdapter adapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.f_saturday, container, false);
-        setupAdapter(view);
-        setupListViewMultiSelect();
-        return view;
-    }
-
-    private void setupAdapter(View view) {
-        db = new DbHelper(getActivity());
-        listView = view.findViewById(R.id.saturdaylist);
-        adapter = new WeekAdapter(getActivity(), listView, R.layout.listview_week_adapter, db.getWeek(KEY_SATURDAY_FRAGMENT));
-        listView.setAdapter(adapter);
-    }
-
-    private void setupListViewMultiSelect() {
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        listView.setMultiChoiceModeListener(FragmentHelper.setupListViewMultiSelect(getActivity(), listView, adapter, db));
+    public void initAdapter(View view) {
+        super.setupAdapter(view, R.id.saturdaylist, ConstentValue.SATURDAY);
     }
 }

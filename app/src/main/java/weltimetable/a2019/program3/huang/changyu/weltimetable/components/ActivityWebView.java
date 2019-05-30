@@ -10,7 +10,6 @@ import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
 import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
 
 /**

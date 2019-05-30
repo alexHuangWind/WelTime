@@ -16,22 +16,18 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-
-
 import org.xdty.preference.colorpicker.ColorPickerDialog;
 import org.xdty.preference.colorpicker.ColorPickerSwatch;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.models.FragmentsTabAdapter;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.WeekAdapter;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.Week;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TTInfoAdapter;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TimeTableInfo;
 
 
 /**
@@ -40,25 +36,24 @@ import weltimetable.a2019.program3.huang.changyu.weltimetable.models.Week;
  */
 public class AlertDialogsHelper {
 
-    public static void getEditSubjectDialog(final Activity activity, final View alertLayout, final ArrayList<Week> adapter, final ListView listView, int position) {
+    public static void getEditSubjectDialog(final Activity activity, final View alertLayout, final ArrayList<TimeTableInfo> adapter, final ListView listView, int position) {
         final HashMap<Integer, EditText> editTextHashs = new HashMap<>();
         final EditText subject = alertLayout.findViewById(R.id.subject_dialog);
-        editTextHashs.put(R.string.subject, subject);
         final EditText teacher = alertLayout.findViewById(R.id.teacher_dialog);
-        editTextHashs.put(R.string.teacher, teacher);
         final EditText room = alertLayout.findViewById(R.id.room_dialog);
-        editTextHashs.put(R.string.room, room);
         final TextView from_time = alertLayout.findViewById(R.id.from_time);
         final TextView to_time = alertLayout.findViewById(R.id.to_time);
         final Button select_color = alertLayout.findViewById(R.id.select_color);
-        final Week week = adapter.get(position);
-
-        subject.setText(week.getSubject());
-        teacher.setText(week.getTeacher());
-        room.setText(week.getRoom());
-        from_time.setText(week.getFromTime());
-        to_time.setText(week.getToTime());
-        select_color.setBackgroundColor(week.getColor() != 0 ? week.getColor() : Color.WHITE);
+        final TimeTableInfo timetableinfo = adapter.get(position);
+        editTextHashs.put(R.string.subject, subject);
+        editTextHashs.put(R.string.teacher, teacher);
+        editTextHashs.put(R.string.room, room);
+        subject.setText(timetableinfo.getSubject());
+        teacher.setText(timetableinfo.getTeacher());
+        room.setText(timetableinfo.getRoom());
+        from_time.setText(timetableinfo.getFromTime());
+        to_time.setText(timetableinfo.getToTime());
+        select_color.setBackgroundColor(timetableinfo.getColor() != 0 ? timetableinfo.getColor() : Color.WHITE);
 
         from_time.setOnClickListener(new View.OnClickListener() {
 
@@ -74,7 +69,7 @@ public class AlertDialogsHelper {
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
                                 from_time.setText(String.format("%02d:%02d", hourOfDay, minute));
-                                week.setFromTime(String.format("%02d:%02d", hourOfDay, minute));
+                                timetableinfo.setFromTime(String.format("%02d:%02d", hourOfDay, minute));
                             }
                         }, mHour, mMinute, true);
                 timePickerDialog.setTitle(R.string.choose_time);
@@ -96,7 +91,7 @@ public class AlertDialogsHelper {
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
                                 to_time.setText(String.format("%02d:%02d", hourOfDay, minute));
-                                week.setToTime(String.format("%02d:%02d", hourOfDay, minute));
+                                timetableinfo.setToTime(String.format("%02d:%02d", hourOfDay, minute));
                             }
                         }, hour, minute, true);
                 timePickerDialog.setTitle(R.string.choose_time);
@@ -158,14 +153,14 @@ public class AlertDialogsHelper {
                     Snackbar.make(alertLayout, R.string.time_error, Snackbar.LENGTH_LONG).show();
                 } else {
                     DbHelper db = new DbHelper(activity);
-                    WeekAdapter weekAdapter = (WeekAdapter) listView.getAdapter(); // In order to get notifyDataSetChanged() method.
+                    TTInfoAdapter TTInfoAdapter = (TTInfoAdapter) listView.getAdapter(); // In order to get notifyDataSetChanged() method.
                     ColorDrawable buttonColor = (ColorDrawable) select_color.getBackground();
-                    week.setSubject(subject.getText().toString());
-                    week.setTeacher(teacher.getText().toString());
-                    week.setRoom(room.getText().toString());
-                    week.setColor(buttonColor.getColor());
-                    db.updateWeek(week);
-                    weekAdapter.notifyDataSetChanged();
+                    timetableinfo.setSubject(subject.getText().toString());
+                    timetableinfo.setTeacher(teacher.getText().toString());
+                    timetableinfo.setRoom(room.getText().toString());
+                    timetableinfo.setColor(buttonColor.getColor());
+                    db.updateTimeTableInfo(timetableinfo);
+                    TTInfoAdapter.notifyDataSetChanged();
                     dialog.dismiss();
                 }
             }
@@ -183,11 +178,12 @@ public class AlertDialogsHelper {
         final TextView from_time = alertLayout.findViewById(R.id.from_time);
         final TextView to_time = alertLayout.findViewById(R.id.to_time);
         final Button select_color = alertLayout.findViewById(R.id.select_color);
-        final Week week = new Week();
+        final TimeTableInfo timetableinfo = new TimeTableInfo();
 
         from_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 final Calendar c = Calendar.getInstance();
                 int mHour = c.get(Calendar.HOUR_OF_DAY);
                 int mMinute = c.get(Calendar.MINUTE);
@@ -198,7 +194,7 @@ public class AlertDialogsHelper {
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
                                 from_time.setText(String.format("%02d:%02d", hourOfDay, minute));
-                                week.setFromTime(String.format("%02d:%02d", hourOfDay, minute));
+                                timetableinfo.setFromTime(String.format("%02d:%02d", hourOfDay, minute));
                             }
                         }, mHour, mMinute, true);
                 timePickerDialog.setTitle(R.string.choose_time);
@@ -219,7 +215,7 @@ public class AlertDialogsHelper {
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
                                 to_time.setText(String.format("%02d:%02d", hourOfDay, minute));
-                                week.setToTime(String.format("%02d:%02d", hourOfDay, minute));
+                                timetableinfo.setToTime(String.format("%02d:%02d", hourOfDay, minute));
                             }
                         }, hour, minute, true);
                 timePickerDialog.setTitle(R.string.choose_time);
@@ -258,8 +254,9 @@ public class AlertDialogsHelper {
         Button submit = alertLayout.findViewById(R.id.save);
         alert.setView(alertLayout);
         final AlertDialog dialog = alert.create();
-        FloatingActionButton fab = activity.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        Button add = activity.findViewById(R.id.add_sub);
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.show();
@@ -289,13 +286,13 @@ public class AlertDialogsHelper {
                     DbHelper dbHelper = new DbHelper(activity);
                     Matcher fragment = Pattern.compile("(.*Fragment)").matcher(adapter.getItem(viewPager.getCurrentItem()).toString());
                     ColorDrawable buttonColor = (ColorDrawable) select_color.getBackground();
-                    week.setSubject(subject.getText().toString());
-                    week.setFragment(fragment.find() ? fragment.group() : null);
+                    timetableinfo.setSubject(subject.getText().toString());
+                    timetableinfo.setFragment(fragment.find() ? fragment.group() : null);
                     fragment.group();
-                    week.setTeacher(teacher.getText().toString());
-                    week.setRoom(room.getText().toString());
-                    week.setColor(buttonColor.getColor());
-                    dbHelper.insertWeek(week);
+                    timetableinfo.setTeacher(teacher.getText().toString());
+                    timetableinfo.setRoom(room.getText().toString());
+                    timetableinfo.setColor(buttonColor.getColor());
+                    dbHelper.insertTimeTableInfo(timetableinfo);
                     adapter.notifyDataSetChanged();
                     subject.getText().clear();
                     teacher.getText().clear();

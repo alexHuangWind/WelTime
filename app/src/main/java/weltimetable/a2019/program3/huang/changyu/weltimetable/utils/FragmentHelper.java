@@ -13,8 +13,8 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.WeekAdapter;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.Week;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TTInfoAdapter;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TimeTableInfo;
 
 /**
  * Created by changyu on 20.05.2019.
@@ -22,7 +22,7 @@ import weltimetable.a2019.program3.huang.changyu.weltimetable.models.Week;
  */
 public class FragmentHelper {
 
-    public static AbsListView.MultiChoiceModeListener setupListViewMultiSelect(final Activity activity, final ListView listView, final WeekAdapter adapter, final DbHelper db) {
+    public static AbsListView.MultiChoiceModeListener setupListViewMultiSelect(final Activity activity, final ListView listView, final TTInfoAdapter adapter, final DbHelper db) {
         return new AbsListView.MultiChoiceModeListener() {
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
@@ -35,17 +35,17 @@ public class FragmentHelper {
             public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_delete:
-                        ArrayList<Week> removelist = new ArrayList<>();
+                        ArrayList<TimeTableInfo> removelist = new ArrayList<>();
                         SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
                         for (int i = 0; i < checkedItems.size(); i++) {
                             int key = checkedItems.keyAt(i);
                             if (checkedItems.get(key)) {
-                                db.deleteWeekById(adapter.getItem(key));
-                                removelist.add(adapter.getWeekList().get(key));
+                                db.deleteTTInfoById(adapter.getItem(key));
+                                removelist.add(adapter.getInfoList().get(key));
                             }
                         }
-                        adapter.getWeekList().removeAll(removelist);
-                        db.updateWeek(adapter.getWeek());
+                        adapter.getInfoList().removeAll(removelist);
+                        db.updateTimeTableInfo(adapter.getmTTInfo());
                         adapter.notifyDataSetChanged();
                         mode.finish();
                         return true;

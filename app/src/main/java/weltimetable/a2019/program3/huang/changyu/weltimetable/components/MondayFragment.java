@@ -9,7 +9,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.WeekAdapter;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.models.ConstentValue;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TTInfoAdapter;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.DbHelper;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.FragmentHelper;
 
@@ -17,33 +18,16 @@ import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.FragmentHelp
  * Created by changyu on 20.05.2019.
  * email：alexchyandroid@gmail.com
  */
-public class MondayFragment extends Fragment {
-
-    public static final String KEY_MONDAY_FRAGMENT = "Monday";
-    private DbHelper db;
-    private ListView listView;
-    private WeekAdapter adapter;
-    private ImageView popup;
+public class MondayFragment extends BaseFragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.f_monday, container, false);
-        setupAdapter(view);
-        setupListViewMultiSelect();
-        popup = view.findViewById(R.id.popupbtn);
-        return view;
+    public int getLayoutID() {
+        return R.layout.f_monday;
     }
 
-    private void setupAdapter(View view) {
-        db = new DbHelper(getActivity());
-        listView = view.findViewById(R.id.mondaylist);
-        adapter = new WeekAdapter(getActivity(), listView, R.layout.listview_week_adapter, db.getWeek(KEY_MONDAY_FRAGMENT));
-        listView.setAdapter(adapter);
-    }
 
-    private void setupListViewMultiSelect() {
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        listView.setMultiChoiceModeListener(FragmentHelper.setupListViewMultiSelect(getActivity(), listView, adapter, db));
+    @Override
+    public void initAdapter(View view) {
+        super.setupAdapter(view, R.id.mondaylist, ConstentValue.MONDAY);
     }
 }

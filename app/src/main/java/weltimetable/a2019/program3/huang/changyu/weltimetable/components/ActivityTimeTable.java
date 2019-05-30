@@ -15,16 +15,12 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.Calendar;
-
 import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.models.FragmentsTabAdapter;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.models.PageTransformer3D;
@@ -48,10 +44,38 @@ public class ActivityTimeTable extends AppCompatActivity implements NavigationVi
 
     private void init() {
         initView();
-        initFireBase();
+//        initFireBase();
         initCustomDialog();
     }
 
+
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        final NavigationView navigationView = findViewById(R.id.nav_view);
+        switch (item.getItemId()) {
+            case R.id.moodlewebsitemenu:
+                String moodleWebsite = "https://moodle.weltec.ac.nz";
+                if (!TextUtils.isEmpty(moodleWebsite)) {
+                    BrowserUtil.openUrlInChromeCustomTab(getApplicationContext(), moodleWebsite);
+                } else {
+                    Snackbar.make(navigationView, R.string.school_website_snackbar, Snackbar.LENGTH_SHORT).show();
+                }
+                return true;
+            case R.id.schoolwebsitemenu:
+                String schoolWebsite = "https://weltec.ac.nz";
+                if (!TextUtils.isEmpty(schoolWebsite)) {
+                    BrowserUtil.openUrlInChromeCustomTab(getApplicationContext(), schoolWebsite);
+                } else {
+                    Snackbar.make(navigationView, R.string.school_website_snackbar, Snackbar.LENGTH_SHORT).show();
+                }
+                return true;
+            default:
+                DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+        }
+    }
     private void initView() {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -66,6 +90,10 @@ public class ActivityTimeTable extends AppCompatActivity implements NavigationVi
         initFragments(toolbar);
     }
 
+    /**
+     * TODO use fireBase to storage timetableinfo
+     * already success added firebase library and tested
+     */
     private void initFireBase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("message");
@@ -96,13 +124,13 @@ public class ActivityTimeTable extends AppCompatActivity implements NavigationVi
         mAdapter = new FragmentsTabAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.viewPager);
         int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-        mAdapter.addFragment(new MondayFragment(), getResources().getString(R.string.monday));
-        mAdapter.addFragment(new TuesdayFragment(), getResources().getString(R.string.tuesday));
-        mAdapter.addFragment(new WednesdayFragment(), getResources().getString(R.string.wednesday));
-        mAdapter.addFragment(new ThursdayFragment(), getResources().getString(R.string.thursday));
-        mAdapter.addFragment(new FridayFragment(), getResources().getString(R.string.friday));
-        mAdapter.addFragment(new SaturdayFragment(), getResources().getString(R.string.saturday));
-        mAdapter.addFragment(new SundayFragment(), getResources().getString(R.string.sunday));
+        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.monday)),getResources().getString(R.string.monday));
+        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.tuesday)),getResources().getString(R.string.tuesday));
+        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.wednesday)),getResources().getString(R.string.wednesday));
+        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.thursday)),getResources().getString(R.string.thursday));
+        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.friday)),getResources().getString(R.string.friday));
+        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.saturday)),getResources().getString(R.string.saturday));
+        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.sunday)),getResources().getString(R.string.sunday));
         mViewPager.setAdapter(mAdapter);
         mViewPager.setPageTransformer(true, new PageTransformer3D());
         mViewPager.setCurrentItem(day == 1 ? 6 : day - 2, true);
@@ -124,32 +152,5 @@ public class ActivityTimeTable extends AppCompatActivity implements NavigationVi
             }
         });
 
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        final NavigationView navigationView = findViewById(R.id.nav_view);
-        switch (item.getItemId()) {
-            case R.id.moodlewebsitemenu:
-                String moodleWebsite = "https://moodle.weltec.ac.nz";
-                if (!TextUtils.isEmpty(moodleWebsite)) {
-                    BrowserUtil.openUrlInChromeCustomTab(getApplicationContext(), moodleWebsite);
-                } else {
-                    Snackbar.make(navigationView, R.string.school_website_snackbar, Snackbar.LENGTH_SHORT).show();
-                }
-                return true;
-            case R.id.schoolwebsitemenu:
-                String schoolWebsite = "https://weltec.ac.nz";
-                if (!TextUtils.isEmpty(schoolWebsite)) {
-                    BrowserUtil.openUrlInChromeCustomTab(getApplicationContext(), schoolWebsite);
-                } else {
-                    Snackbar.make(navigationView, R.string.school_website_snackbar, Snackbar.LENGTH_SHORT).show();
-                }
-                return true;
-            default:
-                DrawerLayout drawer = findViewById(R.id.drawer_layout);
-                drawer.closeDrawer(GravityCompat.START);
-                return true;
-        }
     }
 }
