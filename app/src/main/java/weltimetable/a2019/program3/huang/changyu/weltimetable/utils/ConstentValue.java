@@ -1,5 +1,9 @@
-package weltimetable.a2019.program3.huang.changyu.weltimetable.models;
+package weltimetable.a2019.program3.huang.changyu.weltimetable.utils;
 
+/**
+ * Created by changyu on 20.05.2019.
+ * email：alexchyandroid@gmail.com
+ */
 public class ConstentValue {
     public static final String MONDAY = "Monday";
     public static final String TUESDAY = "Tuesday";

@@ -1,5 +1,9 @@
-package weltimetable.a2019.program3.huang.changyu.weltimetable.models;
+package weltimetable.a2019.program3.huang.changyu.weltimetable.views;
 
+import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TimeTableInfo;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.AlertDialogsHelper;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.DbHelper;
 import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.app.Activity;
@@ -16,9 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Objects;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.AlertDialogsHelper;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.DbHelper;
 
 
 /**

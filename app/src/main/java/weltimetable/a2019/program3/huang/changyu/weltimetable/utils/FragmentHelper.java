@@ -1,5 +1,8 @@
 package weltimetable.a2019.program3.huang.changyu.weltimetable.utils;
 
+import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.views.TTInfoAdapter;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TimeTableInfo;
 import android.app.Activity;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
@@ -8,13 +11,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.AbsListView;
 import android.widget.ListView;
-
-
 import java.util.ArrayList;
 
-import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TTInfoAdapter;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TimeTableInfo;
 
 /**
  * Created by changyu on 20.05.2019.

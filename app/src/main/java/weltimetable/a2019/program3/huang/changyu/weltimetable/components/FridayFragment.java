@@ -1,11 +1,8 @@
 package weltimetable.a2019.program3.huang.changyu.weltimetable.components;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.ConstentValue;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.ConstentValue;
+import android.view.View;
 
 
 /**

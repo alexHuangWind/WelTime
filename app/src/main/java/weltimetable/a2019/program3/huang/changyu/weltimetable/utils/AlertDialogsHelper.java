@@ -1,10 +1,13 @@
 package weltimetable.a2019.program3.huang.changyu.weltimetable.utils;
 
+import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.views.FragmentsTabAdapter;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.views.TTInfoAdapter;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TimeTableInfo;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -24,10 +27,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.FragmentsTabAdapter;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TTInfoAdapter;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TimeTableInfo;
 
 
 /**

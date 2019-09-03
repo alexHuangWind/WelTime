@@ -14,10 +14,10 @@ public class TimeTableInfo {
 
     public TimeTableInfo(String subject, String teacher, String room, String fromtime, String totime, int color) {
         this.subject = subject;
+        this.totime = totime;
+        this.fromtime = fromtime;
         this.teacher = teacher;
         this.room = room;
-        this.fromtime = fromtime;
-        this.totime = totime;
         this.color = color;
     }
 

@@ -1,16 +1,12 @@
 package  weltimetable.a2019.program3.huang.changyu.weltimetable.utils;
 
+import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TimeTableInfo;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-
-
 import java.util.ArrayList;
-
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TimeTableInfo;
 
 /**
  * Created by changyu on 20.05.2019.

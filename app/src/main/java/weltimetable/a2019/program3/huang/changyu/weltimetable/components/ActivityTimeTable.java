@@ -1,8 +1,13 @@
 package weltimetable.a2019.program3.huang.changyu.weltimetable.components;
 
-
+import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.views.FragmentsTabAdapter;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.views.PageTransformer3D;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.AlertDialogsHelper;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.BrowserUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
@@ -21,11 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.Calendar;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.FragmentsTabAdapter;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.PageTransformer3D;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.AlertDialogsHelper;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.BrowserUtil;
+
+
 
 /**
  * Created by changyu on 20.05.2019.
@@ -44,10 +46,10 @@ public class ActivityTimeTable extends AppCompatActivity implements NavigationVi
 
     private void init() {
         initView();
-//        initFireBase();
         initCustomDialog();
-    }
 
+//        initFireBase();
+    }
 
 
     @Override
@@ -76,8 +78,11 @@ public class ActivityTimeTable extends AppCompatActivity implements NavigationVi
                 return true;
         }
     }
+
     private void initView() {
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view1);
+        BottomNavigationView navView = findViewById(R.id.nav_view2);
+        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigationView.setNavigationItemSelectedListener(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("WelTimeTable");
@@ -88,6 +93,7 @@ public class ActivityTimeTable extends AppCompatActivity implements NavigationVi
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         initFragments(toolbar);
+
     }
 
     /**
@@ -105,7 +111,7 @@ public class ActivityTimeTable extends AppCompatActivity implements NavigationVi
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 String value = dataSnapshot.getValue(String.class);
-                Toast.makeText(getApplicationContext(),value,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), value, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -124,13 +130,13 @@ public class ActivityTimeTable extends AppCompatActivity implements NavigationVi
         mAdapter = new FragmentsTabAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.viewPager);
         int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.monday)),getResources().getString(R.string.monday));
-        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.tuesday)),getResources().getString(R.string.tuesday));
-        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.wednesday)),getResources().getString(R.string.wednesday));
-        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.thursday)),getResources().getString(R.string.thursday));
-        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.friday)),getResources().getString(R.string.friday));
-        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.saturday)),getResources().getString(R.string.saturday));
-        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.sunday)),getResources().getString(R.string.sunday));
+        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.monday)), getResources().getString(R.string.monday));
+        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.tuesday)), getResources().getString(R.string.tuesday));
+        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.wednesday)), getResources().getString(R.string.wednesday));
+        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.thursday)), getResources().getString(R.string.thursday));
+        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.friday)), getResources().getString(R.string.friday));
+        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.saturday)), getResources().getString(R.string.saturday));
+        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.sunday)), getResources().getString(R.string.sunday));
         mViewPager.setAdapter(mAdapter);
         mViewPager.setPageTransformer(true, new PageTransformer3D());
         mViewPager.setCurrentItem(day == 1 ? 6 : day - 2, true);
@@ -153,4 +159,21 @@ public class ActivityTimeTable extends AppCompatActivity implements NavigationVi
         });
 
     }
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    return true;
+                case R.id.navigation_dashboard:
+                    return true;
+                case R.id.navigation_notifications:
+                    return true;
+            }
+            return false;
+        }
+    };
+
 }

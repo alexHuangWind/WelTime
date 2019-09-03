@@ -1,5 +1,9 @@
 package weltimetable.a2019.program3.huang.changyu.weltimetable.components;
 
+import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.views.TTInfoAdapter;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.DbHelper;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.FragmentHelper;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,12 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.ConstentValue;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TTInfoAdapter;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.DbHelper;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.FragmentHelper;
-
+/**
+ * Created by changyu on 20.05.2019.
+ * email：alexchyandroid@gmail.com
+ */
 public abstract class BaseFragment extends Fragment {
 
 

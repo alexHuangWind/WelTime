@@ -1,4 +1,4 @@
-package weltimetable.a2019.program3.huang.changyu.weltimetable.models;
+package weltimetable.a2019.program3.huang.changyu.weltimetable.views;
 
 import android.view.View;
 
@@ -18,7 +18,7 @@ public class PageTransformer3D extends BasePageTransformer {
 
     @Override
     public void touch2Left(View view, float position) {
-        //设置旋转中心点
+        //set center point
         view.setPivotX(view.getMeasuredWidth());
         view.setPivotY(view.getMeasuredHeight() * 0.5f);
         view.setRotationY(mMaxRotation * position);
@@ -27,7 +27,7 @@ public class PageTransformer3D extends BasePageTransformer {
 
     @Override
     public void touch2Right(View view, float position) {
-        //设置旋转中心点
+        //set center point
         view.setPivotX(0);
         view.setPivotY(view.getMeasuredHeight() * 0.5f);
         view.setRotationY(mMaxRotation * position);

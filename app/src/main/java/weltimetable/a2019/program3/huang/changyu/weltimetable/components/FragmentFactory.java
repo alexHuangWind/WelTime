@@ -1,12 +1,14 @@
 package weltimetable.a2019.program3.huang.changyu.weltimetable.components;
 
+import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.ConstentValue;
 import android.support.v4.app.Fragment;
-
 import java.util.HashMap;
 
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.ConstentValue;
-
-public class FragmentFactory  {
+/**
+ * Created by changyu on 20.05.2019.
+ * email：alexchyandroid@gmail.com
+ */
+public class FragmentFactory {
 
     private MondayFragment mondayfragment;
     private TuesdayFragment tuesdayfragment;
@@ -21,6 +23,7 @@ public class FragmentFactory  {
     private FragmentFactory() {
 
     }
+
     public static FragmentFactory getInstance() {
         if (mFactory == null) {
             synchronized (FragmentFactory.class) {

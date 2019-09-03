@@ -1,13 +1,12 @@
 package weltimetable.a2019.program3.huang.changyu.weltimetable.utils;
 
+import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.components.ActivityWebView;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
-
-import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.components.ActivityWebView;
 
 /**
  * Created by changyu on 20.05.2019.

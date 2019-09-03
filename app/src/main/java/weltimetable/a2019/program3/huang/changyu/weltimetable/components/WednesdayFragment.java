@@ -1,17 +1,8 @@
 package weltimetable.a2019.program3.huang.changyu.weltimetable.components;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
-
 import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.ConstentValue;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.models.TTInfoAdapter;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.DbHelper;
-import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.FragmentHelper;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.ConstentValue;
+import android.view.View;
 
 /**
  * Created by changyu on 20.05.2019.
