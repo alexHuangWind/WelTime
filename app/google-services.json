@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "781227877374",
+    "firebase_url": "https://test-38497.firebaseio.com",
+    "project_id": "test-38497",
+    "storage_bucket": "test-38497.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:781227877374:android:14826e2f51628c69",
+        "android_client_info": {
+          "package_name": "weltime.program3.huang.changyu.firebasetest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "781227877374-1b3kh6q03g4gedqq49vn61ded5r1sosg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsHzWqG-UdO_bGEHzE8QkSvTTN1wZ8T5k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "781227877374-1b3kh6q03g4gedqq49vn61ded5r1sosg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:781227877374:android:4c357130fa08433d",
+        "android_client_info": {
+          "package_name": "weltimetable.a2019.program3.huang.changyu.weltimetable"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "781227877374-1b3kh6q03g4gedqq49vn61ded5r1sosg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsHzWqG-UdO_bGEHzE8QkSvTTN1wZ8T5k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "781227877374-1b3kh6q03g4gedqq49vn61ded5r1sosg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

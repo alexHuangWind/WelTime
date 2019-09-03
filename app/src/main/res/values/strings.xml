@@ -1,3 +1,71 @@
 <resources>
-    <string name="app_name">WelTimetable</string>
+    <string name="app_name">TimeTable</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Fragments strings -->
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="select_snackbar">Please, select one item.</string>
+    <string name="selected">Selected</string>
+
+    <!-- Main Activity strings -->
+    <string name="timetable">WelTimeTable</string>
+    <string name="title_activity_time_table">WelTimeTable</string>
+    <string name="changyu_huang_email">alexchyandroid@gmail.com</string>
+    <string name="seven_days_of_the_week">7 Days of the Week</string>
+    <string name="subject">Subject</string>
+    <string name="field_error">field can not be empty!</string>
+    <string name="time_error">Time field can not be empty!</string>
+    <string name="week">Week</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="school_website">School website</string>
+    <string name="moodle_website">moodle website</string>
+    <string name="weltec_website">https://moodle.weltec.ac.nz/login/index.php</string>
+    <string name="school_website_snackbar">Please, set URL of your school website in settings.</string>
+    <string name="add_subject">Add subject</string>
+    <string name="edit_subject">Edit subject</string>
+    <string name="teacher">Teacher</string>
+    <string name="room">Room</string>
+    <string name="time">Time</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="time_to_dialog">To:</string>
+    <string name="time_from_dialog">From:</string>
+    <string name="subject_dialog">Subject:</string>
+    <string name="teacher_dialog">Teacher:</string>
+    <string name="room_dialog">Room:</string>
+    <string name="select_time">Select time</string>
+    <string name="select_color">Select color</string>
+    <string name="choose_time">Choose time</string>
+    <string name="choose_date">Choose date</string>
+    <string name="choose_color">Choose color</string>
+    <string name="weltime_url">weltime_url</string>
+
+
+    <!-- Settings Activity strings -->
+    <string name="school_website_setting">Change school website</string>
+    <string name="school_website_setting_summary">Change URL of your school website</string>
+
+    <!-- Notification -->
+    <string name="notification_title">Today\'s lessons</string>
+    <string name="do_not_have_lessons">You do not have lessons!</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_block">Block</string>
+    <string name="title_notifications">Notifications</string>
+
 </resources>
