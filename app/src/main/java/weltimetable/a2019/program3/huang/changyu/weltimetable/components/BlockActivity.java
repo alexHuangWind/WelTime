@@ -50,13 +50,11 @@ public class BlockActivity extends AppCompatActivity {
         mlistViewFriday = (ListView) findViewById(R.id.LV_fridaylist);
         initLists();
         setListInfo();
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        FloatingActionButton fab = findViewById(R.id.fab);
+
         Bt_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BlockActivity.this.onDestroy();
+                BlockActivity.this.finish();
             }
         });
     }

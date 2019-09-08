@@ -15,9 +15,13 @@
             android:icon="@drawable/moodleweltec"
             android:title="@string/moodle_website" />
         <item
-        android:id="@+id/blockPage"
+        android:id="@+id/report"
         android:icon="@drawable/moodleweltec"
-        android:title="@string/moodle_website" />
+        android:title="@string/weekly_report" />
+        <item
+        android:id="@+id/LoginOrLogoff"
+        android:icon="@drawable/moodleweltec"
+        android:title="@string/Login" />
     </group>
 
 </menu>

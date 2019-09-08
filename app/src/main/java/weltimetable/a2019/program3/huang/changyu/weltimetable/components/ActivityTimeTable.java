@@ -1,6 +1,7 @@
 package weltimetable.a2019.program3.huang.changyu.weltimetable.components;
 
 import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.components.ui.login.LoginActivity;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.views.FragmentsTabAdapter;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.views.PageTransformer3D;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.AlertDialogsHelper;
@@ -74,6 +75,18 @@ public class ActivityTimeTable extends AppCompatActivity implements NavigationVi
                 } else {
                     Snackbar.make(navigationView, R.string.school_website_snackbar, Snackbar.LENGTH_SHORT).show();
                 }
+                return true;
+            case R.id.report:
+                String Report = "https://weltec.ac.nz";
+                if (!TextUtils.isEmpty(Report)) {
+                    BrowserUtil.openUrlInChromeCustomTab(getApplicationContext(), Report);
+                } else {
+                    Snackbar.make(navigationView, R.string.school_website_snackbar, Snackbar.LENGTH_SHORT).show();
+                }
+                return true;
+            case R.id.LoginOrLogoff:
+                Intent intent = new Intent(ActivityTimeTable.this, LoginActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 DrawerLayout drawer = findViewById(R.id.drawer_layout);
