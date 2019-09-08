@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="weltimetable.a2019.program3.huang.changyu.weltimetable">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,8 +9,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".components.ui.login.LoginActivity"
+            android:label="@string/title_activity_login"></activity>
+        <activity
+            android:name=".components.BlockActivity"
+            android:label="@string/title_activity_block"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".components.NavigationActivity"
-            android:label="@string/title_activity_navigation"></activity>
+            android:label="@string/title_activity_navigation" />
         <activity
             android:name=".components.ActivityWebView"
             android:label="@string/title_activity_web_view"
@@ -30,5 +34,8 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

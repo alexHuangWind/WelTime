@@ -1,15 +1,19 @@
 package weltimetable.a2019.program3.huang.changyu.weltimetable.components;
 
 import weltimetable.a2019.program3.huang.changyu.weltimetable.R;
+import weltimetable.a2019.program3.huang.changyu.weltimetable.components.ui.login.LoginActivity;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.views.FragmentsTabAdapter;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.views.PageTransformer3D;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.AlertDialogsHelper;
 import weltimetable.a2019.program3.huang.changyu.weltimetable.utils.BrowserUtil;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -72,6 +76,18 @@ public class ActivityTimeTable extends AppCompatActivity implements NavigationVi
                     Snackbar.make(navigationView, R.string.school_website_snackbar, Snackbar.LENGTH_SHORT).show();
                 }
                 return true;
+            case R.id.report:
+                String Report = "https://weltec.ac.nz";
+                if (!TextUtils.isEmpty(Report)) {
+                    BrowserUtil.openUrlInChromeCustomTab(getApplicationContext(), Report);
+                } else {
+                    Snackbar.make(navigationView, R.string.school_website_snackbar, Snackbar.LENGTH_SHORT).show();
+                }
+                return true;
+            case R.id.LoginOrLogoff:
+                Intent intent = new Intent(ActivityTimeTable.this, LoginActivity.class);
+                startActivity(intent);
+                return true;
             default:
                 DrawerLayout drawer = findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
@@ -127,6 +143,17 @@ public class ActivityTimeTable extends AppCompatActivity implements NavigationVi
     }
 
     private void initFragments(Toolbar toolbar) {
+        initTopNavigation(toolbar);
+       initBottomNaviagtion();
+
+    }
+
+    private void initBottomNaviagtion() {
+
+
+    }
+
+    private void initTopNavigation(Toolbar toolbar) {
         mAdapter = new FragmentsTabAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.viewPager);
         int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
@@ -157,23 +184,30 @@ public class ActivityTimeTable extends AppCompatActivity implements NavigationVi
 
             }
         });
-
     }
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment mFragment = null;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+
                     return true;
                 case R.id.navigation_dashboard:
+                    Intent intent = new Intent(ActivityTimeTable.this, BlockActivity.class);
+                    startActivity(intent);
                     return true;
                 case R.id.navigation_notifications:
+
                     return true;
             }
             return false;
         }
+
     };
+
 
 }
