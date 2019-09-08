@@ -12,5 +12,7 @@ public class ConstentValue {
     public static final String FRIDAY = "Friday";
     public static final String SATURDAY = "Saturday";
     public static final String SUNDAY = "Sunday";
+    public static final String BLOCK = "Block";
+    public static final String NOTIFICATIONS = "Notifications";
 
 }

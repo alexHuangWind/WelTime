@@ -12,8 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".components.BlockActivity"
+            android:label="@string/title_activity_block"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".components.NavigationActivity"
-            android:label="@string/title_activity_navigation"></activity>
+            android:label="@string/title_activity_navigation" />
         <activity
             android:name=".components.ActivityWebView"
             android:label="@string/title_activity_web_view"
