@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".components.BlockActivity">
+    tools:context="weltimetable.stp.android.huang.changyu.weltimetable.components.activitys.BlockActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

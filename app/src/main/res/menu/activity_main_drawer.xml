@@ -19,9 +19,17 @@
         android:icon="@drawable/moodleweltec"
         android:title="@string/weekly_report" />
         <item
+        android:id="@+id/sync"
+        android:icon="@drawable/moodleweltec"
+        android:title="@string/Sync" />
+        <item
         android:id="@+id/LoginOrLogoff"
         android:icon="@drawable/moodleweltec"
-        android:title="@string/Login" />
+        android:title="@string/login" />
+        <item
+            android:id="@+id/AddCourse"
+            android:icon="@drawable/moodleweltec"
+            android:title="@string/add_Course" />
     </group>
 
 </menu>

@@ -33,6 +33,10 @@
     <string name="school_website">School website</string>
     <string name="moodle_website">moodle website</string>
     <string name="moodle_Signin">Login</string>
+    <string name="login">Login</string>
+    <string name="add_Course">AddCourse</string>
+    <string name="weekly_report">Weekly Report</string>
+    <string name="Sync">Sync(calendar)</string>
     <string name="weltec_website">https://moodle.weltec.ac.nz/login/index.php</string>
     <string name="school_website_snackbar">Please, set URL of your school website in settings.</string>
     <string name="add_subject">Add subject</string>
@@ -74,13 +78,18 @@
     <string name="title_activity_login">Sign in</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_register">Register</string>
+    <string name="action_RegisterPage">Register</string>
+    <string name="action_Forget_Password">ForgetPassword</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="Login">Login</string>
-    <string name="weekly_report">weekly_report</string>
+    <string name="title_activity_courses_list_">CoursesList_Activity</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_notification">NotificationActivity</string>
+
 
 </resources>

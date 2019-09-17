@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:781227877374:android:14826e2f51628c69",
         "android_client_info": {
-          "package_name": "weltime.program3.huang.changyu.firebasetest"
+          "package_name": "weltime.android.huang.changyu.firebasetest"
         }
       },
       "oauth_client": [
@@ -39,7 +39,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:781227877374:android:4c357130fa08433d",
         "android_client_info": {
-          "package_name": "weltimetable.a2019.program3.huang.changyu.weltimetable"
+          "package_name": "weltimetable.stp.android.huang.changyu.weltimetable"
         }
       },
       "oauth_client": [

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".components.TuesdayFragment">
+    tools:context="weltimetable.stp.android.huang.changyu.weltimetable.components.fragments.TuesdayFragment">
 
     <ListView
         android:id="@+id/tuesdaylist"

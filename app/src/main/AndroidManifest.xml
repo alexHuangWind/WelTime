@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="weltimetable.a2019.program3.huang.changyu.weltimetable">
+
+    package="weltimetable.stp.android.huang.changyu.weltimetable">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <application
         android:allowBackup="true"
@@ -9,22 +15,34 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".components.ui.login.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:name=".components.activitys.NotificationActivity"
+            android:label="NotificationActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".components.BlockActivity"
+            android:name=".components.activitys.RegisterActivity"
+            android:label="@string/title_activity_register"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".components.activitys.CoursesList_Activity"
+            android:label="@string/title_activity_courses_list_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".components.ui.login.LoginActivity"
+            android:label="@string/title_activity_login" />
+        <activity
+            android:name=".components.activitys.BlockActivity"
             android:label="@string/title_activity_block"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".components.NavigationActivity"
+            android:name=".components.activitys.NavigationActivity"
             android:label="@string/title_activity_navigation" />
         <activity
-            android:name=".components.ActivityWebView"
+            android:name=".components.activitys.WebViewActivity"
             android:label="@string/title_activity_web_view"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".components.ActivityTimeTable"
+            android:name=".components.activitys.TimeTableActivity"
             android:label="@string/title_activity_time_table"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -34,8 +52,5 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

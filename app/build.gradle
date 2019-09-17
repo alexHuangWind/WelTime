@@ -5,8 +5,8 @@ apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "weltimetable.a2019.program3.huang.changyu.weltimetable"
-        minSdkVersion 21
+        applicationId "weltimetable.stp.android.huang.changyu.weltimetable"
+        minSdkVersion 22
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".components.ActivityTimeTable">
+    tools:context="weltimetable.stp.android.huang.changyu.weltimetable.components.activitys.TimeTableActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/title_bar_layout"
