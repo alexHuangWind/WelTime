@@ -5,9 +5,9 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.util.Patterns;
 
-import weltimetable.stp.android.huang.changyu.weltimetable.components.data.LoginRepository;
-import weltimetable.stp.android.huang.changyu.weltimetable.components.data.Result;
-import weltimetable.stp.android.huang.changyu.weltimetable.components.data.model.LoggedInUser;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.LoginRepository;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.Result;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.LoggedInUser;
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
 
 

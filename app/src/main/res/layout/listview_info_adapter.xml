@@ -29,12 +29,21 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight=".2"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:src="@mipmap/ic_launcher" />
+                <Button
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/BT_Finish"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/black_de"
+                    android:textColor="@color/white"
+                    android:text="UNFINISHED">
+                </Button>
 
             </LinearLayout>
 
@@ -183,12 +192,18 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
                         <android.support.v7.widget.AppCompatSeekBar
+                            android:id="@+id/SB_Progress"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                         </android.support.v7.widget.AppCompatSeekBar>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="   hours of participation">
 
+                            </TextView>
 
                 </LinearLayout>
 

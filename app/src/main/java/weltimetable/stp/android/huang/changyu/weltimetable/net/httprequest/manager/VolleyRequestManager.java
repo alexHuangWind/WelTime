@@ -59,12 +59,12 @@ public class VolleyRequestManager implements IRequestManager {
     }
 
     /**
-     * 封装带请求体的请求方法
+     * request Method
      *
      * @param url             url
-     * @param requestBodyJson Json string请求体
-     * @param requestCallback 回调接口
-     * @param method          请求方法
+     * @param requestBodyJson Json string
+     * @param requestCallback Callback
+     * @param method          request method
      */
     private void requestWithBody(String url, String requestBodyJson, final IRequestCallback requestCallback, int method) {
         JSONObject jsonObject = null;
@@ -72,7 +72,6 @@ public class VolleyRequestManager implements IRequestManager {
             jsonObject = new JSONObject(requestBodyJson);
         } catch (JSONException e) {
             e.printStackTrace();
-            //// TODO: 2016/12/11 异常处理
         }
         JsonRequest<JSONObject> request = new JsonObjectRequest(method, url, jsonObject,
                 new Response.Listener<JSONObject>() {

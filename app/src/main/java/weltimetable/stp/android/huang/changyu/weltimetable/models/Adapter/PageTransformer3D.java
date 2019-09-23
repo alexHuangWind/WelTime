@@ -1,4 +1,4 @@
-package weltimetable.stp.android.huang.changyu.weltimetable.views;
+package weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter;
 
 import android.view.View;
 

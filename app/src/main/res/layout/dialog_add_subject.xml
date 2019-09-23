@@ -62,21 +62,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight=".5"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".2"
+                android:layout_weight=".4"
                 android:text="@string/time_from_dialog"
-                android:textAlignment="textStart"
+                android:gravity="center"
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
 
@@ -84,38 +83,37 @@
                 android:id="@+id/from_time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".3"
-                android:text="@string/select_time"
+                android:layout_weight=".6"
+                android:text="@string/select_from_time"
                 android:textAllCaps="true"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight=".5"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".2"
-                android:text="@string/time_to_dialog"
-                android:textAlignment="textStart"
+                android:layout_width="5dp"
+                android:layout_height="45dp"
+                android:layout_weight=".4"
+                android:text="@string/time_duration_dialog"
+                android:gravity="center"
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/to_time"
+                android:id="@+id/duration"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".3"
-                android:text="@string/select_time"
+                android:layout_weight=".6"
+                android:text="@string/select_duration"
                 android:textAllCaps="true"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>

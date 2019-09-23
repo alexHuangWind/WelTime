@@ -160,7 +160,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUiWithUser(weltimetable.stp.android.huang.changyu.weltimetable.components.ui.login.LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
-        // TODO : initiate successful logged in experience
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 

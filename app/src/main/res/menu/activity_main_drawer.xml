@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:id="@+id/menu_top"
+    <group
+        android:id="@+id/menu_top"
         android:checkableBehavior="none">
         <item
             android:id="@+id/schoolwebsitemenu"
@@ -15,21 +16,21 @@
             android:icon="@drawable/moodleweltec"
             android:title="@string/moodle_website" />
         <item
-        android:id="@+id/report"
-        android:icon="@drawable/moodleweltec"
-        android:title="@string/weekly_report" />
+            android:id="@+id/report"
+            android:icon="@drawable/moodleweltec"
+            android:title="@string/weekly_report" />
         <item
-        android:id="@+id/sync"
-        android:icon="@drawable/moodleweltec"
-        android:title="@string/Sync" />
-        <item
-        android:id="@+id/LoginOrLogoff"
-        android:icon="@drawable/moodleweltec"
-        android:title="@string/login" />
+            android:id="@+id/sync"
+            android:icon="@drawable/moodleweltec"
+            android:title="@string/Sync" />
         <item
             android:id="@+id/AddCourse"
             android:icon="@drawable/moodleweltec"
             android:title="@string/add_Course" />
+        <item
+            android:id="@+id/LoginOrLogoff"
+            android:icon="@drawable/moodleweltec"
+            android:title="@string/login" />
     </group>
 
 </menu>

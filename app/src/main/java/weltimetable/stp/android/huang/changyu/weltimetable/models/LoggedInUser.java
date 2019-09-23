@@ -1,4 +1,4 @@
-package weltimetable.stp.android.huang.changyu.weltimetable.components.data.model;
+package weltimetable.stp.android.huang.changyu.weltimetable.models;
 
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository

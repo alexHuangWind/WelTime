@@ -1,8 +1,9 @@
 package weltimetable.stp.android.huang.changyu.weltimetable.utils;
 
+import weltimetable.stp.android.huang.changyu.weltimetable.components.dialog.NumberPickerDialog;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.TimeTableInfo;
-import weltimetable.stp.android.huang.changyu.weltimetable.views.FragmentsTabAdapter;
-import weltimetable.stp.android.huang.changyu.weltimetable.views.TTInfoAdapter;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter.FragmentsTabAdapter;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter.TTInfoAdapter;
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
 
 import android.app.Activity;
@@ -18,10 +19,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
 import org.xdty.preference.colorpicker.ColorPickerDialog;
 import org.xdty.preference.colorpicker.ColorPickerSwatch;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -36,13 +40,13 @@ import java.util.regex.Pattern;
  */
 public class AlertDialogsHelper {
 
-    public static void getEditSubjectDialog(final Activity activity, final View alertLayout, final ArrayList<TimeTableInfo> adapter, final ListView listView, int position) {
+    public static void getEditSubjectDialog( Activity activity,  View alertLayout,  ArrayList<TimeTableInfo> adapter,  ListView listView, int position) {
         final HashMap<Integer, EditText> editTextHashs = new HashMap<>();
         final EditText subject = alertLayout.findViewById(R.id.subject_dialog);
         final EditText teacher = alertLayout.findViewById(R.id.teacher_dialog);
         final EditText room = alertLayout.findViewById(R.id.room_dialog);
         final TextView from_time = alertLayout.findViewById(R.id.from_time);
-        final TextView to_time = alertLayout.findViewById(R.id.to_time);
+        final TextView duration = alertLayout.findViewById(R.id.duration);
         final Button select_color = alertLayout.findViewById(R.id.select_color);
         final TimeTableInfo timetableinfo = adapter.get(position);
         editTextHashs.put(R.string.subject, subject);
@@ -52,7 +56,7 @@ public class AlertDialogsHelper {
         teacher.setText(timetableinfo.getTeacher());
         room.setText(timetableinfo.getRoom());
         from_time.setText(timetableinfo.getFromTime());
-        to_time.setText(timetableinfo.getToTime());
+        duration.setText(timetableinfo.getDuration());
         select_color.setBackgroundColor(timetableinfo.getColor() != 0 ? timetableinfo.getColor() : Color.WHITE);
 
         from_time.setOnClickListener(new View.OnClickListener() {
@@ -77,25 +81,35 @@ public class AlertDialogsHelper {
             }
         });
 
-        to_time.setOnClickListener(new View.OnClickListener() {
+        duration.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                final Calendar c = Calendar.getInstance();
-                int hour = c.get(Calendar.HOUR_OF_DAY);
-                int minute = c.get(Calendar.MINUTE);
-                TimePickerDialog timePickerDialog = new TimePickerDialog(activity,
-                        new TimePickerDialog.OnTimeSetListener() {
+                NumberPickerDialog newFragment = new NumberPickerDialog();
+                newFragment.setValueChangeListener(new NumberPicker.OnValueChangeListener() {
 
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay,
-                                                  int minute) {
-                                to_time.setText(String.format("%02d:%02d", hourOfDay, minute));
-                                timetableinfo.setToTime(String.format("%02d:%02d", hourOfDay, minute));
-                            }
-                        }, hour, minute, true);
-                timePickerDialog.setTitle(R.string.choose_time);
-                timePickerDialog.show();
+                    @Override
+                    public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                        duration.setText(String.format("%02d Hours", i));
+                        timetableinfo.setDuration(String.format("%02d Hours", i));
+                    }
+                });
+                newFragment.show(activity.getFragmentManager(), "time picker");
+//                final Calendar c = Calendar.getInstance();
+//                int hour = c.get(Calendar.HOUR_OF_DAY);
+//                int minute = c.get(Calendar.MINUTE);
+//                TimePickerDialog timePickerDialog = new TimePickerDialog(activity,
+//                        new TimePickerDialog.OnTimeSetListener() {
+//
+//                            @Override
+//                            public void onTimeSet(TimePicker view, int hourOfDay,
+//                                                  int minute) {
+//                                duration.setText(String.format("%02d:%02d", hourOfDay, minute));
+//                                timetableinfo.setDuration(String.format("%02d:%02d", hourOfDay, minute));
+//                            }
+//                        }, hour, minute, true);
+//                timePickerDialog.setTitle(R.string.choose_time);
+//                timePickerDialog.show();
             }
         });
 
@@ -149,10 +163,10 @@ public class AlertDialogsHelper {
                             entry.getValue().requestFocus();
                         }
                     }
-                } else if (!from_time.getText().toString().matches(".*\\d+.*") || !to_time.getText().toString().matches(".*\\d+.*")) {
+                } else if (!from_time.getText().toString().matches(".*\\d+.*") || !duration.getText().toString().matches(".*\\d+.*")) {
                     Snackbar.make(alertLayout, R.string.time_error, Snackbar.LENGTH_LONG).show();
                 } else {
-                    weltimetable.stp.android.huang.changyu.weltimetable.utils.DbHelper db = new weltimetable.stp.android.huang.changyu.weltimetable.utils.DbHelper(activity);
+                    DbHelper db = new DbHelper(activity);
                     TTInfoAdapter TTInfoAdapter = (TTInfoAdapter) listView.getAdapter(); // In order to get notifyDataSetChanged() method.
                     ColorDrawable buttonColor = (ColorDrawable) select_color.getBackground();
                     timetableinfo.setSubject(subject.getText().toString());
@@ -176,7 +190,7 @@ public class AlertDialogsHelper {
         final EditText room = alertLayout.findViewById(R.id.room_dialog);
         editTextHashs.put(R.string.room, room);
         final TextView from_time = alertLayout.findViewById(R.id.from_time);
-        final TextView to_time = alertLayout.findViewById(R.id.to_time);
+        final TextView duration = alertLayout.findViewById(R.id.duration);
         final Button select_color = alertLayout.findViewById(R.id.select_color);
         final TimeTableInfo timetableinfo = new TimeTableInfo();
 
@@ -202,24 +216,36 @@ public class AlertDialogsHelper {
             }
         });
 
-        to_time.setOnClickListener(new View.OnClickListener() {
+        duration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Calendar c = Calendar.getInstance();
-                int hour = c.get(Calendar.HOUR_OF_DAY);
-                int minute = c.get(Calendar.MINUTE);
-                TimePickerDialog timePickerDialog = new TimePickerDialog(activity,
-                        new TimePickerDialog.OnTimeSetListener() {
 
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay,
-                                                  int minute) {
-                                to_time.setText(String.format("%02d:%02d", hourOfDay, minute));
-                                timetableinfo.setToTime(String.format("%02d:%02d", hourOfDay, minute));
-                            }
-                        }, hour, minute, true);
-                timePickerDialog.setTitle(R.string.choose_time);
-                timePickerDialog.show();
+                NumberPickerDialog newFragment = new NumberPickerDialog();
+                newFragment.setValueChangeListener(new NumberPicker.OnValueChangeListener() {
+
+                    @Override
+                    public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+                        duration.setText(String.format("%02d Hours", i));
+                        timetableinfo.setDuration(String.format("%02d Hours", i));
+                    }
+                });
+                newFragment.show(activity.getFragmentManager(), "time picker");
+//
+//                final Calendar c = Calendar.getInstance();
+//                int hour = c.get(Calendar.HOUR_OF_DAY);
+//                int minute = c.get(Calendar.MINUTE);
+//                TimePickerDialog timePickerDialog = new TimePickerDialog(activity,
+//                        new TimePickerDialog.OnTimeSetListener() {
+//
+//                            @Override
+//                            public void onTimeSet(TimePicker view, int hourOfDay,
+//                                                  int minute) {
+//                                duration.setText(String.format("%02d:%02d", hourOfDay, minute));
+//                                timetableinfo.setDuration(String.format("%02d:%02d", hourOfDay, minute));
+//                            }
+//                        }, hour, minute, true);
+//                timePickerDialog.setTitle(R.string.choose_time);
+//                timePickerDialog.show();
             }
         });
 
@@ -280,10 +306,10 @@ public class AlertDialogsHelper {
                             entry.getValue().requestFocus();
                         }
                     }
-                } else if (!from_time.getText().toString().matches(".*\\d+.*") || !to_time.getText().toString().matches(".*\\d+.*")) {
+                } else if (!from_time.getText().toString().matches(".*\\d+.*") || !duration.getText().toString().matches(".*\\d+.*")) {
                     Snackbar.make(alertLayout, R.string.time_error, Snackbar.LENGTH_LONG).show();
                 } else {
-                    weltimetable.stp.android.huang.changyu.weltimetable.utils.DbHelper dbHelper = new weltimetable.stp.android.huang.changyu.weltimetable.utils.DbHelper(activity);
+                    DbHelper dbHelper = new DbHelper(activity);
                     Matcher fragment = Pattern.compile("(.*Fragment)").matcher(adapter.getItem(viewPager.getCurrentItem()).toString());
                     ColorDrawable buttonColor = (ColorDrawable) select_color.getBackground();
                     timetableinfo.setSubject(subject.getText().toString());
@@ -297,8 +323,8 @@ public class AlertDialogsHelper {
                     subject.getText().clear();
                     teacher.getText().clear();
                     room.getText().clear();
-                    from_time.setText(R.string.select_time);
-                    to_time.setText(R.string.select_time);
+                    from_time.setText(R.string.select_duration);
+                    duration.setText(R.string.select_duration);
                     select_color.setBackgroundColor(Color.WHITE);
                     subject.requestFocus();
                     dialog.dismiss();

@@ -1,7 +1,7 @@
 package weltimetable.stp.android.huang.changyu.weltimetable.components.fragments;
 
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
-import weltimetable.stp.android.huang.changyu.weltimetable.views.TTInfoAdapter;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter.TTInfoAdapter;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.DbHelper;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.FragmentHelper;
 import android.os.Bundle;

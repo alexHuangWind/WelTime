@@ -1,8 +1,6 @@
-package weltimetable.stp.android.huang.changyu.weltimetable.components.data;
+package weltimetable.stp.android.huang.changyu.weltimetable.models;
 
 import android.content.Context;
-
-import weltimetable.stp.android.huang.changyu.weltimetable.components.data.model.LoggedInUser;
 
 /**
  * Class that requests authentication and user information from the remote data source and

@@ -1,7 +1,7 @@
 package weltimetable.stp.android.huang.changyu.weltimetable.utils;
 
 import weltimetable.stp.android.huang.changyu.weltimetable.models.TimeTableInfo;
-import weltimetable.stp.android.huang.changyu.weltimetable.views.TTInfoAdapter;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter.TTInfoAdapter;
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
 
 import android.app.Activity;
@@ -44,7 +44,7 @@ public class FragmentHelper {
                             }
                         }
                         adapter.getInfoList().removeAll(removelist);
-                        db.updateTimeTableInfo(adapter.getmTTInfo());
+//                        db.updateTimeTableInfo(adapter.getmTTInfo());
                         adapter.notifyDataSetChanged();
                         mode.finish();
                         return true;

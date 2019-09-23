@@ -3,11 +3,14 @@ package weltimetable.stp.android.huang.changyu.weltimetable.components.activitys
 import weltimetable.stp.android.huang.changyu.weltimetable.components.fragments.FragmentFactory;
 import weltimetable.stp.android.huang.changyu.weltimetable.components.ui.login.LoginActivity;
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.TimeTableInfo;
+import weltimetable.stp.android.huang.changyu.weltimetable.utils.DbHelper;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.STPHelper;
-import weltimetable.stp.android.huang.changyu.weltimetable.views.FragmentsTabAdapter;
-import weltimetable.stp.android.huang.changyu.weltimetable.views.PageTransformer3D;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter.FragmentsTabAdapter;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter.PageTransformer3D;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.AlertDialogsHelper;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.BrowserUtil;
+import weltimetable.stp.android.huang.changyu.weltimetable.utils.STPLog;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,10 +26,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -109,11 +113,28 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         initFragments(toolbar);
+        initTimeTableInfo();
+
+    }
+
+    private void initTimeTableInfo() {
+        DbHelper dbHelper = new DbHelper(TimeTableActivity.this);
+        ArrayList<String> list = STPHelper.getDayOfWeekList();
+
+
+        for (String var : list) {
+            TimeTableInfo info = STPHelper.getUnAssignedItem();
+            info.setFragment(var);
+            for (int i = 8; i <= 18; i++) {
+                info.setFromTime(String.format("%02d:%02d", i, 00));
+                dbHelper.insertTimeTableInfo(info);
+            }
+        }
 
     }
 
     /**
-     * TODO use fireBase to storage timetableinfo
+     * android use fireBase to storage timetableinfo
      * already success added firebase library and tested
      */
 //    private void initFireBase() {
@@ -192,7 +213,6 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
             Fragment mFragment = null;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-
                     return true;
                 case R.id.navigation_dashboard:
                     Intent intent = new Intent(TimeTableActivity.this, weltimetable.stp.android.huang.changyu.weltimetable.components.activitys.BlockActivity.class);

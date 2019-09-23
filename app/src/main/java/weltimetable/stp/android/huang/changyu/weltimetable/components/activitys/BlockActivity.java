@@ -7,14 +7,11 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import weltimetable.stp.android.huang.changyu.weltimetable.models.BlockListVIewAdapter;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.BlockModel;
-import weltimetable.stp.android.huang.changyu.weltimetable.models.Poestiton;
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
-import weltimetable.stp.android.huang.changyu.weltimetable.utils.DbHelper;
 
 public class BlockActivity extends AppCompatActivity {
     private ListView mlistViewMonday;
@@ -30,11 +27,6 @@ public class BlockActivity extends AppCompatActivity {
     private List<BlockModel> blockListFri = new ArrayList<BlockModel>();
     private List blockLists = new ArrayList<ArrayList>();
 
-    public HashMap getBlockListSets() {
-        return blockListSets;
-    }
-
-    private HashMap blockListSets = new HashMap<Poestiton,BlockModel>();
 
 
     @Override

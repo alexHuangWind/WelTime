@@ -4,8 +4,8 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
-import weltimetable.stp.android.huang.changyu.weltimetable.components.data.LoginDataSource;
-import weltimetable.stp.android.huang.changyu.weltimetable.components.data.LoginRepository;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.LoginDataSource;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.LoginRepository;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
