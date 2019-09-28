@@ -3,16 +3,24 @@ package weltimetable.stp.android.huang.changyu.weltimetable.components.activitys
 import weltimetable.stp.android.huang.changyu.weltimetable.components.fragments.FragmentFactory;
 import weltimetable.stp.android.huang.changyu.weltimetable.components.ui.login.LoginActivity;
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.CalendarInfo;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseEvent;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseInfo;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.STPController;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.TimeTableInfo;
+import weltimetable.stp.android.huang.changyu.weltimetable.utils.CalendarUtil;
+import weltimetable.stp.android.huang.changyu.weltimetable.utils.ConstentValue;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.DbHelper;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.STPHelper;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter.FragmentsTabAdapter;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter.PageTransformer3D;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.AlertDialogsHelper;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.BrowserUtil;
-import weltimetable.stp.android.huang.changyu.weltimetable.utils.STPLog;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -25,13 +33,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 
 /**
@@ -41,6 +52,8 @@ import java.util.Calendar;
 public class TimeTableActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private FragmentsTabAdapter mAdapter;
     private ViewPager mViewPager;
+    private Button BT_SBbutton;
+    private  AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,13 +97,24 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
                     Snackbar.make(navigationView, R.string.school_website_snackbar, Snackbar.LENGTH_SHORT).show();
                 }
                 return true;
+            case R.id.sync:
+                Calendar cal = Calendar.getInstance();
+                boolean flag = CalendarUtil.getInstance().addCalendarEvent(TimeTableActivity.this,"StudentTimePlanner","test-",cal.getTimeInMillis());
+                if(false == true){
+                    STPHelper.toast(TimeTableActivity.this,"sync calendar success!");
+                }else {
+                    STPHelper.toast(TimeTableActivity.this,"sync calendar fail!");
+                }
+                return true;
+
             case R.id.AddCourse:
                 STPHelper.toast(TimeTableActivity.this, " addcourse popwindow");
                 return true;
+
             case R.id.LoginOrLogoff:
                 STPHelper.startActivity(TimeTableActivity.this, LoginActivity.class);
-
                 return true;
+
             default:
                 DrawerLayout drawer = findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
@@ -98,13 +122,13 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
         }
     }
 
-
     private void initView() {
         NavigationView navigationView = findViewById(R.id.nav_view1);
         BottomNavigationView navView = findViewById(R.id.nav_view2);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigationView.setNavigationItemSelectedListener(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        BT_SBbutton = findViewById(R.id.add_sub);
         toolbar.setTitle("WelTimeTable");
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -112,21 +136,73 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        initListener();
         initFragments(toolbar);
         initTimeTableInfo();
+    }
+
+    private void initListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(TimeTableActivity.this);
+        builder.setTitle("input course code");
+      // Set up the input
+          final EditText input;
+        input = new EditText(TimeTableActivity.this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+          input.setInputType(InputType.TYPE_CLASS_TEXT );
+          builder.setView(input);
+          // Set up the buttons
+          builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+  //                m_Text = input.getText().toString();
+                  if(input.getText().toString().equals("12345")){
+                      SharedPreferences.Editor editor = getSharedPreferences(ConstentValue.TAG_prd, MODE_PRIVATE).edit();
+                      editor.putBoolean("isCourseDownload", true);
+                      editor.apply();
+                  }
+                  CourseInfo info = STPController.getInstance().getCourseInfo(input.getText().toString());
+                  insertCourseIntoTimeTable(info);
+                  DbHelper db = new DbHelper(TimeTableActivity.this);
+                  db.insertCourseInfo(info);
+                  dialog.dismiss();
+
+              }
+          });
+          builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                  dialog.dismiss();
+              }
+          });
+        dialog =  builder.create();
+        BT_SBbutton.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View view) {
+                  dialog.show();
+              }
+          });
+    }
+
+    private void insertCourseIntoTimeTable(CourseInfo info) {
+        for(CourseEvent event   : info.getEvents()){
+            if(event.getIsClass()){
+                TimeTableInfo ttinfo = new TimeTableInfo();
+                ttinfo.setItemID(event.getStartTime()+STPHelper.getDateof(event.getDayOfWeek()));
+            }
+        }
 
     }
 
     private void initTimeTableInfo() {
         DbHelper dbHelper = new DbHelper(TimeTableActivity.this);
         ArrayList<String> list = STPHelper.getDayOfWeekList();
-
-
         for (String var : list) {
             TimeTableInfo info = STPHelper.getUnAssignedItem();
             info.setFragment(var);
             for (int i = 8; i <= 18; i++) {
                 info.setFromTime(String.format("%02d:%02d", i, 00));
+                info.setItemID(var+String.format("%02d:%02d", i, 00));
+                info.setDate(var);
                 dbHelper.insertTimeTableInfo(info);
             }
         }
@@ -181,8 +257,8 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
         mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.wednesday)), getResources().getString(R.string.wednesday));
         mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.thursday)), getResources().getString(R.string.thursday));
         mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.friday)), getResources().getString(R.string.friday));
-        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.saturday)), getResources().getString(R.string.saturday));
-        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.sunday)), getResources().getString(R.string.sunday));
+//        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.saturday)), getResources().getString(R.string.saturday));
+//        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.sunday)), getResources().getString(R.string.sunday));
         mViewPager.setAdapter(mAdapter);
         mViewPager.setPageTransformer(true, new PageTransformer3D());
         mViewPager.setCurrentItem(day == 1 ? 6 : day - 2, true);

@@ -2,7 +2,11 @@ package weltimetable.stp.android.huang.changyu.weltimetable.components.fragments
 
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.ConstentValue;
+import weltimetable.stp.android.huang.changyu.weltimetable.utils.STPHelper;
+
 import android.view.View;
+
+import java.util.Calendar;
 
 /**
  * Created by changyu on 20.05.stp.
@@ -17,7 +21,8 @@ public class TuesdayFragment extends BaseFragment {
 
     @Override
     public void initAdapter(View view) {
-        super.setupAdapter(view, R.id.tuesdaylist, ConstentValue.TUESDAY);
+        STPHelper.getDateof(Calendar.TUESDAY);
+        super.setupAdapter(view, R.id.tuesdaylist, STPHelper.getDateof(Calendar.TUESDAY));
     }
 
 }

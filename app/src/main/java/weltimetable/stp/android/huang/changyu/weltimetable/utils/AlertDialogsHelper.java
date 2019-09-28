@@ -1,6 +1,7 @@
 package weltimetable.stp.android.huang.changyu.weltimetable.utils;
 
 import weltimetable.stp.android.huang.changyu.weltimetable.components.dialog.NumberPickerDialog;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.STPController;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.TimeTableInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter.FragmentsTabAdapter;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter.TTInfoAdapter;
@@ -8,14 +9,18 @@ import weltimetable.stp.android.huang.changyu.weltimetable.R;
 
 import android.app.Activity;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -40,7 +45,7 @@ import java.util.regex.Pattern;
  */
 public class AlertDialogsHelper {
 
-    public static void getEditSubjectDialog( Activity activity,  View alertLayout,  ArrayList<TimeTableInfo> adapter,  ListView listView, int position) {
+    public static void getEditSubjectDialog(Activity activity, View alertLayout, ArrayList<TimeTableInfo> adapter, ListView listView, int position) {
         final HashMap<Integer, EditText> editTextHashs = new HashMap<>();
         final EditText subject = alertLayout.findViewById(R.id.subject_dialog);
         final EditText teacher = alertLayout.findViewById(R.id.teacher_dialog);
@@ -281,21 +286,6 @@ public class AlertDialogsHelper {
         alert.setView(alertLayout);
         final AlertDialog dialog = alert.create();
 
-        Button add = activity.findViewById(R.id.add_sub);
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.show();
-            }
-        });
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -318,7 +308,7 @@ public class AlertDialogsHelper {
                     timetableinfo.setTeacher(teacher.getText().toString());
                     timetableinfo.setRoom(room.getText().toString());
                     timetableinfo.setColor(buttonColor.getColor());
-                    dbHelper.insertTimeTableInfo(timetableinfo);
+                    dbHelper.updateTimeTableInfo(timetableinfo);
                     adapter.notifyDataSetChanged();
                     subject.getText().clear();
                     teacher.getText().clear();

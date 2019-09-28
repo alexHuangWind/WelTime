@@ -2,15 +2,15 @@ package weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter;
 
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
 import weltimetable.stp.android.huang.changyu.weltimetable.components.dialog.TaskPickerDialog;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseEvent;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.TimeTableInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.AlertDialogsHelper;
+import weltimetable.stp.android.huang.changyu.weltimetable.utils.ConstentValue;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.DbHelper;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.STPHelper;
 
-
 import android.annotation.SuppressLint;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 
 import android.support.annotation.NonNull;
@@ -30,6 +30,8 @@ import android.widget.ArrayAdapter;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -46,15 +48,19 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
     private ListView mListView;
     private DbHelper dbHelper;
     private MediaPlayer mMp;
+
+
     @SuppressLint("SetTextI18n")
     @NonNull
     @Override
-    public View getView( int position, View cardView, @NonNull ViewGroup parent) {
+    public View getView(int position, View cardView, @NonNull ViewGroup parent) {
 
-        if(dbHelper == null){
-        dbHelper = new DbHelper(mActivity);
+        if (dbHelper == null) {
+            dbHelper = new DbHelper(mActivity);
         }
-        TimeTableInfo mTTInfo; mTTInfo = dbHelper.getTimeTableItemInfoByID(Objects.requireNonNull(getItem(position)).getId());
+        TimeTableInfo mTTInfo;
+        mTTInfo = dbHelper.getTimeTableItemInfoByItemID(Objects.requireNonNull(getItem(position).getItemID()));
+
 //        String tc = info.getTeacher();
 //        String duration = info.getDuration();
 //        String time_f = info.getFromTime();
@@ -67,19 +73,19 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
         TTinfoViewHolder holder;
 
 //        if (cardView == null) {
-            LayoutInflater inflater = LayoutInflater.from(mActivity);
-            cardView = inflater.inflate(mResource, parent, false);
-            holder = new TTinfoViewHolder(cardView);
-            holder.subject = cardView.findViewById(R.id.subject);
-            holder.popWindow = cardView.findViewById(R.id.popW);
-            holder.teacher = cardView.findViewById(R.id.teacher);
-            holder.time = cardView.findViewById(R.id.time);
-            holder.room = cardView.findViewById(R.id.room);
-            holder.finishButton = cardView.findViewById(R.id.BT_Finish);
-            holder.progressSeekBar = cardView.findViewById(R.id.SB_Progress);
-            holder.room = cardView.findViewById(R.id.room);
-            holder.cardView = cardView.findViewById(R.id.info_cardview);
-            cardView.setTag(holder);
+        LayoutInflater inflater = LayoutInflater.from(mActivity);
+        cardView = inflater.inflate(mResource, parent, false);
+        holder = new TTinfoViewHolder(cardView);
+        holder.subject = cardView.findViewById(R.id.subject);
+        holder.popWindow = cardView.findViewById(R.id.popW);
+        holder.teacher = cardView.findViewById(R.id.teacher);
+        holder.time = cardView.findViewById(R.id.time);
+        holder.room = cardView.findViewById(R.id.room);
+        holder.finishButton = cardView.findViewById(R.id.BT_Finish);
+        holder.progressSeekBar = cardView.findViewById(R.id.SB_Progress);
+        holder.room = cardView.findViewById(R.id.room);
+        holder.cardView = cardView.findViewById(R.id.info_cardview);
+        cardView.setTag(holder);
 //        } else {
 //            holder = (TTinfoViewHolder) cardView.getTag();
 //        }
@@ -90,7 +96,7 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
         holder.time.setText(mTTInfo.getFromTime() + " - " + mTTInfo.getDuration());
         holder.cardView.setBackgroundColor(mTTInfo.getColor());
         holder.progressSeekBar.setProgress(mTTInfo.getProcess());
-        if(holder.progressSeekBar.getProgress()==100){
+        if (holder.progressSeekBar.getProgress() == 100) {
             holder.finishButton.setText("DONE");
             holder.cardView.setBackgroundResource(R.drawable.glassbreak);
         }
@@ -126,7 +132,7 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
             @Override
             public void onClick(View view) {
                 int i = holder.progressSeekBar.getProgress();
-                onTaskStatueChanged(holder, mTTInfo.getId(),mTTInfo.getColor(),true);
+                onTaskStatueChanged(holder, mTTInfo.getId(), mTTInfo.getColor(), true);
 
                 //                STPHelper.toast(mActivity,"progress : "+i);
             }
@@ -145,35 +151,47 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                onTaskStatueChanged(holder, mTTInfo.getId(),mTTInfo.getColor(),false);
+                onTaskStatueChanged(holder, mTTInfo.getId(), mTTInfo.getColor(), false);
             }
         });
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             ////TODO setListItems
             @Override
             public void onClick(View view) {
-                String[] itemdata = new String[10];
-                for (int i = 0; i < 10; i++) {
-                    itemdata[i] = "it730" + i;
+                SharedPreferences prefs = mActivity.getSharedPreferences(ConstentValue.TAG_prd, mActivity.MODE_PRIVATE);
+                Boolean isCourseDownload = prefs.getBoolean("isCourseDownload", false);//"No name defined" is the default value.
+                if (!isCourseDownload) {
+                    STPHelper.toast(mActivity, "Please Add Course Code First!");
+                    return;
                 }
                 TaskPickerDialog newFragment = new TaskPickerDialog();
-                newFragment.setItemdata(itemdata);
-//                newFragment.setListView(mListView);
+                newFragment.setItemInfo(mTTInfo);
                 newFragment.setValueChangeListener(new NumberPicker.OnValueChangeListener() {
 
                     @Override
                     public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+
                         DbHelper db = new DbHelper(mActivity);
+                        CourseEvent event = newFragment.getEventMap().get(newFragment.getItemdata()[i1]);
                         TTInfoAdapter TTInfoAdapter = (TTInfoAdapter) mListView.getAdapter(); // In order to get notifyDataSetChanged() method.
-                       TimeTableInfo timeTableInfo = new TimeTableInfo();
-                        timeTableInfo.setSubject(TaskPickerDialog.getSubject(i));
-                        timeTableInfo.setTeacher(TaskPickerDialog.getTeacher(i));
-                        timeTableInfo.setRoom(TaskPickerDialog.getRoom(i));
+                        TimeTableInfo timeTableInfo = new TimeTableInfo();
+//                        if(event.getIsClass()){
+//                            timeTableInfo.setSubject(event.getParent().getCourseName());
+//                            timeTableInfo.setFromTime(event.getStartTime());
+//                        }else{
+                        timeTableInfo.setSubject(event.getParent().getCourseName() + " - " + event.getEventName());
+                        timeTableInfo.setFromTime(mTTInfo.getFromTime());
+//                        }
+                        event.setQuantity(event.getQuantity() - 1);
+                        timeTableInfo.setTeacher(event.getParent().getTutor());
+                        timeTableInfo.setRoom(event.getClassRoom());
                         timeTableInfo.setColor(TaskPickerDialog.getColor(i));
-                        timeTableInfo.setFromTime(TaskPickerDialog.getFromTime(i));
                         timeTableInfo.setDuration(TaskPickerDialog.getDuration(i));
+                        timeTableInfo.setItemID(mTTInfo.getItemID());
+                        timeTableInfo.setDate(mTTInfo.getDate());
                         timeTableInfo.setId(mTTInfo.getId());
                         db.updateTimeTableInfo(timeTableInfo);
+                        mTTInfolist.set(position,timeTableInfo);
                         TTInfoAdapter.notifyDataSetChanged();
                     }
                 });
@@ -185,21 +203,21 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
         return cardView;
     }
 
-    private void onTaskStatueChanged(TTinfoViewHolder holder,int id,int color, boolean flag) {
+    private void onTaskStatueChanged(TTinfoViewHolder holder, int id, int color, boolean flag) {
         if (flag) {
-            if (holder.progressSeekBar.getProgress()!= 100) {
+            if (holder.progressSeekBar.getProgress() != 100) {
                 holder.finishButton.setText("DONE");
                 holder.cardView.setBackgroundResource(R.drawable.glassbreak);
                 holder.progressSeekBar.setProgress(100);
                 mMp = MediaPlayer.create(mActivity.getApplicationContext(), R.raw.sniper_shot);
                 mMp.start();
-                UpdateProcessByID(id,100);
+                UpdateProcessByID(id, 100);
                 return;
             }
             holder.finishButton.setText("UNFINISHED");
             holder.cardView.setBackgroundColor(color);
             holder.progressSeekBar.setProgress(0);
-            UpdateProcessByID(id,0);
+            UpdateProcessByID(id, 0);
             return;
         }
         if (holder.progressSeekBar.getProgress() == 100) {
@@ -207,16 +225,16 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
             holder.cardView.setBackgroundResource(R.drawable.glassbreak);
             mMp = MediaPlayer.create(mActivity.getApplicationContext(), R.raw.sniper_shot);
             mMp.start();
-            UpdateProcessByID(id,100);
+            UpdateProcessByID(id, 100);
             return;
         }
         holder.finishButton.setText("UNFINISHED");
         holder.cardView.setBackgroundColor(color);
-        UpdateProcessByID(id,holder.progressSeekBar.getProgress());
+        UpdateProcessByID(id, holder.progressSeekBar.getProgress());
         return;
     }
 
-    private void UpdateProcessByID(int id,int process) {
+    private void UpdateProcessByID(int id, int process) {
         DbHelper dbHelper = new DbHelper(mActivity);
 //        TimeTableInfo timetableinfo = new TimeTableInfo();
 //        timetableinfo.setSubject(holder.subject.getText().toString());
@@ -228,7 +246,7 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
 //        timetableinfo.setColor(holder.color);
 //        timetableinfo.setId(holder.id);
 //        timetableinfo.setProcess(holder.progressSeekBar.getProgress());
-        dbHelper.updateTimeTableProcessById(id,process);
+        dbHelper.updateTimeTableProcessById(id, process);
     }
 
 //    private void UpdateProcessByID(TTinfoViewHolder holder) {

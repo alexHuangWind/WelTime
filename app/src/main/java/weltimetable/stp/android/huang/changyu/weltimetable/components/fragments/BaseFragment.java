@@ -37,7 +37,7 @@ public abstract class BaseFragment extends Fragment {
     protected void setupAdapter(@Nullable View view,@Nullable int listID,@Nullable String day) {
         DbHelper db = new DbHelper(getActivity());
         ListView  listView = view.findViewById(listID);
-        TTInfoAdapter adapter = new TTInfoAdapter(getActivity(), listView, R.layout.listview_info_adapter, db.getTimeTableInfo(day));
+        TTInfoAdapter adapter = new TTInfoAdapter(getActivity(), listView, R.layout.listview_info_adapter, db.getTimeTableInfoByDate(day));
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(FragmentHelper.setupListViewMultiSelect(getActivity(), listView, adapter, db));

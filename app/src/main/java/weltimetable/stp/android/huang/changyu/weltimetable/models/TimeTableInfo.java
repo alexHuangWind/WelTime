@@ -18,7 +18,26 @@ public class TimeTableInfo {
     private String weekofyear;
     private String year;
     private String status;
+    private String date;
     private int id, color;
+    private String itemID;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getItemID() {
+        return itemID;
+    }
+
+    public void setItemID(String itemID) {
+        this.itemID = itemID;
+    }
+
 
 
     public TimeTableInfo() {

@@ -91,6 +91,7 @@
     <string name="title_activity_courses_list_">CoursesList_Activity</string>
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_notification">NotificationActivity</string>
+    <string name="courseCode">Course code</string>
 
 
 </resources>

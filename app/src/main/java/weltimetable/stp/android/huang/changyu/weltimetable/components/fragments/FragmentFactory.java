@@ -15,8 +15,6 @@ public class FragmentFactory {
     private WednesdayFragment wednesdayfragment;
     private ThursdayFragment thursdayfragment;
     private FridayFragment fridayfragment;
-    private SaturdayFragment saturdayfragment;
-    private SundayFragment sundayfragment;
     private static FragmentFactory mFactory;
     private HashMap<String, Fragment> mHashMap = new HashMap<>();
 
@@ -57,14 +55,14 @@ public class FragmentFactory {
             fridayfragment = new FridayFragment();
             mHashMap.put(ConstentValue.FRIDAY, fridayfragment);
         }
-        if (tag.equals(ConstentValue.SATURDAY) && saturdayfragment == null) {
-            saturdayfragment = new SaturdayFragment();
-            mHashMap.put(ConstentValue.SATURDAY, saturdayfragment);
-        }
-        if (tag.equals(ConstentValue.SUNDAY) && sundayfragment == null) {
-            sundayfragment = new SundayFragment();
-            mHashMap.put(ConstentValue.SUNDAY, sundayfragment);
-        }
+//        if (tag.equals(ConstentValue.SATURDAY) && saturdayfragment == null) {
+//            saturdayfragment = new SaturdayFragment();
+//            mHashMap.put(ConstentValue.SATURDAY, saturdayfragment);
+//        }
+//        if (tag.equals(ConstentValue.SUNDAY) && sundayfragment == null) {
+//            sundayfragment = new SundayFragment();
+//            mHashMap.put(ConstentValue.SUNDAY, sundayfragment);
+//        }
         return mHashMap.get(tag);
 
     }

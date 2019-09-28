@@ -1,8 +1,11 @@
 package weltimetable.stp.android.huang.changyu.weltimetable.components.fragments;
 
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
-import weltimetable.stp.android.huang.changyu.weltimetable.utils.ConstentValue;
+import weltimetable.stp.android.huang.changyu.weltimetable.utils.STPHelper;
+
 import android.view.View;
+
+import java.util.Calendar;
 
 
 /**
@@ -20,7 +23,7 @@ public class FridayFragment extends BaseFragment {
 
     @Override
     public void initAdapter(View view) {
-        super.setupAdapter(view, R.id.fridaylist, ConstentValue.FRIDAY);
+        super.setupAdapter(view, R.id.fridaylist, STPHelper.getDateof(Calendar.FRIDAY));
     }
 
 }

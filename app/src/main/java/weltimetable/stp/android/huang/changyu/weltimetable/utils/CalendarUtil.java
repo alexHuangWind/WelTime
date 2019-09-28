@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v4.app.ActivityCompat;
@@ -16,404 +18,30 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import weltimetable.stp.android.huang.changyu.weltimetable.models.CalendarInfo;
 
 public class CalendarUtil {
     private static final int MY_PERMISSIONS_REQUEST_READ_CALENDAR = 1000;
     private static final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR = 1001;
+    private static final long ONE_HOUR = 60 * 60 * 1000;
+    private static String CALANDER_URL = "content://com.android.calendar/calendars";
+    private static String CALANDER_EVENT_URL = "content://com.android.calendar/events";
+    private static String CALANDER_REMIDER_URL = "content://com.android.calendar/reminders";
+    private static CalendarUtil INSTANCE;
 
-    public ArrayList<String> getCalendars(Activity activity) {
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_CALENDAR}, MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
-            return null;
-        }
-
-        // Projection array. Creating indices for this array instead of doing dynamic lookups improves performance.
-        final String[] EVENT_PROJECTION = new String[]{
-                CalendarContract.Calendars._ID,                           // 0
-                CalendarContract.Calendars.ACCOUNT_NAME,                  // 1
-                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,         // 2
-                CalendarContract.Calendars.OWNER_ACCOUNT                  // 3
-        };
-
-        // The indices for the projection array above.
-        final int PROJECTION_ID_INDEX = 0;
-        final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
-        final int PROJECTION_DISPLAY_NAME_INDEX = 2;
-        final int PROJECTION_OWNER_ACCOUNT_INDEX = 3;
-
-
-        ContentResolver contentResolver = activity.getContentResolver();
-        Cursor cur = contentResolver.query(CalendarContract.Calendars.CONTENT_URI, EVENT_PROJECTION, null, null, null);
-
-        ArrayList<String> calendarInfos = new ArrayList<>();
-        while (cur.moveToNext()) {
-            long calID = 0;
-            String displayName = null;
-            String accountName = null;
-            String ownerName = null;
-
-            // Get the field values
-            calID = cur.getLong(PROJECTION_ID_INDEX);
-            displayName = cur.getString(PROJECTION_DISPLAY_NAME_INDEX);
-            accountName = cur.getString(PROJECTION_ACCOUNT_NAME_INDEX);
-            ownerName = cur.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
-
-            String calendarInfo = String.format("Calendar ID: %s\nDisplay Name: %s\nAccount Name: %s\nOwner Name: %s", calID, displayName, accountName, ownerName);
-            calendarInfos.add(calendarInfo);
-        }
-
-        return calendarInfos;
+    private CalendarUtil() {
     }
 
-    public ArrayList<String> getPrimaryCalendar(Activity activity) {
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_CALENDAR}, MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
-            return null;
+    public static CalendarUtil getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new CalendarUtil();
         }
 
-        // Projection array. Creating indices for this array instead of doing dynamic lookups improves performance.
-        final String[] EVENT_PROJECTION = new String[]{
-                CalendarContract.Calendars._ID,                           // 0
-                CalendarContract.Calendars.ACCOUNT_NAME,                  // 1
-                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,         // 2
-                CalendarContract.Calendars.OWNER_ACCOUNT                  // 3
-        };
-
-        // The indices for the projection array above.
-        final int PROJECTION_ID_INDEX = 0;
-        final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
-        final int PROJECTION_DISPLAY_NAME_INDEX = 2;
-        final int PROJECTION_OWNER_ACCOUNT_INDEX = 3;
-
-        ContentResolver contentResolver = activity.getContentResolver();
-        String selection = CalendarContract.Calendars.VISIBLE + " = 1 AND " + CalendarContract.Calendars.IS_PRIMARY + "=1";
-        Cursor cur = contentResolver.query(CalendarContract.Calendars.CONTENT_URI, EVENT_PROJECTION, selection, null, null);
-
-        ArrayList<String> calendarInfos = new ArrayList<>();
-        while (cur.moveToNext()) {
-            long calID = 0;
-            String displayName = null;
-            String accountName = null;
-            String ownerName = null;
-
-            // Get the field values
-            calID = cur.getLong(PROJECTION_ID_INDEX);
-            displayName = cur.getString(PROJECTION_DISPLAY_NAME_INDEX);
-            accountName = cur.getString(PROJECTION_ACCOUNT_NAME_INDEX);
-            ownerName = cur.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
-
-            String calendarInfo = String.format("Calendar ID: %s\nDisplay Name: %s\nAccount Name: %s\nOwner Name: %s", calID, displayName, accountName, ownerName);
-            calendarInfos.add(calendarInfo);
-        }
-
-        return calendarInfos;
+        return INSTANCE;
     }
 
-    public ArrayList<String> readCalendarsByAccount(View view, Activity activity) {
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_CALENDAR}, MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
-            return null;
-        }
-
-        // Projection array. Creating indices for this array instead of doing dynamic lookups improves performance.
-        final String[] EVENT_PROJECTION = new String[]{
-                CalendarContract.Calendars._ID,                           // 0
-                CalendarContract.Calendars.ACCOUNT_NAME,                  // 1
-                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,         // 2
-                CalendarContract.Calendars.OWNER_ACCOUNT                  // 3
-        };
-
-        // The indices for the projection array above.
-        final int PROJECTION_ID_INDEX = 0;
-        final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
-        final int PROJECTION_DISPLAY_NAME_INDEX = 2;
-        final int PROJECTION_OWNER_ACCOUNT_INDEX = 3;
-
-        // Run query
-        Cursor cur = null;
-        ContentResolver cr = activity.getContentResolver();
-        Uri uri = CalendarContract.Calendars.CONTENT_URI;
-        String selection = "((" + CalendarContract.Calendars.ACCOUNT_NAME + " = ?) AND ("
-                + CalendarContract.Calendars.ACCOUNT_TYPE + " = ?) AND ("
-                + CalendarContract.Calendars.OWNER_ACCOUNT + " = ?))";
-        String[] selectionArgs = new String[]{"test@gmail.com", "com.google", "test@gmail.com"};
-        // Submit the query and get a Cursor object back.
-        cur = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
-
-        // Use the cursor to step through the returned records
-        ArrayList<String> calendars = new ArrayList<>();
-        while (cur.moveToNext()) {
-            long calID = 0;
-            String displayName = null;
-            String accountName = null;
-            String ownerName = null;
-
-            // Get the field values
-            calID = cur.getLong(PROJECTION_ID_INDEX);
-            displayName = cur.getString(PROJECTION_DISPLAY_NAME_INDEX);
-            accountName = cur.getString(PROJECTION_ACCOUNT_NAME_INDEX);
-            ownerName = cur.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
-
-            String calendarInfo = String.format("Calendar ID: %s\nDisplay Name: %s\nAccount Name: %s\nOwner Name: %s", calID, displayName, accountName, ownerName);
-            calendars.add(calendarInfo);
-        }
-
-        return calendars;
-    }
-
-    private boolean isEventAlreadyExist(Activity activity, String eventTitle) {
-        final String[] INSTANCE_PROJECTION = new String[]{
-                CalendarContract.Instances.EVENT_ID,      // 0
-                CalendarContract.Instances.BEGIN,         // 1
-                CalendarContract.Instances.TITLE          // 2
-        };
-
-        long startMillis = 0;
-        long endMillis = 0;
-        Calendar beginTime = Calendar.getInstance();
-        beginTime.set(2017, 11, 15, 6, 00);
-        startMillis = beginTime.getTimeInMillis();
-        Calendar endTime = Calendar.getInstance();
-        endTime.set(2017, 11, 15, 8, 00);
-        endMillis = endTime.getTimeInMillis();
-
-        // The ID of the recurring event whose instances you are searching for in the Instances table
-        String selection = CalendarContract.Instances.TITLE + " = ?";
-        String[] selectionArgs = new String[]{eventTitle};
-
-        // Construct the query with the desired date range.
-        Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
-        ContentUris.appendId(builder, startMillis);
-        ContentUris.appendId(builder, endMillis);
-
-        // Submit the query
-        Cursor cur = activity.getContentResolver().query(builder.build(), INSTANCE_PROJECTION, selection, selectionArgs, null);
-
-        return cur.getCount() > 0;
-    }
-
-    /*
-    * values.put(CalendarContract.Events.DTSTART, startMillis);
-            values.put(CalendarContract.Events.DTEND, endMillis);
-            values.put(CalendarContract.Events.TITLE, "Jazzercise");
-            values.put(CalendarContract.Events.DESCRIPTION, "Group workout");
-            values.put(CalendarContract.Events.CALENDAR_ID, calID);
-            values.put(CalendarContract.Events.EVENT_TIMEZONE, "America/Los_Angeles");
-            values.put(CalendarContract.Events.ORGANIZER, "google_calendar@gmail.com");
-            * */
-    public void addEvent(Activity activity, CalendarInfo calendarInfo) {
-
-        if (isEventAlreadyExist(activity, calendarInfo.getEventTitle())) {
-            STPHelper.toast(activity, "Jazzercise event already exist!");
-            return;
-        }
-//        Calendar beginTime = Calendar.getInstance();
-//        beginTime.set(2017, 11, 15, 6, 00);
-//        startMillis = beginTime.getTimeInMillis();
-//        Calendar endTime = Calendar.getInstance();
-//        endTime.set(2017, 11, 15, 8, 00);
-//        endMillis = endTime.getTimeInMillis();
-        ContentResolver cr = activity.getContentResolver();
-        ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.DTSTART, calendarInfo.getStartMillis());
-        values.put(CalendarContract.Events.DTEND, calendarInfo.getEndMillis());
-        values.put(CalendarContract.Events.TITLE, calendarInfo.getEventTitle());
-        values.put(CalendarContract.Events.DESCRIPTION, calendarInfo.getDescription());
-        values.put(CalendarContract.Events.CALENDAR_ID, calendarInfo.getCalID());
-        values.put(CalendarContract.Events.EVENT_TIMEZONE, calendarInfo.getEventTimezone());
-        values.put(CalendarContract.Events.ORGANIZER, calendarInfo.getOrganizer());
-
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
-            Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
-            long eventID = Long.parseLong(uri.getLastPathSegment());
-            Log.i("Calendar", "Event Created, the event id is: " + eventID);
-        } else {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_CALENDAR}, MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
-        }
-
-    }
-
-//    public void removeEvent(Activity activity) {
-//        String eventTitle = "Jazzercise";
-//
-//        final String[] INSTANCE_PROJECTION = new String[]{
-//                CalendarContract.Instances.EVENT_ID,      // 0
-//                CalendarContract.Instances.BEGIN,         // 1
-//                CalendarContract.Instances.TITLE          // 2
-//        };
-//        // The indices for the projection array above.
-//        final int PROJECTION_ID_INDEX = 0;
-//        final int PROJECTION_BEGIN_INDEX = 1;
-//        final int PROJECTION_TITLE_INDEX = 2;
-//
-//        // Specify the date range you want to search for recurring event instances
-//        Calendar beginTime = Calendar.getInstance();
-//        beginTime.set(2017, 9, 23, 8, 0);
-//        long startMillis = beginTime.getTimeInMillis();
-//        Calendar endTime = Calendar.getInstance();
-//        endTime.set(2018, 1, 24, 8, 0);
-//        long endMillis = endTime.getTimeInMillis();
-//
-//
-//        // The ID of the recurring event whose instances you are searching for in the Instances table
-//        String selection = CalendarContract.Instances.TITLE + " = ?";
-//        String[] selectionArgs = new String[]{eventTitle};
-//
-//        // Construct the query with the desired date range.
-//        Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
-//        ContentUris.appendId(builder, startMillis);
-//        ContentUris.appendId(builder, endMillis);
-//
-//        // Submit the query
-//        Cursor cur = activity.getContentResolver().query(builder.build(), INSTANCE_PROJECTION, selection, selectionArgs, null);
-//
-//        while (cur.moveToNext()) {
-//            // Get the field values
-//            long eventID = cur.getLong(PROJECTION_ID_INDEX);
-//            long beginVal = cur.getLong(PROJECTION_BEGIN_INDEX);
-//            String title = cur.getString(PROJECTION_TITLE_INDEX);
-//
-//            Uri deleteUri = null;
-//            deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
-//            int rows = activity.getContentResolver().delete(deleteUri, null, null);
-//            Log.i("Calendar", "Rows deleted: " + rows);
-//        }
-//
-//    }
-
-//    private void showEvents(String eventTitle) {
-//        final String[] INSTANCE_PROJECTION = new String[]{
-//                CalendarContract.Instances.EVENT_ID,       // 0
-//                CalendarContract.Instances.BEGIN,         // 1
-//                CalendarContract.Instances.TITLE,        // 2
-//                CalendarContract.Instances.ORGANIZER    //3
-//        };
-//
-//        // The indices for the projection array above.
-//        final int PROJECTION_ID_INDEX = 0;
-//        final int PROJECTION_BEGIN_INDEX = 1;
-//        final int PROJECTION_TITLE_INDEX = 2;
-//        final int PROJECTION_ORGANIZER_INDEX = 3;
-//
-//        // Specify the date range you want to search for recurring event instances
-//        Calendar beginTime = Calendar.getInstance();
-//        beginTime.set(2017, 9, 23, 8, 0);
-//        long startMillis = beginTime.getTimeInMillis();
-//        Calendar endTime = Calendar.getInstance();
-//        endTime.set(2018, 1, 24, 8, 0);
-//        long endMillis = endTime.getTimeInMillis();
-//
-//
-//        // The ID of the recurring event whose instances you are searching for in the Instances table
-//        String selection = CalendarContract.Instances.TITLE + " = ?";
-//        String[] selectionArgs = new String[]{eventTitle};
-//
-//        // Construct the query with the desired date range.
-//        Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
-//        ContentUris.appendId(builder, startMillis);
-//        ContentUris.appendId(builder, endMillis);
-//
-//        // Submit the query
-//        Cursor cur = getContentResolver().query(builder.build(), INSTANCE_PROJECTION, selection, selectionArgs, null);
-//
-//
-//        ArrayList<String> events = new ArrayList<>();
-//        while (cur.moveToNext()) {
-//            // Get the field values
-//            long eventID = cur.getLong(PROJECTION_ID_INDEX);
-//            long beginVal = cur.getLong(PROJECTION_BEGIN_INDEX);
-//            String title = cur.getString(PROJECTION_TITLE_INDEX);
-//            String organizer = cur.getString(PROJECTION_ORGANIZER_INDEX);
-//
-//            // Do something with the values.
-//            Log.i("Calendar", "Event:  " + title);
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.setTimeInMillis(beginVal);
-//            DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-//            Log.i("Calendar", "Date: " + formatter.format(calendar.getTime()));
-//
-//            events.add(String.format("Event: %s\nOrganizer: %s\nDate: %s", title, organizer, formatter.format(calendar.getTime())));
-//        }
-//
-//        ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, events);
-//        listView.setAdapter(stringArrayAdapter);
-//    }
-
-//    public void readEvents(View view) {
-//        final String[] INSTANCE_PROJECTION = new String[]{
-//                CalendarContract.Instances.EVENT_ID,      // 0
-//                CalendarContract.Instances.BEGIN,         // 1
-//                CalendarContract.Instances.TITLE,          // 2
-//                CalendarContract.Instances.ORGANIZER
-//        };
-//
-//        // The indices for the projection array above.
-//        final int PROJECTION_ID_INDEX = 0;
-//        final int PROJECTION_BEGIN_INDEX = 1;
-//        final int PROJECTION_TITLE_INDEX = 2;
-//        final int PROJECTION_ORGANIZER_INDEX = 3;
-//
-//        // Specify the date range you want to search for recurring event instances
-//        Calendar beginTime = Calendar.getInstance();
-//        beginTime.set(2017, 9, 23, 8, 0);
-//        long startMillis = beginTime.getTimeInMillis();
-//        Calendar endTime = Calendar.getInstance();
-//        endTime.set(2018, 1, 24, 8, 0);
-//        long endMillis = endTime.getTimeInMillis();
-//
-//
-//        // The ID of the recurring event whose instances you are searching for in the Instances table
-//        String selection = CalendarContract.Instances.EVENT_ID + " = ?";
-//        String[] selectionArgs = new String[]{"207"};
-//
-//        // Construct the query with the desired date range.
-//        Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
-//        ContentUris.appendId(builder, startMillis);
-//        ContentUris.appendId(builder, endMillis);
-//
-//        // Submit the query
-//        Cursor cur = getContentResolver().query(builder.build(), INSTANCE_PROJECTION, null, null, null);
-//
-//
-//        ArrayList<String> events = new ArrayList<>();
-//        while (cur.moveToNext()) {
-//
-//            // Get the field values
-//            long eventID = cur.getLong(PROJECTION_ID_INDEX);
-//            long beginVal = cur.getLong(PROJECTION_BEGIN_INDEX);
-//            String title = cur.getString(PROJECTION_TITLE_INDEX);
-//            String organizer = cur.getString(PROJECTION_ORGANIZER_INDEX);
-//
-//            // Do something with the values.
-//            Log.i("Calendar", "Event:  " + title);
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.setTimeInMillis(beginVal);
-//            DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-//            Log.i("Calendar", "Date: " + formatter.format(calendar.getTime()));
-//
-//            events.add(String.format("Event: %s\nOrganizer: %s\nDate: %s", title, organizer, formatter.format(calendar.getTime())));
-//        }
-//
-//        ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, events);
-//        listView.setAdapter(stringArrayAdapter);
-//    }
-
-    private void updateEvent(Activity activity, long eventID, CalendarInfo calendarInfo) {
-        ContentResolver cr = activity.getContentResolver();
-        ContentValues values = new ContentValues();
-        setClaendarInfo(values, calendarInfo);
-        Uri updateUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
-        int rows = activity.getContentResolver().update(updateUri, values, null, null);
-        Log.i("Calendar", "Rows updated: " + rows);
-    }
-
-    private void deleteEvent(Activity activity, long eventID) {
-        Uri deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
-        int rows = activity.getContentResolver().delete(deleteUri, null, null);
-        Log.i("Calendar", "Rows deleted: " + rows);
-    }
     private ContentValues setClaendarInfo(ContentValues values, CalendarInfo calendarInfo) {
         values.put(CalendarContract.Events.DTSTART, calendarInfo.getStartMillis());
         values.put(CalendarContract.Events.DTEND, calendarInfo.getEndMillis());
@@ -423,5 +51,142 @@ public class CalendarUtil {
         values.put(CalendarContract.Events.EVENT_TIMEZONE, calendarInfo.getEventTimezone());
         values.put(CalendarContract.Events.ORGANIZER, calendarInfo.getOrganizer());
         return values;
+    }
+
+    public static boolean addCalendarEvent(Context context, String title, String description, long beginTime) {
+        // 获取日历账户的id
+        int calId = checkAndAddCalendarAccount(context);
+        if (calId < 0) {
+            // 获取账户id失败直接返回，添加日历事件失败
+            return false;
+        }
+
+        ContentValues event = new ContentValues();
+        event.put("title", title);
+        event.put("description", description);
+        // 插入账户的id
+        event.put("calendar_id", calId);
+
+        Calendar mCalendar = Calendar.getInstance();
+        mCalendar.setTimeInMillis(beginTime);//设置开始时间
+        long start = mCalendar.getTime().getTime();
+        mCalendar.setTimeInMillis(start + ONE_HOUR);//设置终止时间
+        long end = mCalendar.getTime().getTime();
+
+        event.put(CalendarContract.Events.DTSTART, start);
+        event.put(CalendarContract.Events.DTEND, end);
+        event.put(CalendarContract.Events.HAS_ALARM, 1);//设置有闹钟提醒
+        event.put(CalendarContract.Events.EVENT_TIMEZONE, "Asia/Shanghai");  //这个是时区，必须有，
+        //添加事件
+        Uri newEvent = context.getContentResolver().insert(Uri.parse(CALANDER_EVENT_URL), event);
+        if (newEvent == null) {
+            // 添加日历事件失败直接返回
+            return false;
+        }
+        //事件提醒的设定
+        ContentValues values = new ContentValues();
+        values.put(CalendarContract.Reminders.EVENT_ID, ContentUris.parseId(newEvent));
+        // 提前10分钟有提醒
+        values.put(CalendarContract.Reminders.MINUTES, 10);
+        values.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+        Uri uri = context.getContentResolver().insert(Uri.parse(CALANDER_REMIDER_URL), values);
+        if (uri == null) {
+            // 添加闹钟提醒失败直接返回
+            return false;
+        }
+        return true;
+    }
+
+    private static int checkAndAddCalendarAccount(Context context) {
+        int oldId = checkCalendarAccount(context);
+        if (oldId >= 0) {
+            return oldId;
+        } else {
+            long addId = addCalendarAccount(context);
+            if (addId >= 0) {
+                return checkCalendarAccount(context);
+            } else {
+                return -1;
+            }
+        }
+    }
+
+    private static String CALENDARS_NAME = "test";
+    private static String CALENDARS_ACCOUNT_NAME = "test@gmail.com";
+    private static String CALENDARS_ACCOUNT_TYPE = "com.android.exchange";
+    private static String CALENDARS_DISPLAY_NAME = "TestAccount";
+
+    private static long addCalendarAccount(Context context) {
+        TimeZone timeZone = TimeZone.getDefault();
+        ContentValues value = new ContentValues();
+        value.put(CalendarContract.Calendars.NAME, CALENDARS_NAME);
+
+        value.put(CalendarContract.Calendars.ACCOUNT_NAME, CALENDARS_ACCOUNT_NAME);
+        value.put(CalendarContract.Calendars.ACCOUNT_TYPE, CALENDARS_ACCOUNT_TYPE);
+        value.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, CALENDARS_DISPLAY_NAME);
+        value.put(CalendarContract.Calendars.VISIBLE, 1);
+        value.put(CalendarContract.Calendars.CALENDAR_COLOR, Color.BLUE);
+        value.put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_OWNER);
+        value.put(CalendarContract.Calendars.SYNC_EVENTS, 1);
+        value.put(CalendarContract.Calendars.CALENDAR_TIME_ZONE, timeZone.getID());
+        value.put(CalendarContract.Calendars.OWNER_ACCOUNT, CALENDARS_ACCOUNT_NAME);
+        value.put(CalendarContract.Calendars.CAN_ORGANIZER_RESPOND, 0);
+
+        Uri calendarUri = Uri.parse(CALANDER_URL);
+        calendarUri = calendarUri.buildUpon()
+                .appendQueryParameter(CalendarContract.CALLER_IS_SYNCADAPTER, "true")
+                .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_NAME, CALENDARS_ACCOUNT_NAME)
+                .appendQueryParameter(CalendarContract.Calendars.ACCOUNT_TYPE, CALENDARS_ACCOUNT_TYPE)
+                .build();
+
+        Uri result = context.getContentResolver().insert(calendarUri, value);
+        long id = result == null ? -1 : ContentUris.parseId(result);
+        return id;
+    }
+
+    private static int checkCalendarAccount(Context context) {
+        Cursor userCursor = context.getContentResolver().query(Uri.parse(CALANDER_URL), null, null, null, null);
+        try {
+            if (userCursor == null)//查询返回空值
+                return -1;
+            int count = userCursor.getCount();
+            if (count > 0) {//存在现有账户，取第一个账户的id返回
+                userCursor.moveToFirst();
+                return userCursor.getInt(userCursor.getColumnIndex(CalendarContract.Calendars._ID));
+            } else {
+                return -1;
+            }
+        } finally {
+            if (userCursor != null) {
+                userCursor.close();
+            }
+        }
+    }
+
+    public static void deleteCalendarEvent(Context context, String title) {
+        Cursor eventCursor = context.getContentResolver().query(Uri.parse(CALANDER_EVENT_URL), null, null, null, null);
+        try {
+            if (eventCursor == null)//查询返回空值
+                return;
+            if (eventCursor.getCount() > 0) {
+                //遍历所有事件，找到title跟需要查询的title一样的项
+                for (eventCursor.moveToFirst(); !eventCursor.isAfterLast(); eventCursor.moveToNext()) {
+                    String eventTitle = eventCursor.getString(eventCursor.getColumnIndex("title"));
+                    if (!STPHelper.isEmpty(title) && title.equals(eventTitle)) {
+                        int id = eventCursor.getInt(eventCursor.getColumnIndex(CalendarContract.Calendars._ID));//取得id
+                        Uri deleteUri = ContentUris.withAppendedId(Uri.parse(CALANDER_EVENT_URL), id);
+                        int rows = context.getContentResolver().delete(deleteUri, null, null);
+                        if (rows == -1) {
+                            //事件删除失败
+                            return;
+                        }
+                    }
+                }
+            }
+        } finally {
+            if (eventCursor != null) {
+                eventCursor.close();
+            }
+        }
     }
 }
