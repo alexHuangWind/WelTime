@@ -13,14 +13,25 @@ public class TimeTableInfo {
     private String fromtime;
     private String duration;
     private String time;
-    private int process;
+    private int process = -1;
     private String semastor;
     private String weekofyear;
     private String year;
     private String status;
     private String date;
-    private int id, color=0;
+    private int id, color = -1;
     private String itemID;
+    private long fromtimeMillis = -1;
+
+    public long getFromtimeMillis() {
+        return fromtimeMillis;
+    }
+
+    public void setFromtimeMillis(long fromtimeMillis) {
+        this.fromtimeMillis = fromtimeMillis;
+    }
+
+
 
     public String getDate() {
         return date;
@@ -39,13 +50,11 @@ public class TimeTableInfo {
     }
 
 
-
     public TimeTableInfo() {
     }
 
 
-
-    public TimeTableInfo(int id,String subject, String teacher, String room, String fromtime, String duration, int color, int progress) {
+    public TimeTableInfo(int id, String subject, String teacher, String room, String fromtime, String duration, int color, int progress) {
         this.id = id;
         this.subject = subject;
         this.duration = duration;

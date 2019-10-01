@@ -54,10 +54,10 @@ public class CalendarUtil {
     }
 
     public static boolean addCalendarEvent(Context context, String title, String description, long beginTime) {
-        // 获取日历账户的id
+        // get calendar id
         int calId = checkAndAddCalendarAccount(context);
         if (calId < 0) {
-            // 获取账户id失败直接返回，添加日历事件失败
+            // get userid failed
             return false;
         }
 
@@ -68,9 +68,9 @@ public class CalendarUtil {
         event.put("calendar_id", calId);
 
         Calendar mCalendar = Calendar.getInstance();
-        mCalendar.setTimeInMillis(beginTime);//设置开始时间
+        mCalendar.setTimeInMillis(beginTime);//set starttime
         long start = mCalendar.getTime().getTime();
-        mCalendar.setTimeInMillis(start + ONE_HOUR);//设置终止时间
+        mCalendar.setTimeInMillis(start + ONE_HOUR);//setend time
         long end = mCalendar.getTime().getTime();
 
         event.put(CalendarContract.Events.DTSTART, start);

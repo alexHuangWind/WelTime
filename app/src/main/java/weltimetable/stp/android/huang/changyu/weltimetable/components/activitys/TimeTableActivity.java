@@ -3,7 +3,6 @@ package weltimetable.stp.android.huang.changyu.weltimetable.components.activitys
 import weltimetable.stp.android.huang.changyu.weltimetable.components.fragments.FragmentFactory;
 import weltimetable.stp.android.huang.changyu.weltimetable.components.ui.login.LoginActivity;
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
-import weltimetable.stp.android.huang.changyu.weltimetable.models.CalendarInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseEvent;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.STPController;
@@ -42,7 +41,6 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.TimeZone;
 
 
 /**
@@ -98,9 +96,16 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
                 }
                 return true;
             case R.id.sync:
+                DbHelper db = new DbHelper(TimeTableActivity.this);
+                ArrayList<TimeTableInfo> list = db.getCalendarList();
                 Calendar cal = Calendar.getInstance();
-                boolean flag = CalendarUtil.getInstance().addCalendarEvent(TimeTableActivity.this,"StudentTimePlanner","test-",cal.getTimeInMillis());
-                if(false == true){
+                boolean flag = true;
+                for (TimeTableInfo info: list) {
+                    if(!CalendarUtil.getInstance().addCalendarEvent(TimeTableActivity.this,info.getSubject(),"room: "+info.getRoom()+" Tutor: "+info.getTeacher(),info.getFromtimeMillis())){
+                        flag=false;
+                    }
+                }
+                if(flag){
                     STPHelper.toast(TimeTableActivity.this,"sync calendar success!");
                 }else {
                     STPHelper.toast(TimeTableActivity.this,"sync calendar fail!");
@@ -205,6 +210,8 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
                 info.setFromTime(String.format("%02d:%02d", i, 00));
                 info.setItemID(listD.get(j)+":"+String.format("%02d:%02d", i, 00));
                 info.setDate(listD.get(j));
+                long time = STPHelper.getTimeMillisByTiem(i+":"+"00 "+listD.get(j));
+                info.setFromtimeMillis(time);
                 TimeTableInfo info2 = dbHelper.getTimeTableItemInfoByItemID(info.getItemID());
                 if(info2==null){
                     dbHelper.insertTimeTableInfo(info);

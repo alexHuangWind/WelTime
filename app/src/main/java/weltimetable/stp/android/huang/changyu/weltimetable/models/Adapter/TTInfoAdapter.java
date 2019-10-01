@@ -17,7 +17,6 @@ import android.support.annotation.NonNull;
 import android.app.Activity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.support.v7.widget.PopupMenu;
@@ -31,7 +30,6 @@ import android.widget.ArrayAdapter;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -103,7 +101,7 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
             holder.cardView.setBackgroundResource(R.drawable.glassbreak);
         }
         if (checkBlockState(mTTInfo, myBlockInfo)) {
-            if(holder.subject.getText()!=null&& holder.subject.getText().equals(ConstentValue.UNASIGNED)){
+            if(holder.subject.getText()!=null&& holder.subject.getText().equals(ConstentValue.UNASSIGNED)){
                 holder.subject.setText("BLOCKED");
                 cardView.setEnabled(false);
                 cardView.setAlpha((float) 0.3);

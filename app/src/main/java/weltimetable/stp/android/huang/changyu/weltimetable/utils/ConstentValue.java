@@ -16,7 +16,7 @@ public class ConstentValue {
     public static final String TAG_stg = "STP_STG_LOG";
     public static final String TAG_prd = "STP_PRD_LOG";
     public static final String NOTIFICATIONS = "Notifications";
-    public static final String UNASIGNED = "UNASSIGNED";
+    public static final String UNASSIGNED = "UNASSIGNED";
 
     //DataBase Values
 

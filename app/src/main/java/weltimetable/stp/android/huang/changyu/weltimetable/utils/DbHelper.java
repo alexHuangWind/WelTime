@@ -10,15 +10,8 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.net.Inet4Address;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-
-import javax.crypto.AEADBadTagException;
 
 /**
  * Created by changyu on 20.05.stp.
@@ -42,6 +35,7 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String TimeTableInfo_SEMESTER = "semester";
     private static final String TimeTableInfo_WOY = "weekofyear";
     private static final String TimeTableInfo_YEAR = "year";
+    private static final String TIMETABLEINFO_FROMTIMEMILLIS = "fromtimemillis";
     //date+startTime
     private static final String ITEMID = "itemid";
     private static final String TimeTableInfo_Date = "date";
@@ -89,6 +83,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 + TimeTableInfo_WOY + " TEXT,"
                 + TimeTableInfo_Date + " TEXT,"
                 + TimeTableInfo_YEAR + " TEXT,"
+                + TIMETABLEINFO_FROMTIMEMILLIS + " LONG,"
                 + TimeTableInfo_COLOR + " INTEGER" + ")";
         db.execSQL(CREATE_TIMETABLE);
 
@@ -229,6 +224,7 @@ public class DbHelper extends SQLiteOpenHelper {
         timetableinfo.setWeekofyear(cursor.getString(cursor.getColumnIndex(TimeTableInfo_WOY)));
         timetableinfo.setYear(cursor.getString(cursor.getColumnIndex(TimeTableInfo_YEAR)));
         timetableinfo.setItemID(cursor.getString(cursor.getColumnIndex(ITEMID)));
+        timetableinfo.setFromtimeMillis(cursor.getLong(cursor.getColumnIndex(TIMETABLEINFO_FROMTIMEMILLIS)));
         timetableinfo.setDate(cursor.getString(cursor.getColumnIndex(TimeTableInfo_Date)));
         return timetableinfo;
     }
@@ -238,6 +234,11 @@ public class DbHelper extends SQLiteOpenHelper {
         if (timeTableInfo.getSubject() != null) {
 
             contentValues.put(TimeTableInfo_SUBJECT, timeTableInfo.getSubject());
+
+        }
+        if (timeTableInfo.getFromtimeMillis() != -1) {
+
+            contentValues.put(TIMETABLEINFO_FROMTIMEMILLIS, timeTableInfo.getFromtimeMillis());
 
         }
         if (timeTableInfo.getFragment() != null) {
@@ -261,11 +262,11 @@ public class DbHelper extends SQLiteOpenHelper {
             contentValues.put(TimeTableInfo_DURATION, timeTableInfo.getDuration());
 
         }
-        if (timeTableInfo.getColor() != 0) {
+        if (timeTableInfo.getColor() != -1) {
             contentValues.put(TimeTableInfo_COLOR, timeTableInfo.getColor());
 
         }
-        if (timeTableInfo.getProcess() != 0) {
+        if (timeTableInfo.getProcess() != -1) {
             contentValues.put(TimeTableInfo_PROCESS, timeTableInfo.getProcess());
 
         }
@@ -403,7 +404,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private void addTTInfoToBlist(ArrayList<String> list, ArrayList<TimeTableInfo> timeTableInfoList) {
         for (TimeTableInfo info : timeTableInfoList) {
-            if (info.getSubject() != null && !info.getSubject().equals(ConstentValue.UNASIGNED)) {
+            if (info.getSubject() != null && !info.getSubject().equals(ConstentValue.UNASSIGNED)) {
                 String blockInfo = parseInfo(info.getFragment(), info.getFromTime());
                 list.add(blockInfo);
             }
@@ -411,6 +412,31 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     private String parseInfo(String Fragement, String fromTime) {
-        return STPHelper.Fragment2String(Fragement) + ":" + STPHelper.FromTime2Int(fromTime);
+        return STPHelper.Fragment2String(Fragement) + ":" + STPHelper.FromTime2String(fromTime);
+    }
+    public ArrayList<TimeTableInfo> getCalendarList(){
+        SQLiteDatabase db = null;
+        ArrayList<TimeTableInfo> TimeTableInfoList = new ArrayList<>();
+        TimeTableInfo info = null;
+        Cursor cursor = null;
+        try {
+            db = this.getWritableDatabase();
+            cursor = db.rawQuery("SELECT * FROM ( SELECT * FROM " + TIMETABLE + " ORDER BY " + TimeTableInfo_FROM_TIME + " ) WHERE " + TimeTableInfo_WOY + " = '" + STPHelper.getWeekofyear() + "'", null);
+            while (cursor.moveToNext()) {
+                info = setTimeTableInfo(cursor);
+                if(!info.getSubject().equals(ConstentValue.UNASSIGNED)){
+                    TimeTableInfoList.add(info);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            db.close();
+        }
+        return TimeTableInfoList;
     }
 }

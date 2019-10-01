@@ -1,13 +1,11 @@
 package weltimetable.stp.android.huang.changyu.weltimetable.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.text.format.DateFormat;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -55,7 +53,7 @@ public class STPHelper {
 
     public static TimeTableInfo getUnAssignedItem() {
         TimeTableInfo timetableinfo = new TimeTableInfo();
-        timetableinfo.setSubject(ConstentValue.UNASIGNED);
+        timetableinfo.setSubject(ConstentValue.UNASSIGNED);
         timetableinfo.setTeacher("");
         timetableinfo.setRoom("");
         timetableinfo.setStatus("0");
@@ -166,7 +164,7 @@ public class STPHelper {
         return row;
     }
 
-    public static String FromTime2Int(String fromTime) {
+    public static String FromTime2String(String fromTime) {
         String res = "";
         switch (fromTime) {
             case ("08:00"):
@@ -175,6 +173,7 @@ public class STPHelper {
             case ("09:00"):
                 res = "2";
                 break;
+
 
             case ("10:00"):
                 res = "3";
@@ -283,5 +282,16 @@ public class STPHelper {
         }
 
         return res;
+    }
+
+    public static long getTimeMillisByTiem(String dateFormat) {
+        Date date = new Date();
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm yyyy-MM-dd");
+            date = formatter.parse(dateFormat);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date.getTime();
     }
 }
