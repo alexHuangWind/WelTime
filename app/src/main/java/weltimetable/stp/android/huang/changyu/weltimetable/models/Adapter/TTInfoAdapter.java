@@ -17,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.app.Activity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.support.v7.widget.PopupMenu;
@@ -89,7 +90,6 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
 //        } else {
 //            holder = (TTinfoViewHolder) cardView.getTag();
 //        }
-
         holder.subject.setText(mTTInfo.getSubject());
         holder.teacher.setText(mTTInfo.getTeacher());
         holder.room.setText(mTTInfo.getRoom());

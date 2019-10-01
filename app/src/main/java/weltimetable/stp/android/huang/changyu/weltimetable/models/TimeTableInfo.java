@@ -19,7 +19,7 @@ public class TimeTableInfo {
     private String year;
     private String status;
     private String date;
-    private int id, color;
+    private int id, color=0;
     private String itemID;
 
     public String getDate() {

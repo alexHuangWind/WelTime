@@ -11,9 +11,12 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.List;
 
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
+import weltimetable.stp.android.huang.changyu.weltimetable.components.activitys.BlockActivity;
+import weltimetable.stp.android.huang.changyu.weltimetable.utils.DbHelper;
 
 
 public class BlockListVIewAdapter extends ArrayAdapter<BlockModel> {
@@ -35,21 +38,31 @@ public class BlockListVIewAdapter extends ArrayAdapter<BlockModel> {
         View view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
         TextView blockTime = (TextView) view.findViewById(R.id.block_time);
         blockTime.setText(BM.getTime());
-        String color = BM.getDefaultColor();
-        if(color == null) return view;
+        String color = getColorByCheck(BM);
+        if (color == null) return view;
         view.setBackgroundColor(Color.parseColor(color));
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext,"poesition: x= "+BM.getRow()+" Y = "+ BM.getColumn(),Toast.LENGTH_SHORT).show();
-                if(!BM.getCheck()){
+                Toast.makeText(mContext, "poesition: x= " + BM.getRow() + " Y = " + BM.getColumn(), Toast.LENGTH_SHORT).show();
+                if (!BM.getCheck()) {
                     view.setBackgroundColor(Color.parseColor(BM.CHECKED_COLOR));
-                }else {
+                } else {
                     view.setBackgroundColor(Color.parseColor(BM.UNCHECKED_COLOR));
                 }
                 BM.setCheck(!BM.getCheck());
             }
         });
         return view;
+    }
+
+    public String getColorByCheck(BlockModel bm) {
+        if (bm == null) {
+            return bm.getDefaultColor();
+        }
+        if (bm.getCheck()) {
+            return bm.CHECKED_COLOR;
+        }
+        return bm.UNCHECKED_COLOR;
     }
 }

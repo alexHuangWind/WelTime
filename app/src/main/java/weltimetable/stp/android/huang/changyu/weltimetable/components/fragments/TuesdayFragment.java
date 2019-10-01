@@ -21,7 +21,6 @@ public class TuesdayFragment extends BaseFragment {
 
     @Override
     public void initAdapter(View view) {
-        STPHelper.getDateof(Calendar.TUESDAY);
         super.setupAdapter(view, R.id.tuesdaylist, STPHelper.getDateof(Calendar.TUESDAY));
     }
 

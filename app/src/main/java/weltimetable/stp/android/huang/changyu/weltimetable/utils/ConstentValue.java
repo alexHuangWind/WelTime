@@ -10,8 +10,8 @@ public class ConstentValue {
     public static final String WEDNESDAY = "Wednesday";
     public static final String THURSDAY = "Thursday";
     public static final String FRIDAY = "Friday";
-//    public static final String SATURDAY = "Saturday";
-//    public static final String SUNDAY = "Sunday";
+    public static final String SATURDAY = "Saturday";
+    public static final String SUNDAY = "Sunday";
     public static final String BASIC_URL = "http://192.168.1.2:8002/api";
     public static final String TAG_stg = "STP_STG_LOG";
     public static final String TAG_prd = "STP_PRD_LOG";
