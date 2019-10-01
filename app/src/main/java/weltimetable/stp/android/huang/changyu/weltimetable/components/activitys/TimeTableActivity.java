@@ -195,16 +195,22 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
 
     private void initTimeTableInfo() {
         DbHelper dbHelper = new DbHelper(TimeTableActivity.this);
-        ArrayList<String> list = STPHelper.getDayOfWeekList();
-        for (String var : list) {
+        ArrayList<String> listD = STPHelper.getDayOfWeekList();
+        ArrayList<String> listF = STPHelper.getFragmentList();
+        int j=0;
+        for (String var : listF) {
             TimeTableInfo info = STPHelper.getUnAssignedItem();
-            info.setFragment(var);
             for (int i = 8; i <= 18; i++) {
+                info.setFragment(var);
                 info.setFromTime(String.format("%02d:%02d", i, 00));
-                info.setItemID(var+String.format("%02d:%02d", i, 00));
-                info.setDate(var);
-                dbHelper.insertTimeTableInfo(info);
+                info.setItemID(listD.get(j)+":"+String.format("%02d:%02d", i, 00));
+                info.setDate(listD.get(j));
+                TimeTableInfo info2 = dbHelper.getTimeTableItemInfoByItemID(info.getItemID());
+                if(info2==null){
+                    dbHelper.insertTimeTableInfo(info);
+                }
             }
+            j++;
         }
 
     }
@@ -257,8 +263,8 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
         mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.wednesday)), getResources().getString(R.string.wednesday));
         mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.thursday)), getResources().getString(R.string.thursday));
         mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.friday)), getResources().getString(R.string.friday));
-//        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.saturday)), getResources().getString(R.string.saturday));
-//        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.sunday)), getResources().getString(R.string.sunday));
+        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.saturday)), getResources().getString(R.string.saturday));
+        mAdapter.addFragment(FragmentFactory.getInstance().getFragmentByTag(getResources().getString(R.string.sunday)), getResources().getString(R.string.sunday));
         mViewPager.setAdapter(mAdapter);
         mViewPager.setPageTransformer(true, new PageTransformer3D());
         mViewPager.setCurrentItem(day == 1 ? 6 : day - 2, true);

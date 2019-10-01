@@ -7,11 +7,13 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import weltimetable.stp.android.huang.changyu.weltimetable.models.BlockListVIewAdapter;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.BlockModel;
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
+import weltimetable.stp.android.huang.changyu.weltimetable.utils.DbHelper;
 
 public class BlockActivity extends AppCompatActivity {
     private ListView mlistViewMonday;
@@ -28,7 +30,6 @@ public class BlockActivity extends AppCompatActivity {
     private List blockLists = new ArrayList<ArrayList>();
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,12 +40,14 @@ public class BlockActivity extends AppCompatActivity {
         mlistViewWednesday = (ListView) findViewById(R.id.LV_wedlist);
         mlistViewThursday = (ListView) findViewById(R.id.LV_thulist);
         mlistViewFriday = (ListView) findViewById(R.id.LV_fridaylist);
-        initLists();
         setListInfo();
 
         Bt_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DbHelper db = new DbHelper(BlockActivity.this);
+                db.cleanBlockInfo();
+                setChected();
                 BlockActivity.this.finish();
             }
         });
@@ -60,11 +63,11 @@ public class BlockActivity extends AppCompatActivity {
 
     private void initLists() {
         //init title
-        BlockModel Monday = new BlockModel("Mon", "#0088CC",1);
-        BlockModel Tuesday = new BlockModel("Tues","#DA4F49",2);
-        BlockModel wednesday = new BlockModel("Wed","#FAA732",3);
-        BlockModel Thursday = new BlockModel("Thur","#5BB75B",4);
-        BlockModel friday = new BlockModel("Fri","#49afcd",5);
+        BlockModel Monday = new BlockModel("Mon", "#0088CC", 1);
+        BlockModel Tuesday = new BlockModel("Tues", "#DA4F49", 2);
+        BlockModel wednesday = new BlockModel("Wed", "#FAA732", 3);
+        BlockModel Thursday = new BlockModel("Thur", "#5BB75B", 4);
+        BlockModel friday = new BlockModel("Fri", "#49afcd", 5);
 
         blockListMon.add(Monday);
         blockListTues.add(Tuesday);
@@ -76,25 +79,50 @@ public class BlockActivity extends AppCompatActivity {
         blockLists.add(blockListWed);
         blockLists.add(blockListThus);
         blockLists.add(blockListFri);
+        //getBlockListFromDatabase
+        DbHelper dbHelper = new DbHelper(BlockActivity.this);
+
+        HashMap<Integer, ArrayList<Integer>> bList = dbHelper.getBlockInfo();
         //init table
-        for (Object item: blockLists) {
-            ArrayList list =  (ArrayList)item;
+        for (Object item : blockLists) {
+            ArrayList list = (ArrayList) item;
             BlockModel headerBM = (BlockModel) list.get(0);
             for (int i = 8; i < 18; i++) {
                 String hour = i + "";
                 if (i < 10) hour = "0" + hour;
                 BlockModel BM = new BlockModel(hour + ":00");
-                BM.setColumn(i-7);
+                BM.setColumn(i - 7);
                 BM.setRow(headerBM.getDayOfweek());
                 list.add(BM);
+                if (bList != null && bList.get(BM.getRow()) != null) {
+                    ArrayList<Integer> mList = bList.get(BM.getRow());
+                    for (Integer num : mList) {
+                        if(BM.getColumn()==num) BM.setCheck(true);
+                    }
+                }
             }
         }
-        setChected();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initLists();
     }
 
     private void setChected() {
-//        DbHelper dbHelper = new DbHelper(BlockActivity.this);
-//        dbHelper.getTimeTableInfo()
+
+        for (Object item : blockLists) {
+            DbHelper dbHelper = new DbHelper(BlockActivity.this);
+            ArrayList list = (ArrayList) item;
+            for (int i = 0; i < list.size(); i++) {
+                if (((BlockModel) list.get(i)).getCheck()) {
+                    dbHelper.insertBlockInfo(((BlockModel) list.get(i)).getRow(), ((BlockModel) list.get(i)).getColumn());
+                }
+            }
+        }
+//        dbHelper.getBlockInfo();
     }
 
 
