@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import weltimetable.stp.android.huang.changyu.weltimetable.models.BlockListVIewAdapter;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter.BlockListVIewAdapter;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.BlockModel;
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.DbHelper;

@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 
@@ -49,6 +50,7 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
     private ListView mListView;
     private DbHelper dbHelper;
     private MediaPlayer mMp;
+    private HashMap<Integer, ArrayList<Integer>> myBlockInfo;
 
 
     @SuppressLint("SetTextI18n")
@@ -61,7 +63,7 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
         }
         TimeTableInfo mTTInfo;
         mTTInfo = dbHelper.getTimeTableItemInfoByItemID(Objects.requireNonNull(getItem(position).getItemID()));
-
+        myBlockInfo = dbHelper.getBlockInfo();
 //        String tc = info.getTeacher();
 //        String duration = info.getDuration();
 //        String time_f = info.getFromTime();
@@ -99,6 +101,14 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
         if (holder.progressSeekBar.getProgress() == 100) {
             holder.finishButton.setText("DONE");
             holder.cardView.setBackgroundResource(R.drawable.glassbreak);
+        }
+        if (checkBlockState(mTTInfo, myBlockInfo)) {
+            if(holder.subject.getText()!=null&& holder.subject.getText().equals(ConstentValue.UNASIGNED)){
+                holder.subject.setText("BLOCKED");
+                cardView.setEnabled(false);
+                cardView.setAlpha((float) 0.3);
+            }
+            return cardView;
         }
         holder.popWindow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,7 +201,7 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
                         timeTableInfo.setDate(mTTInfo.getDate());
                         timeTableInfo.setId(mTTInfo.getId());
                         db.updateTimeTableInfo(timeTableInfo);
-                        mTTInfolist.set(position,timeTableInfo);
+                        mTTInfolist.set(position, timeTableInfo);
                         TTInfoAdapter.notifyDataSetChanged();
                     }
                 });
@@ -199,8 +209,16 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
             }
         });
         hidePopUpMenu(holder);
-
         return cardView;
+    }
+
+    private boolean checkBlockState(TimeTableInfo mTTInfo, HashMap<Integer, ArrayList<Integer>> myBlockInfo) {
+        int row = Integer.parseInt(STPHelper.Fragment2String(mTTInfo.getFragment()));
+        int coloum = Integer.parseInt(STPHelper.FromTime2String(mTTInfo.getFromTime()));
+        if (myBlockInfo.get(row) == null) {
+            return false;
+        }
+        return myBlockInfo.get(row).contains(coloum);
     }
 
     private void onTaskStatueChanged(TTinfoViewHolder holder, int id, int color, boolean flag) {

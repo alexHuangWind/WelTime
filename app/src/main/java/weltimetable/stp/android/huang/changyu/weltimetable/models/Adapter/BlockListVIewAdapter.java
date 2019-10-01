@@ -1,4 +1,4 @@
-package weltimetable.stp.android.huang.changyu.weltimetable.models;
+package weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -16,6 +16,7 @@ import java.util.List;
 
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
 import weltimetable.stp.android.huang.changyu.weltimetable.components.activitys.BlockActivity;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.BlockModel;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.DbHelper;
 
 
@@ -44,7 +45,7 @@ public class BlockListVIewAdapter extends ArrayAdapter<BlockModel> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "poesition: x= " + BM.getRow() + " Y = " + BM.getColumn(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, "poesition: x= " + BM.getRow() + " Y = " + BM.getColumn(), Toast.LENGTH_SHORT).show();
                 if (!BM.getCheck()) {
                     view.setBackgroundColor(Color.parseColor(BM.CHECKED_COLOR));
                 } else {
