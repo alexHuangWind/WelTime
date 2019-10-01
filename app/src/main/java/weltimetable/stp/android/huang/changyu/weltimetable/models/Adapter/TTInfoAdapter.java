@@ -190,7 +190,7 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
                         timeTableInfo.setSubject(event.getParent().getCourseName() + " - " + event.getEventName());
                         timeTableInfo.setFromTime(mTTInfo.getFromTime());
 //                        }
-                        event.setQuantity(event.getQuantity() - 1);
+                        event.setQuantity(event.getQuantity());
                         timeTableInfo.setTeacher(event.getParent().getTutor());
                         timeTableInfo.setRoom(event.getClassRoom());
                         timeTableInfo.setColor(TaskPickerDialog.getColor(i));

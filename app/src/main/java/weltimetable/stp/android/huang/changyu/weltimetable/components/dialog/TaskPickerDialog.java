@@ -9,12 +9,14 @@ import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseEvent;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.STPController;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.TimeTableInfo;
+import weltimetable.stp.android.huang.changyu.weltimetable.utils.STPHelper;
 
 public class TaskPickerDialog extends DialogFragment {
     private NumberPicker.OnValueChangeListener valueChangeListener;
@@ -47,6 +49,9 @@ public class TaskPickerDialog extends DialogFragment {
             i++;
         }
         numberPicker.setMinValue(0);
+        if(eventMap.size()<=0){
+            return null;
+        }
         numberPicker.setMaxValue(eventMap.size() - 1);
         numberPicker.setDisplayedValues(itemdata);
         numberPicker.setOnValueChangedListener(valueChangeListener);
@@ -59,6 +64,14 @@ public class TaskPickerDialog extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 valueChangeListener.onValueChange(numberPicker,
                         numberPicker.getValue(), numberPicker.getValue());
+                ArrayList<CourseEvent> eventlist = courseInfo.getEvents();
+                    String s = "which = "+which;
+                   CourseEvent selectedEvent =  eventMap.get(itemdata[numberPicker.getValue()]);
+                int q = selectedEvent.getQuantity()-1;
+                selectedEvent.setQuantity(q);
+                if(q <=0){
+                    courseInfo.removeEvent(selectedEvent);
+                }
                 dialog.dismiss();
             }
         });

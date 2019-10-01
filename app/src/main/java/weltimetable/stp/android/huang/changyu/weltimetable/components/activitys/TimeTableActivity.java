@@ -166,9 +166,14 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
                       editor.apply();
                   }
                   CourseInfo info = STPController.getInstance().getCourseInfo(input.getText().toString());
-                  insertCourseIntoTimeTable(info);
-                  DbHelper db = new DbHelper(TimeTableActivity.this);
-                  db.insertCourseInfo(info);
+                  if(info!=null){
+                      insertCourseIntoTimeTable(info);
+                      DbHelper db = new DbHelper(TimeTableActivity.this);
+                      db.insertCourseInfo(info);
+                  }else {
+                      STPHelper.toast(TimeTableActivity.this,"CODE NOT MATCT ANY COURSE");
+                  }
+
                   dialog.dismiss();
 
               }

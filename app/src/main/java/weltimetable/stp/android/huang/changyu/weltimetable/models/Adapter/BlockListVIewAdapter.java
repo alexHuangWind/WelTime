@@ -45,7 +45,6 @@ public class BlockListVIewAdapter extends ArrayAdapter<BlockModel> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(mContext, "poesition: x= " + BM.getRow() + " Y = " + BM.getColumn(), Toast.LENGTH_SHORT).show();
                 if (!BM.getCheck()) {
                     view.setBackgroundColor(Color.parseColor(BM.CHECKED_COLOR));
                 } else {

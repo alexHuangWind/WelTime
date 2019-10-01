@@ -8,6 +8,18 @@ import java.util.Calendar;
 public class STPController {
     private static STPController INSTANCE;
 
+
+    public CourseInfo getInfo() {
+        return info;
+    }
+
+    public void setInfo(CourseInfo info) {
+        this.info = info;
+    }
+
+    private ArrayList<CourseEvent> eventlist;
+    private CourseInfo info;
+
     private STPController() {
     }
 
@@ -42,12 +54,18 @@ public class STPController {
     }
 
     public CourseInfo getCourseInfo(String courseCode) {
+        if (courseCode != null && !courseCode.equals("12345")) {
+            return null;
+        }
+        if (info!=null){
+        return info;
+        }
         ArrayList<CourseInfo> list = new ArrayList();
-        CourseInfo info = new CourseInfo();
+        info = new CourseInfo();
         info.setCourseID("It7343");
         info.setCourseName("PM");
         info.setTutor("Robert");
-        ArrayList<CourseEvent> eventlist = new ArrayList<CourseEvent>();
+        eventlist = new ArrayList<CourseEvent>();
         CourseEvent event = new CourseEvent(info);
         eventlist.add(event);
         event.setEventName("Reading");
@@ -85,10 +103,7 @@ public class STPController {
         info.setQuantity(3);
         info.setEvents(eventlist);
         list.add(info);
-        if (courseCode != null && courseCode.equals("12345")) {
-            return info;
-        }
-        return new CourseInfo();
+        return info;
     }
 
     public boolean syncCalendar(Activity activity, TimeTableInfo info) {

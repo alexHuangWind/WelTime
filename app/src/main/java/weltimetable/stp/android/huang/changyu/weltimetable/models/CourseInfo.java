@@ -58,4 +58,8 @@ public class CourseInfo {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public void removeEvent(CourseEvent selectedEvent) {
+        events.remove(selectedEvent);
+    }
 }
