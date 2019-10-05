@@ -3,12 +3,12 @@ package weltimetable.stp.android.huang.changyu.weltimetable.models;
 import java.util.ArrayList;
 
 public class CourseInfo {
-    private String courseName;
-    private String courseID;
-    private String tutor;
-    private String endWeekOfYear;
-    private ArrayList<CourseEvent> events;
-    private int quantity;
+    private String courseName = "undefined";
+    private String courseID = "undefined";
+    private String tutor = "undefined";
+    private String endWeekOfYear = "undefined";
+    private ArrayList<CourseEvent> events = new ArrayList<>();
+    private int quantity = -1;
 
     public ArrayList<CourseEvent> getEvents() {
         return events;

@@ -1,21 +1,12 @@
 package weltimetable.stp.android.huang.changyu.weltimetable.models;
 
-import android.app.Activity;
-
+import android.util.Log;
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class STPController {
     private static STPController INSTANCE;
-
-
-    public CourseInfo getInfo() {
-        return info;
-    }
-
-    public void setInfo(CourseInfo info) {
-        this.info = info;
-    }
 
     private ArrayList<CourseEvent> eventlist;
     private CourseInfo info;
@@ -57,8 +48,8 @@ public class STPController {
         if (courseCode != null && !courseCode.equals("12345")) {
             return null;
         }
-        if (info!=null){
-        return info;
+        if (info != null) {
+            return info;
         }
         ArrayList<CourseInfo> list = new ArrayList();
         info = new CourseInfo();
@@ -68,16 +59,22 @@ public class STPController {
         eventlist = new ArrayList<CourseEvent>();
         CourseEvent event = new CourseEvent(info);
         eventlist.add(event);
+        event.setCourseName("PM");
+        event.setTutor("Robert");
         event.setEventName("Reading");
         event.setQuantity(2);
         event.setClass(false);
         CourseEvent event2 = new CourseEvent(info);
         eventlist.add(event2);
+        event2.setCourseName("PM");
+        event2.setTutor("Robert");
         event2.setEventName("assignment1");
         event2.setQuantity(4);
         event2.setClass(false);
         CourseEvent event3 = new CourseEvent(info);
         eventlist.add(event3);
+        event3.setCourseName("PM");
+        event3.setTutor("Robert");
         event3.setEventName("assignment2");
         event3.setQuantity(4);
         event3.setClass(false);
@@ -87,10 +84,13 @@ public class STPController {
         classInfo1.setStartTime("08:00");
         classInfo1.setDayOfWeek(Calendar.TUESDAY);
         classInfo1.setQuantity(4);
+        classInfo1.setCourseName("PM");
+        classInfo1.setTutor("Robert");
         classInfo1.setClass(true);
-
         CourseEvent classInfo2 = new CourseEvent(info);
         classInfo2.setEventName(info.getCourseName());
+        classInfo2.setCourseName("PM");
+        classInfo2.setTutor("Robert");
         classInfo2.setClassRoom("B101");
         classInfo2.setStartTime("09:00");
         classInfo2.setDayOfWeek(Calendar.WEDNESDAY);
@@ -99,24 +99,20 @@ public class STPController {
         eventlist.add(classInfo1);
         eventlist.add(classInfo2);
         info.setEndWeekOfYear("12");
-
         info.setQuantity(3);
         info.setEvents(eventlist);
         list.add(info);
+//        try {
+//            Gson gson = new Gson();
+//            String json3 = gson.toJson(list);
+//            Log.d("","",null);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//
+//
+//
         return info;
-    }
-
-    public boolean syncCalendar(Activity activity, TimeTableInfo info) {
-//       Long startMillis = info.getFromTime();
-//        Long endMillis = endMillis;
-//        String eventTitle = eventTitle;
-//        String Description = description;
-//        Long CalID = calID;
-//        String EventTimezone = eventTimezone;
-//        String  Organizer = organizer;
-//        CalendarInfo calendarInfo = new CalendarInfo();
-//        CalendarUtil.getInstance().addEvent(activity,);
-        return true;
     }
 
 }

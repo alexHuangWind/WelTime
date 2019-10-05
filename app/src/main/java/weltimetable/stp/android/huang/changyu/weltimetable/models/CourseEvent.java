@@ -1,26 +1,35 @@
 package weltimetable.stp.android.huang.changyu.weltimetable.models;
 
+import java.util.Date;
+
 public class CourseEvent {
-    private String EventName;
-    private int quantity = 1;
-    private String startTime;
-    private int dayOfWeek;
+    private String EventName = "undefined";
+    private int quantity = -1;
+    private String startTime = "undefined";
+
+
+    private String tutor = "undefined";
+
+
+    private String courseName = "undefined";
+    private int dayOfWeek = -1;
     private String classRoom = "undefined";
-    private boolean isClass;
+    private boolean isClass = true;
+    private Date finalExam = new Date();
+//    private CourseInfo parent;
+
 
     public CourseEvent(CourseInfo info) {
-        this.parent = info;
+//        this.parent = info;
     }
 
-    public CourseInfo getParent() {
-        return parent;
-    }
-
-    public void setParent(CourseInfo parent) {
-        this.parent = parent;
-    }
-
-    private CourseInfo parent;
+//    public CourseInfo getParent() {
+//        return parent;
+//    }
+//
+//    public void setParent(CourseInfo parent) {
+//        this.parent = parent;
+//    }
 
     public String getStartTime() {
         return startTime;
@@ -68,5 +77,32 @@ public class CourseEvent {
 
     public void setClass(boolean aClass) {
         isClass = aClass;
+    }
+
+    public boolean isClass() {
+        return isClass;
+    }
+
+    public Date getFinalExam() {
+        return finalExam;
+    }
+
+    public void setFinalExam(Date finalExam) {
+        this.finalExam = finalExam;
+    }
+
+    public String getTutor() {
+        return tutor;
+    }
+
+    public void setTutor(String tutor) {
+        this.tutor = tutor;
+    }
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 }
