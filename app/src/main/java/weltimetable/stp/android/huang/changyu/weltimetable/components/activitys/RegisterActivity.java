@@ -96,7 +96,7 @@ public class RegisterActivity extends AppCompatActivity {
                         Log.d("alexTimeTable: ", string);
                         RegisterActivity.this.runOnUiThread(new Runnable() {
                             public void run() {
-                                Toast.makeText(RegisterActivity.this, "请求失败了。。" + string, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, "request Fail..." + string, Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

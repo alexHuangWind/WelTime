@@ -15,6 +15,7 @@ import weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter.Fragme
 import weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter.PageTransformer3D;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.AlertDialogsHelper;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.BrowserUtil;
+import weltimetable.stp.android.huang.changyu.weltimetable.utils.SharedPrefsUtils;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -38,6 +39,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,7 +53,8 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
     private FragmentsTabAdapter mAdapter;
     private ViewPager mViewPager;
     private Button BT_SBbutton;
-    private  AlertDialog dialog;
+    private AlertDialog dialog;
+    private MenuItem LoginItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,24 +103,32 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
                 ArrayList<TimeTableInfo> list = db.getCalendarList();
                 Calendar cal = Calendar.getInstance();
                 boolean flag = true;
-                for (TimeTableInfo info: list) {
-                    if(!CalendarUtil.getInstance().addCalendarEvent(TimeTableActivity.this,info.getSubject(),"room: "+info.getRoom()+" Tutor: "+info.getTeacher(),info.getFromtimeMillis())){
-                        flag=false;
+                for (TimeTableInfo info : list) {
+                    if (!CalendarUtil.getInstance().addCalendarEvent(TimeTableActivity.this, info.getSubject(), "room: " + info.getRoom() + " Tutor: " + info.getTeacher(), info.getFromtimeMillis())) {
+                        flag = false;
                     }
                 }
-                if(flag){
-                    STPHelper.toast(TimeTableActivity.this,"sync calendar success!");
-                }else {
-                    STPHelper.toast(TimeTableActivity.this,"sync calendar fail!");
+                if (flag) {
+                    STPHelper.toast(TimeTableActivity.this, "sync calendar success!");
+                } else {
+                    STPHelper.toast(TimeTableActivity.this, "sync calendar fail!");
                 }
                 return true;
 
             case R.id.AddCourse:
-                STPHelper.toast(TimeTableActivity.this, " addcourse popwindow");
+                STPHelper.toast(TimeTableActivity.this, " add course popwindow");
                 return true;
 
             case R.id.LoginOrLogoff:
-                STPHelper.startActivity(TimeTableActivity.this, LoginActivity.class);
+                boolean b = SharedPrefsUtils.getBooleanPreference(TimeTableActivity.this, SharedPrefsUtils.LOGIN, false);
+                if (b) {
+                    SharedPrefsUtils.setStringPreference(TimeTableActivity.this, SharedPrefsUtils.LOGIN, "");
+                    SharedPrefsUtils.setBooleanPreference(TimeTableActivity.this, SharedPrefsUtils.LOGIN, false);
+                    Toast.makeText(TimeTableActivity.this, "Logout success...", Toast.LENGTH_SHORT).show();
+                    LoginItem.setTitle("Login");
+                } else {
+                    STPHelper.startActivity(TimeTableActivity.this, LoginActivity.class);
+                }
                 return true;
 
             default:
@@ -132,6 +143,7 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
         BottomNavigationView navView = findViewById(R.id.nav_view2);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigationView.setNavigationItemSelectedListener(this);
+        LoginItem = navigationView.getMenu().findItem(R.id.LoginOrLogoff);
         Toolbar toolbar = findViewById(R.id.toolbar);
         BT_SBbutton = findViewById(R.id.add_sub);
         toolbar.setTitle("WelTimeTable");
@@ -149,55 +161,55 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
     private void initListener() {
         AlertDialog.Builder builder = new AlertDialog.Builder(TimeTableActivity.this);
         builder.setTitle("input course code");
-      // Set up the input
-          final EditText input;
+        // Set up the input
+        final EditText input;
         input = new EditText(TimeTableActivity.this);
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-          input.setInputType(InputType.TYPE_CLASS_TEXT );
-          builder.setView(input);
-          // Set up the buttons
-          builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-  //                m_Text = input.getText().toString();
-                  if(input.getText().toString().equals("12345")){
-                      SharedPreferences.Editor editor = getSharedPreferences(ConstentValue.TAG_prd, MODE_PRIVATE).edit();
-                      editor.putBoolean("isCourseDownload", true);
-                      editor.apply();
-                  }
-                  CourseInfo info = STPController.getInstance().getCourseInfo(input.getText().toString());
-                  if(info!=null){
-                      insertCourseIntoTimeTable(info);
-                      DbHelper db = new DbHelper(TimeTableActivity.this);
-                      db.insertCourseInfo(info);
-                  }else {
-                      STPHelper.toast(TimeTableActivity.this,"CODE NOT MATCT ANY COURSE");
-                  }
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //                m_Text = input.getText().toString();
+                if (input.getText().toString().equals("12345")) {
+                    SharedPreferences.Editor editor = getSharedPreferences(ConstentValue.TAG_prd, MODE_PRIVATE).edit();
+                    editor.putBoolean("isCourseDownload", true);
+                    editor.apply();
+                }
+                CourseInfo info = STPController.getInstance().getCourseInfo(input.getText().toString());
+                if (info != null) {
+                    insertCourseIntoTimeTable(info);
+                    DbHelper db = new DbHelper(TimeTableActivity.this);
+                    db.insertCourseInfo(info);
+                } else {
+                    STPHelper.toast(TimeTableActivity.this, "CODE NOT MATCT ANY COURSE");
+                }
 
-                  dialog.dismiss();
+                dialog.dismiss();
 
-              }
-          });
-          builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                  dialog.dismiss();
-              }
-          });
-        dialog =  builder.create();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog = builder.create();
         BT_SBbutton.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View view) {
-                  dialog.show();
-              }
-          });
+            @Override
+            public void onClick(View view) {
+                dialog.show();
+            }
+        });
     }
 
     private void insertCourseIntoTimeTable(CourseInfo info) {
-        for(CourseEvent event   : info.getEvents()){
-            if(event.getIsClass()){
+        for (CourseEvent event : info.getEvents()) {
+            if (event.getIsClass()) {
                 TimeTableInfo ttinfo = new TimeTableInfo();
-                ttinfo.setItemID(event.getStartTime()+STPHelper.getDateof(event.getDayOfWeek()));
+                ttinfo.setItemID(event.getStartTime() + STPHelper.getDateof(event.getDayOfWeek()));
             }
         }
 
@@ -207,18 +219,18 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
         DbHelper dbHelper = new DbHelper(TimeTableActivity.this);
         ArrayList<String> listD = STPHelper.getDayOfWeekList();
         ArrayList<String> listF = STPHelper.getFragmentList();
-        int j=0;
+        int j = 0;
         for (String var : listF) {
             TimeTableInfo info = STPHelper.getUnAssignedItem();
             for (int i = 8; i <= 18; i++) {
                 info.setFragment(var);
                 info.setFromTime(String.format("%02d:%02d", i, 00));
-                info.setItemID(listD.get(j)+":"+String.format("%02d:%02d", i, 00));
+                info.setItemID(listD.get(j) + ":" + String.format("%02d:%02d", i, 00));
                 info.setDate(listD.get(j));
-                long time = STPHelper.getTimeMillisByTiem(i+":"+"00 "+listD.get(j));
+                long time = STPHelper.getTimeMillisByTiem(i + ":" + "00 " + listD.get(j));
                 info.setFromtimeMillis(time);
                 TimeTableInfo info2 = dbHelper.getTimeTableItemInfoByItemID(info.getItemID());
-                if(info2==null){
+                if (info2 == null) {
                     dbHelper.insertTimeTableInfo(info);
                 }
             }
@@ -321,5 +333,14 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
 
     };
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        boolean b = SharedPrefsUtils.getBooleanPreference(TimeTableActivity.this, SharedPrefsUtils.LOGIN, false);
+        if (b) {
+            LoginItem.setTitle("Logout");
+        } else {
+            LoginItem.setTitle("Login");
+        }
+    }
 }
