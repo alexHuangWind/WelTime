@@ -5,6 +5,10 @@ import android.os.Handler;
 import android.util.Log;
 
 
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -16,8 +20,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import weltimetable.stp.android.huang.changyu.weltimetable.components.activitys.TimeTableActivity;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.UserInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.interfaces.ICallBack;
 import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.interfaces.IhttpProcessor;
+import weltimetable.stp.android.huang.changyu.weltimetable.utils.STPHelper;
+import weltimetable.stp.android.huang.changyu.weltimetable.utils.SharedPrefsUtils;
 
 
 public class OkHttpProcessor implements IhttpProcessor {
@@ -73,11 +81,14 @@ public class OkHttpProcessor implements IhttpProcessor {
 
     @Override
     public void post(String url, Map<String, Object> params, final ICallBack callback) {
-
+        String token = "";
         RequestBody requestBody = appendBody(params);
-
+        UserInfo uInfo = STPHelper.getInstance().getUserInfo();
+        if(uInfo != null){
+            token = uInfo.getToken();
+        }
         Request request = new Request.Builder()
-                .addHeader("token","alexhuangtoken")
+                .addHeader("token",token)
                 .post(requestBody)
                 .url(url)
                 .build();
@@ -139,12 +150,22 @@ public class OkHttpProcessor implements IhttpProcessor {
                         Headers headers2 = response.headers();
                         String token = headers2.get("token");
                         String token2 = headers.get("token");
-//                        result[1]=token;
-//                        result[2]=token2;
+                        String firstName = headers.get("firstName");
+                        String studentID = headers.get("studentID");
+                        String major = headers.get("major");
+                        if(token2!=null&&firstName!=null&&studentID!=null&&major!=null){
+                            UserInfo uinfo = new UserInfo();
+                            uinfo.setFamilyName(firstName);
+                            uinfo.setStudentID(studentID);
+                            uinfo.setToken(token2);
+                            uinfo.setMajor(major);
+                            Gson g = new Gson();
+                            String userINfo = g.toJson(uinfo);
+                            SharedPrefsUtils.setStringPreference(STPHelper.getInstance().getContext(), SharedPrefsUtils.USERINFO,userINfo);
+                        }
+
                         Log.d("RRR",""+token+"  "+token2);
-//                        result[1] = response.header("token");
-//                        result[1] = response.header("firstName");
-//                        result[1] = response.header("studentID");
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

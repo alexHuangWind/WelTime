@@ -1,5 +1,7 @@
 package weltimetable.stp.android.huang.changyu.weltimetable.utils;
 
+import weltimetable.stp.android.huang.changyu.weltimetable.components.activitys.TimeTableActivity;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseEvent;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.TimeTableInfo;
 
@@ -10,7 +12,9 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 /**
@@ -57,9 +61,6 @@ public class DbHelper extends SQLiteOpenHelper {
     //dayofweek+starttime
     public static final String BLOCK_ID = "id";
     private static DbHelper INSTANCE;
-
-
-    private CourseInfo info;
 
 
     public DbHelper(Context context) {
@@ -114,7 +115,7 @@ public class DbHelper extends SQLiteOpenHelper {
      **/
     public void insertTimeTableInfo(TimeTableInfo timeTableInfo) {
         String ItemId = null;
-        if(getTimeTableItemInfoByItemID(timeTableInfo.getItemID())!=null){
+        if (getTimeTableItemInfoByItemID(timeTableInfo.getItemID()) != null) {
             ItemId = getTimeTableItemInfoByItemID(timeTableInfo.getItemID()).getItemID();
         }
 
@@ -196,7 +197,7 @@ public class DbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM ( SELECT * FROM " + TIMETABLE + " ORDER BY " + TimeTableInfo_FROM_TIME + " ) WHERE " + ITEMID + " = '" + itemid + "'", null);
 
         try {
-            if(cursor.moveToNext()){
+            if (cursor.moveToNext()) {
                 timetableinfo = setTimeTableInfo(cursor);
             }
         } catch (Exception e) {
@@ -299,12 +300,25 @@ public class DbHelper extends SQLiteOpenHelper {
         return contentValues;
     }
 
-    public void insertCourseInfo(CourseInfo info) {
-        this.info = info;
-    }
-
-    public CourseInfo getInfo() {
-        return info;
+    public void insertCourseInfo(CourseInfo cinfo) {
+        ArrayList<CourseEvent> eventlist = cinfo.getEvents();
+        for (CourseEvent event : eventlist) {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_WEEK, event.getDayOfWeek());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String date = sdf.format(cal.getTime());
+            if (event.isClass()) {
+                TimeTableInfo info = STPHelper.getUnAssignedItem();
+                info.setFragment(STPHelper.String2Fragment(event.getDayOfWeek() + ""));
+                info.setFromTime(event.getStartTime());
+                info.setItemID(date + ":" + event.getStartTime());
+                info.setDate(date);
+                info.setSubject(event.getEventName());
+                long time = STPHelper.getTimeMillisByTiem(event.getStartTime() + ":" + "00 " + date);
+                info.setFromtimeMillis(time);
+                insertTimeTableInfo(info);
+            }
+        }
     }
 
     /**
@@ -414,7 +428,8 @@ public class DbHelper extends SQLiteOpenHelper {
     private String parseInfo(String Fragement, String fromTime) {
         return STPHelper.Fragment2String(Fragement) + ":" + STPHelper.FromTime2String(fromTime);
     }
-    public ArrayList<TimeTableInfo> getCalendarList(){
+
+    public ArrayList<TimeTableInfo> getCalendarList() {
         SQLiteDatabase db = null;
         ArrayList<TimeTableInfo> TimeTableInfoList = new ArrayList<>();
         TimeTableInfo info = null;
@@ -424,7 +439,7 @@ public class DbHelper extends SQLiteOpenHelper {
             cursor = db.rawQuery("SELECT * FROM ( SELECT * FROM " + TIMETABLE + " ORDER BY " + TimeTableInfo_FROM_TIME + " ) WHERE " + TimeTableInfo_WOY + " = '" + STPHelper.getWeekofyear() + "'", null);
             while (cursor.moveToNext()) {
                 info = setTimeTableInfo(cursor);
-                if(!info.getSubject().equals(ConstentValue.UNASSIGNED)){
+                if (!info.getSubject().equals(ConstentValue.UNASSIGNED)) {
                     TimeTableInfoList.add(info);
                 }
             }

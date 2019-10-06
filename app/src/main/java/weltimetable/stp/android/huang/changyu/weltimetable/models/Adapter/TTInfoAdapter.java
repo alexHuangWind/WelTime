@@ -187,12 +187,12 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
 //                            timeTableInfo.setSubject(event.getParent().getCourseName());
 //                            timeTableInfo.setFromTime(event.getStartTime());
 //                        }else{
-                        timeTableInfo.setSubject(event.getParent().getCourseName() + " - " + event.getEventName());
+                        timeTableInfo.setSubject(event.getCourseName() + " - " + event.getEventName());
                         timeTableInfo.setFromTime(mTTInfo.getFromTime());
 //                        }
                         event.setQuantity(event.getQuantity());
-                        timeTableInfo.setTeacher(event.getParent().getTutor());
-                        timeTableInfo.setRoom(event.getClassRoom());
+                        timeTableInfo.setTeacher(event.getTutorName());
+                        timeTableInfo.setRoom(event.getLocation());
                         timeTableInfo.setColor(TaskPickerDialog.getColor(i));
                         timeTableInfo.setDuration(TaskPickerDialog.getDuration(i));
                         timeTableInfo.setItemID(mTTInfo.getItemID());

@@ -30,6 +30,7 @@ import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.pro
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.ConstentValue;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.STPHelper;
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
+import weltimetable.stp.android.huang.changyu.weltimetable.utils.SharedPrefsUtils;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -61,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         PB_Loading = findViewById(R.id.loading);
         TV_ForgotPassword = findViewById(R.id.TV_ForgotPassword);
         TV_Register = findViewById(R.id.TV_Register);
-        HttpHelper.init(new OkHttpProcessor());
+
     }
 
     private void setOnclickLisner() {
@@ -174,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
         loginMap.put("passWord", loginBeanReq.Password);
         Log.d("alexTimeTable: ", loginMap.get("email").toString());
 
-        //访问网络
+        //Login
         HttpHelper.obtain().post(ConstentValue.BASIC_URL + "/Login",
                 loginMap, new HttpCallback<LoginBeanResp>() {
                     @Override
@@ -183,6 +184,8 @@ public class LoginActivity extends AppCompatActivity {
                         LoginActivity.this.runOnUiThread(new Runnable() {
                             public void run() {
                                 Toast.makeText(LoginActivity.this, "success。。" + loginBean.toString(), Toast.LENGTH_SHORT).show();
+                                SharedPrefsUtils.setStringPreference(LoginActivity.this,SharedPrefsUtils.LOGIN,loginBean.toString());
+                                SharedPrefsUtils.setBooleanPreference(LoginActivity.this,SharedPrefsUtils.LOGIN,true);
                             }
                         });
                     }

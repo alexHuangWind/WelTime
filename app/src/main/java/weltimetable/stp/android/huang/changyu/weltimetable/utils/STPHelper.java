@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,11 +13,24 @@ import java.util.Calendar;
 import java.util.Date;
 
 import weltimetable.stp.android.huang.changyu.weltimetable.models.TimeTableInfo;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.UserInfo;
 
 public class STPHelper {
     private static String year;
     private static String semaster;
+    private static Context mContext;
+    private static STPHelper INSTANCE;
 
+    private STPHelper() {
+    }
+
+    public static STPHelper getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new STPHelper();
+        }
+
+        return INSTANCE;
+    }
     public static String getYear() {
         Calendar c = Calendar.getInstance();
         Date date = new Date();
@@ -27,6 +42,10 @@ public class STPHelper {
     public static String getSemaster() {
 
         return "1";
+    }
+
+    public void setmContext(Context mContext) {
+        STPHelper.mContext = mContext;
     }
 
     public static String getWeekofyear() {
@@ -42,7 +61,6 @@ public class STPHelper {
     public static void toast(Context context, String message) {
         if (context == null || message == null) return;
         Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-
         toast.show();
     }
 
@@ -79,11 +97,6 @@ public class STPHelper {
             c.add(Calendar.DAY_OF_MONTH, 1);
             list.add(sdf.format(c.getTime()));
         }
-//        list.add("Monday");
-//        list.add("Tuesday");
-//        list.add("Wednesday");
-//        list.add("Thursday");
-//        list.add("Friday");
         return list;
     }
 
@@ -293,5 +306,16 @@ public class STPHelper {
             e.printStackTrace();
         }
         return date.getTime();
+    }
+
+    public Context getContext() {
+        return mContext;
+    }
+
+    public UserInfo getUserInfo() {
+        String st =  SharedPrefsUtils.getStringPreference(STPHelper.getInstance().getContext(), SharedPrefsUtils.USERINFO);
+        Gson g= new Gson();
+        UserInfo info =  g.fromJson(st,UserInfo.class);
+        return info;
     }
 }

@@ -10,6 +10,7 @@ import android.text.TextUtils;
  */
 final public class SharedPrefsUtils {
     public static final String LOGIN = "login";
+    public static final String USERINFO = "userinfo";
 
     private SharedPrefsUtils() {}
 

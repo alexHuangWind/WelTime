@@ -6,17 +6,19 @@ public class CourseEvent {
     private String EventName = "undefined";
     private int quantity = -1;
     private String startTime = "undefined";
-
-
-    private String tutor = "undefined";
-
-
-    private String courseName = "undefined";
+    private String TutorName = "undefined";
+    private String CourseName = "undefined";
     private int dayOfWeek = -1;
-    private String classRoom = "undefined";
+    private String Location = "undefined";
     private boolean isClass = true;
     private Date finalExam = new Date();
 //    private CourseInfo parent;
+
+    private String CourseCode = "undefined";
+    private String Major = "undefined";
+    private String TutorID = "undefined";
+    private int StartWeek = -1;
+    private int EndWeek = -1;
 
 
     public CourseEvent(CourseInfo info) {
@@ -47,12 +49,12 @@ public class CourseEvent {
         this.dayOfWeek = dayOfWeek;
     }
 
-    public String getClassRoom() {
-        return classRoom;
+    public String getLocation() {
+        return Location;
     }
 
-    public void setClassRoom(String classRoom) {
-        this.classRoom = classRoom;
+    public void setLocation(String location) {
+        this.Location = location;
     }
 
     public String getEventName() {
@@ -91,18 +93,18 @@ public class CourseEvent {
         this.finalExam = finalExam;
     }
 
-    public String getTutor() {
-        return tutor;
+    public String getTutorName() {
+        return TutorName;
     }
 
-    public void setTutor(String tutor) {
-        this.tutor = tutor;
+    public void setTutorName(String tutorName) {
+        this.TutorName = tutorName;
     }
     public String getCourseName() {
-        return courseName;
+        return CourseName;
     }
 
     public void setCourseName(String courseName) {
-        this.courseName = courseName;
+        this.CourseName = courseName;
     }
 }

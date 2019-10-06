@@ -7,6 +7,8 @@ import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseEvent;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.STPController;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.TimeTableInfo;
+import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.http.HttpHelper;
+import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.processor.OkHttpProcessor;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.CalendarUtil;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.ConstentValue;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.DbHelper;
@@ -67,6 +69,8 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
         initView();
         initCustomDialog();
 //        initFireBase();
+        STPHelper.getInstance().setmContext(TimeTableActivity.this.getApplicationContext());
+        HttpHelper.init(new OkHttpProcessor());
     }
 
 
