@@ -303,20 +303,25 @@ public class DbHelper extends SQLiteOpenHelper {
     public void insertCourseInfo(CourseInfo cinfo) {
         ArrayList<CourseEvent> eventlist = cinfo.getEvents();
         for (CourseEvent event : eventlist) {
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DAY_OF_WEEK, event.getDayOfWeek());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String date = sdf.format(cal.getTime());
+
             if (event.isClass()) {
-                TimeTableInfo info = STPHelper.getUnAssignedItem();
-                info.setFragment(STPHelper.String2Fragment(event.getDayOfWeek() + ""));
-                info.setFromTime(event.getStartTime());
-                info.setItemID(date + ":" + event.getStartTime());
-                info.setDate(date);
-                info.setSubject(event.getEventName());
-                long time = STPHelper.getTimeMillisByTiem(event.getStartTime() + ":" + "00 " + date);
-                info.setFromtimeMillis(time);
-                insertTimeTableInfo(info);
+                for (int j = event.getStartWeek();j<=event.getEndWeek();j++){
+                    Calendar cal = Calendar.getInstance();
+                    cal.add(Calendar.WEEK_OF_YEAR,j);
+                    cal.add(Calendar.DAY_OF_WEEK, event.getDayOfWeek());
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String date = sdf.format(cal.getTime());
+                    TimeTableInfo info = STPHelper.getUnAssignedItem();
+                    info.setFragment(STPHelper.String2Fragment(event.getDayOfWeek() + ""));
+                    info.setFromTime(event.getStartTime());
+                    info.setItemID(date + ":" + event.getStartTime());
+                    info.setDate(date);
+                    info.setSubject(event.getEventName());
+                    long time = STPHelper.getTimeMillisByTiem(event.getStartTime() + ":" + "00 " + date);
+                    info.setFromtimeMillis(time);
+                    insertTimeTableInfo(info);
+                    cal=null;
+                }
             }
         }
     }

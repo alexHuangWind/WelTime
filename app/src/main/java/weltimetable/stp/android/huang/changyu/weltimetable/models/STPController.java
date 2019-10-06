@@ -108,6 +108,8 @@ public class STPController {
         classInfo1.setQuantity(4);
         classInfo1.setCourseName("PM");
         classInfo1.setTutorName("Robert");
+        classInfo1.setStartWeek(1);
+        classInfo1.setEndWeek(52);
         classInfo1.setClass(true);
         CourseEvent classInfo2 = new CourseEvent(info);
         classInfo2.setEventName(info.getCourseName());
@@ -117,6 +119,8 @@ public class STPController {
         classInfo2.setStartTime("09:00");
         classInfo2.setDayOfWeek(Calendar.WEDNESDAY);
         classInfo2.setQuantity(4);
+        classInfo2.setStartWeek(1);
+        classInfo2.setEndWeek(52);
         classInfo2.setClass(true);
         eventlist.add(classInfo1);
         eventlist.add(classInfo2);

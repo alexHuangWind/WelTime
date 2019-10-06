@@ -10,6 +10,47 @@ public class CourseEvent {
     private String CourseName = "undefined";
     private int dayOfWeek = -1;
     private String Location = "undefined";
+
+    public String getCourseCode() {
+        return CourseCode;
+    }
+
+    public void setCourseCode(String courseCode) {
+        CourseCode = courseCode;
+    }
+
+    public String getMajor() {
+        return Major;
+    }
+
+    public void setMajor(String major) {
+        Major = major;
+    }
+
+    public String getTutorID() {
+        return TutorID;
+    }
+
+    public void setTutorID(String tutorID) {
+        TutorID = tutorID;
+    }
+
+    public int getStartWeek() {
+        return StartWeek;
+    }
+
+    public void setStartWeek(int startWeek) {
+        StartWeek = startWeek;
+    }
+
+    public int getEndWeek() {
+        return EndWeek;
+    }
+
+    public void setEndWeek(int endWeek) {
+        EndWeek = endWeek;
+    }
+
     private boolean isClass = true;
     private Date finalExam = new Date();
 //    private CourseInfo parent;

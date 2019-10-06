@@ -33,7 +33,7 @@ public class TaskPickerDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        courseInfo = STPController.getInstance().getCourseInfo("");
+        courseInfo = STPController.getInstance().getCourseInfo("12345");
         final NumberPicker numberPicker = new NumberPicker(getActivity());
         for (int i = 0; i < courseInfo.getEvents().size(); i++) {
             CourseEvent event = courseInfo.getEvents().get(i);

@@ -189,9 +189,7 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
                 } else {
                     STPHelper.toast(TimeTableActivity.this, "CODE NOT MATCT ANY COURSE");
                 }
-
                 dialog.dismiss();
-
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
