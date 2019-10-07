@@ -26,7 +26,6 @@ import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.bea
 import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.bean.LoginBeanResp;
 import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.http.HttpCallback;
 import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.http.HttpHelper;
-import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.processor.OkHttpProcessor;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.ConstentValue;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.STPHelper;
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
@@ -137,10 +136,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 PB_Loading.setVisibility(View.VISIBLE);
-                loginViewModel.login(ET_UserName.getText().toString(),
-                        ET_PWD.getText().toString());
-                TestLogin(new LoginBeanReq(ET_UserName.getText().toString() , ET_PWD.getText().toString()));
-//                TestLogin(new LoginBeanReq( , ET_PWD.getText().toString()));
+                doLogin(new LoginBeanReq(ET_UserName.getText().toString(), ET_PWD.getText().toString()));
             }
         });
         TV_ForgotPassword.setOnClickListener(new View.OnClickListener() {
@@ -168,11 +164,11 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 
-    private void TestLogin(LoginBeanReq loginBeanReq) {
+    private void doLogin(LoginBeanReq loginBeanReq) {
+
         final HashMap loginMap = new HashMap<>();
         loginMap.put("email", loginBeanReq.userName);
-        loginMap.put("studentID", loginBeanReq.studentID);
-        loginMap.put("passWord", loginBeanReq.Password);
+        loginMap.put("passWord", STPHelper.md5(loginBeanReq.Password));
         Log.d("alexTimeTable: ", loginMap.get("email").toString());
 
         //Login
@@ -181,11 +177,17 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(LoginBeanResp loginBean) {
                         Log.d("alexTimeTable: ", loginBean.toString());
+                        if(loginBean.getResult()!=null&&!loginBean.getResult().equals("200")){
+                            onFailed(loginBean.getResult());
+                            loginViewModel.login(ET_UserName.getText().toString(), ET_PWD.getText().toString());
+                            return;
+                        }
+                        SharedPrefsUtils.setStringPreference(LoginActivity.this, SharedPrefsUtils.LOGIN, loginBean.toString());
+                        SharedPrefsUtils.setBooleanPreference(LoginActivity.this, SharedPrefsUtils.LOGIN, true);
                         LoginActivity.this.runOnUiThread(new Runnable() {
                             public void run() {
-                                Toast.makeText(LoginActivity.this, "success。。" + loginBean.toString(), Toast.LENGTH_SHORT).show();
-                                SharedPrefsUtils.setStringPreference(LoginActivity.this,SharedPrefsUtils.LOGIN,loginBean.toString());
-                                SharedPrefsUtils.setBooleanPreference(LoginActivity.this,SharedPrefsUtils.LOGIN,true);
+                                Toast.makeText(LoginActivity.this, "success.." + loginBean.toString(), Toast.LENGTH_SHORT).show();
+                                loginViewModel.login(ET_UserName.getText().toString(), ET_PWD.getText().toString());
                             }
                         });
                     }
@@ -198,7 +200,8 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("alexTimeTable: ", string);
                         LoginActivity.this.runOnUiThread(new Runnable() {
                             public void run() {
-                                Toast.makeText(LoginActivity.this, "请求失败了。。" + string, Toast.LENGTH_SHORT).show();
+                                loginViewModel.login(ET_UserName.getText().toString(), ET_PWD.getText().toString());
+                                Toast.makeText(LoginActivity.this, "Request Failed... Code: " + string, Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -15,9 +16,14 @@ import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.bea
 import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.http.HttpCallback;
 import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.http.HttpHelper;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.ConstentValue;
+import weltimetable.stp.android.huang.changyu.weltimetable.utils.STPHelper;
 
 public class RegisterActivity extends AppCompatActivity {
     Button bt_register;
+    private EditText ET_studentId;
+    private EditText ET_Email;
+    private EditText ET_pwd;
+    private EditText ET_pwd2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +37,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void initView() {
         bt_register = findViewById(R.id.BT_Register);
+        ET_studentId = findViewById(R.id.ET_StduentID);
+        ET_Email = findViewById(R.id.ET_Email);
+        ET_pwd = findViewById(R.id.ET_PWD);
+        ET_pwd2 = findViewById(R.id.ET_PWD2);
     }
 
     private void initListener() {
@@ -69,9 +79,20 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void TestRegster() {
         final HashMap loginMap = new HashMap<>();
-        loginMap.put("email", "Robert@it.weltec.ac.nz");
-        loginMap.put("studentID", "123123");
-        loginMap.put("passWord", "slkdjflskdjflksjdf");
+        loginMap.put("email", ET_Email.getText());
+        loginMap.put("studentID", ET_studentId.getText());
+        String pwd1 =STPHelper.md5(ET_pwd.getText().toString()) ;
+        String pwd2 =STPHelper.md5(ET_pwd2.getText().toString()) ;
+        if(pwd1!=null&&pwd2!=null&&!pwd1.equals(pwd2)){
+            RegisterActivity.this.runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(RegisterActivity.this, "passwords not same...", Toast.LENGTH_SHORT).show();
+                }
+            });
+            return;
+        }
+
+        loginMap.put("passWord", STPHelper.md5(ET_pwd2.getText().toString()));
         loginMap.put("majoy", "IT");
         Log.d("alexTimeTable: ", loginMap.get("email").toString());
 
@@ -79,11 +100,16 @@ public class RegisterActivity extends AppCompatActivity {
         HttpHelper.obtain().post(ConstentValue.BASIC_URL+"/Reg",
                 loginMap, new HttpCallback<RegisterResp>() {
                     @Override
-                    public void onSuccess(RegisterResp loginBean) {
-                        Log.d("alexTimeTable: ", loginBean.toString());
+                    public void onSuccess(RegisterResp RegisterBean) {
+                        Log.d("alexTimeTable: ", RegisterBean.toString());
+                        String res = RegisterBean.getResult();
+                        if(res!=null&&!res.equals("200")){
+                            onFailed(res);
+                            return;
+                        }
                         RegisterActivity.this.runOnUiThread(new Runnable() {
                             public void run() {
-                                Toast.makeText(RegisterActivity.this, "success。。" + loginBean.toString(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, "success.." + RegisterBean.toString(), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -96,7 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
                         Log.d("alexTimeTable: ", string);
                         RegisterActivity.this.runOnUiThread(new Runnable() {
                             public void run() {
-                                Toast.makeText(RegisterActivity.this, "request Fail..." + string, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, "request Fail... code:" + string, Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

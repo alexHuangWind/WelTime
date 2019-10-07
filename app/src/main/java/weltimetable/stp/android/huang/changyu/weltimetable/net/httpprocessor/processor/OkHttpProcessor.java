@@ -2,6 +2,7 @@ package weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.pr
 
 
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 
@@ -30,12 +31,12 @@ import weltimetable.stp.android.huang.changyu.weltimetable.utils.SharedPrefsUtil
 
 public class OkHttpProcessor implements IhttpProcessor {
 
-    public static final String TAG ="OkHttpProcessor";
+    public static final String TAG = "OkHttpProcessor";
 
     private static OkHttpClient mOkHttpClient;
     private Handler mHandler;
 
-    public OkHttpProcessor(){
+    public OkHttpProcessor() {
         mOkHttpClient = new OkHttpClient();
         mHandler = new Handler();
     }
@@ -73,7 +74,7 @@ public class OkHttpProcessor implements IhttpProcessor {
                     });
                 }*/
                 boolean isSuccessful = response.isSuccessful();
-                postParams(callback,isSuccessful,response);
+                postParams(callback, isSuccessful, response);
             }
         });
     }
@@ -81,14 +82,15 @@ public class OkHttpProcessor implements IhttpProcessor {
 
     @Override
     public void post(String url, Map<String, Object> params, final ICallBack callback) {
+        boolean b =  Looper.myLooper() != Looper.getMainLooper();
         String token = "";
         RequestBody requestBody = appendBody(params);
         UserInfo uInfo = STPHelper.getInstance().getUserInfo();
-        if(uInfo != null){
+        if (uInfo != null) {
             token = uInfo.getToken();
         }
         Request request = new Request.Builder()
-                .addHeader("token",token)
+                .addHeader("token", token)
                 .post(requestBody)
                 .url(url)
                 .build();
@@ -118,59 +120,61 @@ public class OkHttpProcessor implements IhttpProcessor {
                     });
                 }*/
                 boolean isSuccessful = response.isSuccessful();
-                postParams(callback,isSuccessful,response);
+                postParams(callback, isSuccessful, response);
             }
         });
     }
 
     //传入参数，返回添加头信息
-    private RequestBody appendBody( Map<String, Object> params){
+    private RequestBody appendBody(Map<String, Object> params) {
         FormBody.Builder body = new FormBody.Builder();
-        if(params == null || params.isEmpty()){
+        if (params == null || params.isEmpty()) {
             return body.build();
         }
-        for(Map.Entry<String, Object> entry : params.entrySet()){
-                body.add(entry.getKey(),entry.getValue().toString());
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            body.add(entry.getKey(), entry.getValue().toString());
         }
 
         return body.build();
     }
 
 
-    private void postParams(final ICallBack callback, final boolean isSuccess, final Response response){
+    private void postParams(ICallBack callback, final boolean isSuccess, final Response response) {
         final String[] result = {""};
+        boolean b =  Looper.myLooper() != Looper.getMainLooper();
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                if(isSuccess == true){
+                boolean b =  Looper.myLooper() != Looper.getMainLooper();
+                if (isSuccess == true) {
                     try {
 //                        "[{\"result\":\"200\"}]"
                         result[0] = response.body().string();
-                        Headers headers =  response.networkResponse().request().headers();;
+                        Headers headers = response.networkResponse().request().headers();
                         Headers headers2 = response.headers();
                         String token = headers2.get("token");
-                        String token2 = headers.get("token");
-                        String firstName = headers.get("firstName");
-                        String studentID = headers.get("studentID");
-                        String major = headers.get("major");
-                        if(token2!=null&&firstName!=null&&studentID!=null&&major!=null){
+//                        String firstName = headers2.get("firstName");
+                        String studentID = headers2.get("studentID");
+                        String major = headers.get("majoy");
+                        if (token != null && studentID != null && !token.equals("") && !studentID.equals("")) {
                             UserInfo uinfo = new UserInfo();
-                            uinfo.setFamilyName(firstName);
                             uinfo.setStudentID(studentID);
-                            uinfo.setToken(token2);
-                            uinfo.setMajor(major);
+                            uinfo.setToken(token);
+                            uinfo.setMajor("IT");
                             Gson g = new Gson();
                             String userINfo = g.toJson(uinfo);
-                            SharedPrefsUtils.setStringPreference(STPHelper.getInstance().getContext(), SharedPrefsUtils.USERINFO,userINfo);
+                            SharedPrefsUtils.setStringPreference(STPHelper.getInstance().getContext(), SharedPrefsUtils.USERINFO, userINfo);
                         }
 
-                        Log.d("RRR",""+token+"  "+token2);
-
+                        Log.d("RRR", "" + token + "  " + token);
+                        callback.onSuccess(result[0]);
+                        return;
                     } catch (IOException e) {
                         e.printStackTrace();
+                        callback.onFailed(result[0]);
+                        return;
                     }
-                    callback.onSuccess(result[0]);
-                }else{
+                } else {
                     result[0] = response.message().toString();
                     callback.onFailed(result[0]);
                 }

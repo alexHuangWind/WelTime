@@ -6,12 +6,15 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.TimeTableInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.UserInfo;
 
@@ -31,6 +34,7 @@ public class STPHelper {
 
         return INSTANCE;
     }
+
     public static String getYear() {
         Calendar c = Calendar.getInstance();
         Date date = new Date();
@@ -42,6 +46,11 @@ public class STPHelper {
     public static String getSemaster() {
 
         return "1";
+    }
+
+    public static void saveCourseInfo(Context context, CourseInfo info) {
+        Gson g = new Gson();
+        SharedPrefsUtils.setStringPreference(context, SharedPrefsUtils.COURSEINFO, g.toJson(info));
     }
 
     public void setmContext(Context mContext) {
@@ -313,9 +322,33 @@ public class STPHelper {
     }
 
     public UserInfo getUserInfo() {
-        String st =  SharedPrefsUtils.getStringPreference(STPHelper.getInstance().getContext(), SharedPrefsUtils.USERINFO);
-        Gson g= new Gson();
-        UserInfo info =  g.fromJson(st,UserInfo.class);
+        String st = SharedPrefsUtils.getStringPreference(getContext(), SharedPrefsUtils.USERINFO);
+        Gson g = new Gson();
+        UserInfo info = g.fromJson(st, UserInfo.class);
         return info;
+    }
+
+    public static final String md5(final String s) {
+        final String MD5 = "MD5";
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance(MD5);
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

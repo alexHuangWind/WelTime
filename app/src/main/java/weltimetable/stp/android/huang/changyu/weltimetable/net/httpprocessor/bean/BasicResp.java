@@ -1,5 +1,7 @@
 package weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.bean;
 
-public class BasicResp {
+import java.util.ArrayList;
+
+public class BasicResp extends ArrayList {
 
 }

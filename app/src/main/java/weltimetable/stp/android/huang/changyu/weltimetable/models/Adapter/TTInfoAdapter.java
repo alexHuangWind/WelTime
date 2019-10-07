@@ -101,7 +101,7 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
             holder.cardView.setBackgroundResource(R.drawable.glassbreak);
         }
         if (checkBlockState(mTTInfo, myBlockInfo)) {
-            if(holder.subject.getText()!=null&& holder.subject.getText().equals(ConstentValue.UNASSIGNED)){
+            if (holder.subject.getText() != null && holder.subject.getText().equals(ConstentValue.UNASSIGNED)) {
                 holder.subject.setText("BLOCKED");
                 cardView.setEnabled(false);
                 cardView.setAlpha((float) 0.3);

@@ -2,6 +2,8 @@ package weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.ht
 
 
 
+import android.os.Looper;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +48,8 @@ public class HttpHelper implements IhttpProcessor {
     @Override
     public void post(String url, Map<String, Object> params, ICallBack callback) {
         //final String finalUrl = appendParams(url,params);
-		mIhttpProcessor.post(url,params,callback);
+        boolean b =  Looper.myLooper() != Looper.getMainLooper();
+        mIhttpProcessor.post(url,params,callback);
     }
 
 	//拼接url

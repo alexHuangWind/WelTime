@@ -2,18 +2,17 @@ package weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.be
 
 
 /**
- * 快递查询的bjavaean
+ * javabean for login
  */
 public class LoginBeanResp extends BasicResp {
 
-    public String userName;
-    public String Password;
+    private String result;
 
-    @Override
-    public String toString() {
-        return "LoginBean{" +
-                "userName='" + userName + '\'' +
-                ", Password='" + Password + '\'' +
-                '}';
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

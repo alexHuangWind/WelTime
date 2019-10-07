@@ -7,6 +7,7 @@ import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseEvent;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.STPController;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.TimeTableInfo;
+import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.CourseInfoListener;
 import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.http.HttpHelper;
 import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.processor.OkHttpProcessor;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.CalendarUtil;
@@ -71,6 +72,11 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
 //        initFireBase();
         STPHelper.getInstance().setmContext(TimeTableActivity.this.getApplicationContext());
         HttpHelper.init(new OkHttpProcessor());
+        SendLastweekCoureseData();
+    }
+
+    private void SendLastweekCoureseData() {
+        String data = "[{year:'2019',week:'26',studentID:'2182821',courseCode:'IT001',taskname:'DeadLine Reading',arrangetime:'4',finishtime:'3',finishdate:'2019-10-06 10:39:21'},{year:'2019',week:'26',studentID:'2182821',courseCode:'IT001',taskname:'DeadLine Reading',arrangetime:'4',finishtime:'2',finishdate:'2019-10-06 11:39:21'}] ";
     }
 
 
@@ -176,19 +182,24 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //                m_Text = input.getText().toString();
-                if (input.getText().toString().equals("12345")) {
+                if (input.getText().toString().equals("IT001")) {
                     SharedPreferences.Editor editor = getSharedPreferences(ConstentValue.TAG_prd, MODE_PRIVATE).edit();
                     editor.putBoolean("isCourseDownload", true);
                     editor.apply();
                 }
-                CourseInfo info = STPController.getInstance().getCourseInfo(input.getText().toString());
-                if (info != null) {
-                    insertCourseIntoTimeTable(info);
-                    DbHelper db = new DbHelper(TimeTableActivity.this);
-                    db.insertCourseInfo(info);
-                } else {
-                    STPHelper.toast(TimeTableActivity.this, "CODE NOT MATCT ANY COURSE");
-                }
+                STPController.getInstance().getCourseInfo(input.getText().toString(), new CourseInfoListener() {
+                    @Override
+                    public void methodToCallBack(CourseInfo info) {
+                        if (info != null) {
+                            insertCourseIntoTimeTable(info);
+                            DbHelper db = new DbHelper(TimeTableActivity.this);
+                            STPHelper.saveCourseInfo(TimeTableActivity.this,info);
+                            db.insertCourseInfo(info);
+                        } else {
+                            STPHelper.toast(TimeTableActivity.this, "CODE NOT MATCT ANY COURSE");
+                        }
+                    }
+                });
 
                 dialog.dismiss();
 
