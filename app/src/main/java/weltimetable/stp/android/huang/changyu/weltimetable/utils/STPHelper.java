@@ -52,6 +52,16 @@ public class STPHelper {
         Gson g = new Gson();
         SharedPrefsUtils.setStringPreference(context, SharedPrefsUtils.COURSEINFO, g.toJson(info));
     }
+    public static CourseInfo getCourseInfo(Context context) {
+        Gson g = new Gson();
+        String str = SharedPrefsUtils.getStringPreference(context, SharedPrefsUtils.COURSEINFO);
+        if(str==null){
+            return null;
+        }
+
+        CourseInfo info = g.fromJson(str,CourseInfo.class);
+        return info;
+    }
 
     public void setmContext(Context mContext) {
         STPHelper.mContext = mContext;

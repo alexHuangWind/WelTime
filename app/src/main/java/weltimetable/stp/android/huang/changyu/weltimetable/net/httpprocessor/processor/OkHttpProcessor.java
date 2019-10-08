@@ -1,6 +1,7 @@
 package weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.processor;
 
 
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -8,11 +9,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.Map;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -21,7 +19,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import weltimetable.stp.android.huang.changyu.weltimetable.components.activitys.TimeTableActivity;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.UserInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.interfaces.ICallBack;
 import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.interfaces.IhttpProcessor;
@@ -84,16 +81,23 @@ public class OkHttpProcessor implements IhttpProcessor {
     public void post(String url, Map<String, Object> params, final ICallBack callback) {
         boolean b =  Looper.myLooper() != Looper.getMainLooper();
         String token = "";
-        RequestBody requestBody = appendBody(params);
         UserInfo uInfo = STPHelper.getInstance().getUserInfo();
+        RequestBody requestBody = appendBody(params);
+        Request request;
         if (uInfo != null) {
             token = uInfo.getToken();
+             request = new Request.Builder()
+                    .addHeader("token", token)
+                    .post(requestBody)
+                    .url(url)
+                    .build();
+        }else{
+             request = new Request.Builder()
+                    .post(requestBody)
+                    .url(url)
+                    .build();
         }
-        Request request = new Request.Builder()
-                .addHeader("token", token)
-                .post(requestBody)
-                .url(url)
-                .build();
+
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -142,14 +146,15 @@ public class OkHttpProcessor implements IhttpProcessor {
     private void postParams(ICallBack callback, final boolean isSuccess, final Response response) {
         final String[] result = {""};
         boolean b =  Looper.myLooper() != Looper.getMainLooper();
-        mHandler.post(new Runnable() {
+//        mHandler.post();
+        Thread myThread = new Thread(){
             @Override
             public void run() {
+//                super.run();
                 boolean b =  Looper.myLooper() != Looper.getMainLooper();
                 if (isSuccess == true) {
                     try {
 //                        "[{\"result\":\"200\"}]"
-                        result[0] = response.body().string();
                         Headers headers = response.networkResponse().request().headers();
                         Headers headers2 = response.headers();
                         String token = headers2.get("token");
@@ -167,18 +172,28 @@ public class OkHttpProcessor implements IhttpProcessor {
                         }
 
                         Log.d("RRR", "" + token + "  " + token);
-                        callback.onSuccess(result[0]);
-                        return;
-                    } catch (IOException e) {
+                        callback.onSuccess(response.body().string());
+                        return ;
+                    } catch (Exception e) {
                         e.printStackTrace();
-                        callback.onFailed(result[0]);
-                        return;
+                        callback.onFailed("ERR");
+                        return ;
                     }
                 } else {
-                    result[0] = response.message().toString();
-                    callback.onFailed(result[0]);
+                    callback.onFailed(response.message().toString());
                 }
+
             }
-        });
-    }
-}
+        };
+//        myThread.run();
+        myThread.start();
+//        AsyncTask task = new AsyncTask() {
+//            @Override
+//            protected Object doInBackground(Object[] objects) {
+//
+//                return null;
+//            }
+//
+//    };
+
+}}

@@ -2,7 +2,7 @@ package weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.be
 
 
 /**
- * 快递查询的bjavaean
+ * Login req javaean
  */
 public class LoginBeanReq {
     public String userName;

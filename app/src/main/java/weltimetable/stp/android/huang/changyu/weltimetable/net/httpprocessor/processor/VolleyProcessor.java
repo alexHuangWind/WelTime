@@ -14,6 +14,7 @@ import java.util.Map;
 
 import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.interfaces.ICallBack;
 import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.interfaces.IhttpProcessor;
+import weltimetable.stp.android.huang.changyu.weltimetable.net.httprequest.manager.HeaderStringRequest;
 
 
 public class VolleyProcessor implements IhttpProcessor {
@@ -45,8 +46,9 @@ public class VolleyProcessor implements IhttpProcessor {
 
     @Override
     public void post(String url, Map<String, Object> params, final ICallBack callback) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+        StringRequest stringRequest = new HeaderStringRequest(Request.Method.POST,
                 url, new Response.Listener<String>() {
+
             @Override
             public void onResponse(String response) {
                 callback.onSuccess(response);

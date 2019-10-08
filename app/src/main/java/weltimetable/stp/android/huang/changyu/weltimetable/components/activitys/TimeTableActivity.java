@@ -7,9 +7,17 @@ import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseEvent;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.STPController;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.TimeTableInfo;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.UserInfo;
+import weltimetable.stp.android.huang.changyu.weltimetable.net.CallAPI;
 import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.CourseInfoListener;
+import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.bean.LoginBeanReq;
+import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.bean.LoginBeanResp;
+import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.bean.UploadInfoBean;
+import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.bean.upLoadInfoReq;
+import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.http.HttpCallback;
 import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.http.HttpHelper;
 import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.processor.OkHttpProcessor;
+import weltimetable.stp.android.huang.changyu.weltimetable.net.httpprocessor.processor.VolleyProcessor;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.CalendarUtil;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.ConstentValue;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.DbHelper;
@@ -24,6 +32,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -38,14 +47,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Random;
 
 
 /**
@@ -71,14 +88,69 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
         initCustomDialog();
 //        initFireBase();
         STPHelper.getInstance().setmContext(TimeTableActivity.this.getApplicationContext());
-        HttpHelper.init(new OkHttpProcessor());
-        SendLastweekCoureseData();
+//        HttpHelper.init(new VolleyProcessor(TimeTableActivity.this.getApplicationContext()));
     }
 
-    private void SendLastweekCoureseData() {
-        String data = "[{year:'2019',week:'26',studentID:'2182821',courseCode:'IT001',taskname:'DeadLine Reading',arrangetime:'4',finishtime:'3',finishdate:'2019-10-06 10:39:21'},{year:'2019',week:'26',studentID:'2182821',courseCode:'IT001',taskname:'DeadLine Reading',arrangetime:'4',finishtime:'2',finishdate:'2019-10-06 11:39:21'}] ";
+    private void SendLastweekCoureseData(UploadInfoBean ulbean) {
+        HashMap loginMap = new HashMap<>();
+        UserInfo uinfo = STPHelper.getInstance().getUserInfo();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd ",
+                Locale.getDefault());
+        Date d = new Date();
+        d.setTime(System.currentTimeMillis());
+        Random r = new Random();
+        ulbean.setFinishdate(sdf.format(d)+(r.nextInt(6)+10)+":00:00");
+        loginMap.put("year", ulbean.getYear());
+        loginMap.put("week", ulbean.getWeek());
+        loginMap.put("studentID", uinfo.getStudentID());
+        loginMap.put("courseCode", ulbean.getCourseCode());
+        loginMap.put("taskname", ulbean.getTaskname());
+        loginMap.put("finishtime", ulbean.getFinishtime());
+        loginMap.put("finishdate", ulbean.getFinishdate());
+        //SendLastweekCoureseData
+        HttpHelper.obtain().post(ConstentValue.BASIC_URL + "/PostUserTime",
+
+                loginMap, new HttpCallback<LoginBeanResp>() {
+                    @Override
+                    public void onSuccess(LoginBeanResp loginBean) {
+                        Log.d("alexTimeTable: ", loginBean.toString());
+                        if (loginBean.getResult() != null && !loginBean.getResult().equals("200")) {
+                            onFailed(loginBean.getResult());
+                            return;
+                        }
+                        SharedPrefsUtils.setStringPreference(TimeTableActivity.this, SharedPrefsUtils.LOGIN, loginBean.toString());
+                        SharedPrefsUtils.setBooleanPreference(TimeTableActivity.this, SharedPrefsUtils.LOGIN, true);
+                        TimeTableActivity.this.runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(TimeTableActivity.this, "success.." + loginBean.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+//                    email:'Andrew.Liu@it.weltec.ac.nz',
+//                    studentID:'1234',
+//                    passWord:'5dd7ad06e369442c814aaabd2d1a792b'
+
+                    @Override
+                    public void onFailed(String string) {
+                        Log.d("alexTimeTable: ", string);
+                        TimeTableActivity.this.runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(TimeTableActivity.this, "Request Failed... Code: " + string, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
     }
 
+    private void doUploadData() {
+        Gson g = new Gson();
+        UploadInfoBean ulbean1 = g.fromJson("{year:'2019',week:'26',studentID:'2182821',courseCode:'IT001',taskname:'DeadLine Reading',arrangetime:'4',finishtime:'3',finishdate:'2019-10-06 10:39:21'}", UploadInfoBean.class);
+        UploadInfoBean ulbean2 = g.fromJson("{year:'2019',week:'26',studentID:'2182821',courseCode:'IT001',taskname:'DeadLine Reading',arrangetime:'4',finishtime:'2',finishdate:'2019-10-06 11:39:21'}", UploadInfoBean.class);
+        SendLastweekCoureseData(ulbean1);
+        SendLastweekCoureseData(ulbean2);
+
+
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -126,7 +198,9 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
                 return true;
 
             case R.id.AddCourse:
-                STPHelper.toast(TimeTableActivity.this, " add course popwindow");
+//                STPHelper.toast(TimeTableActivity.this, " add course popwindow");
+//                doUploadData();
+                Test();
                 return true;
 
             case R.id.LoginOrLogoff:
@@ -146,6 +220,16 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
         }
+    }
+
+    private void Test() {
+        Gson g = new Gson();
+        String v = "{\"courseID\":\"IT001\",\"courseName\":\"ProjectManagement\",\"endWeekOfYear\":\"undefined\",\"events\":[{\"CourseCode\":\"undefined\",\"CourseName\":\"ProjectManagement\",\"EndWeek\":-1,\"EventName\":\"ProjectManagement\",\"Location\":\"Petone\",\"Major\":\"undefined\",\"StartWeek\":-1,\"TutorID\":\"undefined\",\"TutorName\":\"Robert\",\"dayOfWeek\":3,\"finalExam\":\"Aug 8, 2019 19:09:50\",\"isClass\":true,\"quantity\":2,\"startTime\":\"9:00\"},{\"CourseCode\":\"undefined\",\"CourseName\":\"ProjectManagement\",\"EndWeek\":-1,\"EventName\":\"DeadLine Reading \",\"Location\":\"undefined\",\"Major\":\"undefined\",\"StartWeek\":-1,\"TutorID\":\"undefined\",\"TutorName\":\"Robert\",\"dayOfWeek\":-1,\"finalExam\":\"Aug 8, 2019 19:09:50\",\"isClass\":false,\"quantity\":2,\"startTime\":\"undefined\"},{\"CourseCode\":\"undefined\",\"CourseName\":\"ProjectManagement\",\"EndWeek\":-1,\"EventName\":\"Reading Book\",\"Location\":\"undefined\",\"Major\":\"undefined\",\"StartWeek\":-1,\"TutorID\":\"undefined\",\"TutorName\":\"Robert\",\"dayOfWeek\":-1,\"finalExam\":\"Aug 8, 2019 19:09:50\",\"isClass\":false,\"quantity\":2,\"startTime\":\"undefined\"},{\"CourseCode\":\"undefined\",\"CourseName\":\"ProjectManagement\",\"EndWeek\":-1,\"EventName\":\"ProjectManagement\",\"Location\":\"Petone\",\"Major\":\"undefined\",\"StartWeek\":-1,\"TutorID\":\"undefined\",\"TutorName\":\"Robert\",\"dayOfWeek\":5,\"finalExam\":\"Aug 8, 2019 19:09:50\",\"isClass\":true,\"quantity\":2,\"startTime\":\"11:00\"}],\"quantity\":-1,\"tutor\":\"Robert\"}";
+        CourseInfo info = g.fromJson(v,CourseInfo.class);
+        insertCourseIntoTimeTable(info);
+        DbHelper db = new DbHelper(TimeTableActivity.this);
+        STPHelper.saveCourseInfo(TimeTableActivity.this, info);
+        db.insertCourseInfo(info);
     }
 
     private void initView() {
@@ -187,20 +271,24 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
                     editor.putBoolean("isCourseDownload", true);
                     editor.apply();
                 }
-                STPController.getInstance().getCourseInfo(input.getText().toString(), new CourseInfoListener() {
+               CourseInfo defaultInfo =  STPController.getInstance().getCourseInfo(input.getText().toString(), new CourseInfoListener() {
                     @Override
                     public void methodToCallBack(CourseInfo info) {
                         if (info != null) {
+                            Gson g = new Gson();
+                            String res = g.toJson(info);
+
                             insertCourseIntoTimeTable(info);
                             DbHelper db = new DbHelper(TimeTableActivity.this);
-                            STPHelper.saveCourseInfo(TimeTableActivity.this,info);
+                            STPHelper.saveCourseInfo(TimeTableActivity.this, info);
                             db.insertCourseInfo(info);
+
+
                         } else {
                             STPHelper.toast(TimeTableActivity.this, "CODE NOT MATCT ANY COURSE");
                         }
                     }
                 });
-
                 dialog.dismiss();
 
             }
@@ -358,4 +446,5 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
             LoginItem.setTitle("Login");
         }
     }
+
 }

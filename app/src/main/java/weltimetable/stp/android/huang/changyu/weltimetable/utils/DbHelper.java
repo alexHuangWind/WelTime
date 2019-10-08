@@ -301,19 +301,20 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public void insertCourseInfo(CourseInfo cinfo) {
-        ArrayList<CourseEvent> eventlist = cinfo.getEvents();
-        for (CourseEvent event : eventlist) {
+        for (CourseEvent event : cinfo.getEvents()) {
             Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DAY_OF_WEEK, event.getDayOfWeek());
+            cal.set(Calendar.DAY_OF_WEEK, event.getDayOfWeek());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String date = sdf.format(cal.getTime());
             if (event.isClass()) {
                 TimeTableInfo info = STPHelper.getUnAssignedItem();
-                info.setFragment(STPHelper.String2Fragment(event.getDayOfWeek() + ""));
+                info.setFragment(STPHelper.String2Fragment(event.getDayOfWeek()-1 + ""));
                 info.setFromTime(event.getStartTime());
                 info.setItemID(date + ":" + event.getStartTime());
                 info.setDate(date);
                 info.setSubject(event.getEventName());
+                info.setTeacher(event.getTutorName());
+                info.setRoom(event.getLocation());
                 long time = STPHelper.getTimeMillisByTiem(event.getStartTime() + ":" + "00 " + date);
                 info.setFromtimeMillis(time);
                 insertTimeTableInfo(info);
