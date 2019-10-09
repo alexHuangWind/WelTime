@@ -25,7 +25,7 @@ public class STPHelper {
     private static Context mContext;
     private static STPHelper INSTANCE;
 
-    private STPHelper() {
+    STPHelper() {
     }
 
     public static STPHelper getInstance() {
