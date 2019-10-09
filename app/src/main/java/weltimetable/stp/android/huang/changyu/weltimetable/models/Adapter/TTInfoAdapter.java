@@ -3,11 +3,13 @@ package weltimetable.stp.android.huang.changyu.weltimetable.models.Adapter;
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
 import weltimetable.stp.android.huang.changyu.weltimetable.components.dialog.TaskPickerDialog;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseEvent;
+import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.TimeTableInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.AlertDialogsHelper;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.ConstentValue;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.DbHelper;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.STPHelper;
+import weltimetable.stp.android.huang.changyu.weltimetable.utils.SharedPrefsUtils;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
@@ -166,10 +168,15 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
             ////TODO setListItems
             @Override
             public void onClick(View view) {
-                SharedPreferences prefs = mActivity.getSharedPreferences(ConstentValue.TAG_prd, mActivity.MODE_PRIVATE);
-                Boolean isCourseDownload = prefs.getBoolean("isCourseDownload", false);//"No name defined" is the default value.
-                if (!isCourseDownload) {
-                    STPHelper.toast(mActivity, "Please Add Course Code First!");
+//                SharedPreferences prefs = mActivity.getSharedPreferences(SharedPreferences.TAG_prd, mActivity.MODE_PRIVATE);
+                CourseInfo asinfo = STPHelper.getAssmtInfo(mActivity);
+                Boolean Task2choose = false;
+                if(asinfo!=null&&asinfo.getEvents().size()!=0){
+                    Task2choose=true;
+                }
+//                Boolean isCourseDownload = prefs.getBoolean("isCourseDownload", false);//"No name defined" is the default value.
+                if (!Task2choose) {
+                    STPHelper.toast(mActivity, "ALL DONE");
                     return;
                 }
                 TaskPickerDialog newFragment = new TaskPickerDialog();

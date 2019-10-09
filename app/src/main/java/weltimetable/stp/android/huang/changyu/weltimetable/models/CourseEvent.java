@@ -11,7 +11,7 @@ public class CourseEvent {
     private int dayOfWeek = -1;
     private String Location = "undefined";
     private boolean isClass = true;
-    private Date finalExam = new Date();
+    private String finalExam = "";
 //    private CourseInfo parent;
 
     private String CourseCode = "undefined";
@@ -85,11 +85,11 @@ public class CourseEvent {
         return isClass;
     }
 
-    public Date getFinalExam() {
+    public String getFinalExam() {
         return finalExam;
     }
 
-    public void setFinalExam(Date finalExam) {
+    public void setFinalExam(String finalExam) {
         this.finalExam = finalExam;
     }
 

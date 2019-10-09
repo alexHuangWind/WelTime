@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseEvent;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.TimeTableInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.UserInfo;
@@ -44,10 +45,22 @@ public class STPHelper {
     }
 
     public static String getSemaster() {
-
         return "1";
     }
-
+    public static void saveAssmtInfo(Context context, CourseInfo info) {
+        Gson g = new Gson();
+        info.setSaveDate(Integer.parseInt(getWeekofyear()));
+        SharedPrefsUtils.setStringPreference(context, SharedPrefsUtils.ASSIGNMENTS, g.toJson(info));
+    }
+    public static CourseInfo getAssmtInfo(Context context) {
+        Gson g = new Gson();
+        String str = SharedPrefsUtils.getStringPreference(context, SharedPrefsUtils.ASSIGNMENTS);
+        if(str==null){
+            return null;
+        }
+        CourseInfo info = g.fromJson(str,CourseInfo.class);
+        return info;
+    }
     public static void saveCourseInfo(Context context, CourseInfo info) {
         Gson g = new Gson();
         SharedPrefsUtils.setStringPreference(context, SharedPrefsUtils.COURSEINFO, g.toJson(info));
@@ -361,4 +374,19 @@ public class STPHelper {
         }
         return "";
     }
+    public static void parseCourseingoSaveAssinfo(Context context, CourseInfo info) {
+        CourseInfo Assignmentinfo = new CourseInfo();
+        ArrayList<CourseEvent> el = new ArrayList<>();
+        for (CourseEvent event : info.getEvents()) {
+            if (!event.getIsClass()) {
+                TimeTableInfo ttinfo = new TimeTableInfo();
+                ttinfo.setItemID(event.getStartTime() + STPHelper.getDateof(event.getDayOfWeek()));
+                el.add(event);
+            }
+        }
+        Assignmentinfo.setEvents(el);
+        STPHelper.saveAssmtInfo(context,Assignmentinfo);
+
+    }
+
 }

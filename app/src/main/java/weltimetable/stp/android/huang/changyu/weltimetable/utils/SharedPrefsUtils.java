@@ -12,6 +12,7 @@ final public class SharedPrefsUtils {
     public static final String LOGIN = "login";
     public static final String USERINFO = "userinfo";
     public static final String COURSEINFO = "courseinfo";
+    public static final String ASSIGNMENTS = "assignments";
 
     private SharedPrefsUtils() {}
 

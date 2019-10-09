@@ -55,6 +55,16 @@ public class CourseInfoResp {
     private int StartWeek;
     private int EndWeek;
     private String BreakWeek;
+
+    public String getFinalExam() {
+        return finalExam;
+    }
+
+    public void setFinalExam(String finalExam) {
+        this.finalExam = finalExam;
+    }
+
+    private String finalExam;
     private String ClassRoom;
     private String StartTime;
     private int Duration;

@@ -14,7 +14,6 @@ import java.util.HashMap;
 
 import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseEvent;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.CourseInfo;
-import weltimetable.stp.android.huang.changyu.weltimetable.models.STPController;
 import weltimetable.stp.android.huang.changyu.weltimetable.models.TimeTableInfo;
 import weltimetable.stp.android.huang.changyu.weltimetable.utils.STPHelper;
 
@@ -23,6 +22,7 @@ public class TaskPickerDialog extends DialogFragment {
 
     private static String[] itemdata = null;
     private static ListView listView = null;
+    private CourseInfo assignmentInfo;
     private CourseInfo courseInfo;
     private TimeTableInfo mttinfo;
     private HashMap<String, CourseEvent> eventMap = new HashMap<>();
@@ -33,10 +33,16 @@ public class TaskPickerDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        courseInfo = STPController.getInstance().getCourseInfo();
+        //update assignment info eachweek
+        assignmentInfo = STPHelper.getAssmtInfo(STPHelper.getInstance().getContext());
+        courseInfo = STPHelper.getCourseInfo(STPHelper.getInstance().getContext());
+        if (assignmentInfo!=null&&Integer.parseInt(STPHelper.getWeekofyear()) != assignmentInfo.getSaveDate()) {
+            STPHelper.parseCourseingoSaveAssinfo(STPHelper.getInstance().getContext(), courseInfo);
+            assignmentInfo = STPHelper.getAssmtInfo(STPHelper.getInstance().getContext());
+        }
         final NumberPicker numberPicker = new NumberPicker(getActivity());
-        for (int i = 0; i < courseInfo.getEvents().size(); i++) {
-            CourseEvent event = courseInfo.getEvents().get(i);
+        for (int i = 0; i < assignmentInfo.getEvents().size(); i++) {
+            CourseEvent event = assignmentInfo.getEvents().get(i);
             if (!event.getIsClass()) {
 //                String title = event.getParent().getCourseName() + "-" + event.getEventName() + " * " + event.getQuantity();
                 String title = event.getCourseName() + "-" + event.getEventName() + " * " + event.getQuantity();
@@ -50,7 +56,7 @@ public class TaskPickerDialog extends DialogFragment {
             i++;
         }
         numberPicker.setMinValue(0);
-        if(eventMap.size()<=0){
+        if (eventMap.size() <= 0) {
             return null;
         }
         numberPicker.setMaxValue(eventMap.size() - 1);
@@ -65,14 +71,11 @@ public class TaskPickerDialog extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 valueChangeListener.onValueChange(numberPicker,
                         numberPicker.getValue(), numberPicker.getValue());
-                ArrayList<CourseEvent> eventlist = courseInfo.getEvents();
-                    String s = "which = "+which;
-                   CourseEvent selectedEvent =  eventMap.get(itemdata[numberPicker.getValue()]);
-                int q = selectedEvent.getQuantity()-1;
-                selectedEvent.setQuantity(q);
-                if(q <=0){
-                    courseInfo.removeEvent(selectedEvent);
-                }
+                ArrayList<CourseEvent> eventlist = assignmentInfo.getEvents();
+                String s = "which = " + which;
+                CourseEvent selectedEvent = eventMap.get(itemdata[numberPicker.getValue()]);
+                updateEvent(selectedEvent);
+
                 dialog.dismiss();
             }
         });
@@ -88,6 +91,22 @@ public class TaskPickerDialog extends DialogFragment {
 
         builder.setView(numberPicker);
         return builder.create();
+    }
+
+    private void updateEvent(CourseEvent selectedEvent) {
+        CourseInfo info = STPHelper.getAssmtInfo(STPHelper.getInstance().getContext());
+        CourseEvent resEvent = null;
+        for (CourseEvent event : info.getEvents()) {
+            if (event.getEventName().equals(selectedEvent.getEventName())) {
+                event.setQuantity(event.getQuantity() - 1);
+                resEvent = event;
+
+            }
+        }
+        if (resEvent.getQuantity() <= 0) {
+            info.removeEvent(resEvent);
+        }
+        STPHelper.saveAssmtInfo(STPHelper.getInstance().getContext(), info);
     }
 
 

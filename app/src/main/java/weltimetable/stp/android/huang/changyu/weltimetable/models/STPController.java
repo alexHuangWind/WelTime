@@ -9,6 +9,7 @@ import com.google.gson.internal.LinkedTreeMap;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -164,7 +165,7 @@ public class STPController {
 
     private CourseInfo getDefaultInfo() {
         Gson g = new Gson();
-        String v = "{\"courseID\":\"IT001\",\"courseName\":\"ProjectManagement\",\"endWeekOfYear\":\"undefined\",\"events\":[{\"CourseCode\":\"undefined\",\"CourseName\":\"ProjectManagement\",\"EndWeek\":-1,\"EventName\":\"ProjectManagement\",\"Location\":\"Petone\",\"Major\":\"undefined\",\"StartWeek\":-1,\"TutorID\":\"undefined\",\"TutorName\":\"Robert\",\"dayOfWeek\":3,\"finalExam\":\"Aug 8, 2019 19:09:50\",\"isClass\":true,\"quantity\":2,\"startTime\":\"9:00\"},{\"CourseCode\":\"undefined\",\"CourseName\":\"ProjectManagement\",\"EndWeek\":-1,\"EventName\":\"DeadLine Reading \",\"Location\":\"undefined\",\"Major\":\"undefined\",\"StartWeek\":-1,\"TutorID\":\"undefined\",\"TutorName\":\"Robert\",\"dayOfWeek\":-1,\"finalExam\":\"Aug 8, 2019 19:09:50\",\"isClass\":false,\"quantity\":2,\"startTime\":\"undefined\"},{\"CourseCode\":\"undefined\",\"CourseName\":\"ProjectManagement\",\"EndWeek\":-1,\"EventName\":\"Reading Book\",\"Location\":\"undefined\",\"Major\":\"undefined\",\"StartWeek\":-1,\"TutorID\":\"undefined\",\"TutorName\":\"Robert\",\"dayOfWeek\":-1,\"finalExam\":\"Aug 8, 2019 19:09:50\",\"isClass\":false,\"quantity\":2,\"startTime\":\"undefined\"},{\"CourseCode\":\"undefined\",\"CourseName\":\"ProjectManagement\",\"EndWeek\":-1,\"EventName\":\"ProjectManagement\",\"Location\":\"Petone\",\"Major\":\"undefined\",\"StartWeek\":-1,\"TutorID\":\"undefined\",\"TutorName\":\"Robert\",\"dayOfWeek\":5,\"finalExam\":\"Aug 8, 2019 19:09:50\",\"isClass\":true,\"quantity\":2,\"startTime\":\"11:00\"}],\"quantity\":-1,\"tutor\":\"Robert\"}";
+        String v = "{\"courseID\":\"IT001\",\"finalExam\":\"Aug 8, 2019 19:09:50\",\"courseName\":\"ProjectManagement\",\"endWeekOfYear\":\"undefined\",\"events\":[{\"CourseCode\":\"undefined\",\"CourseName\":\"ProjectManagement\",\"EndWeek\":-1,\"EventName\":\"ProjectManagement\",\"Location\":\"Petone\",\"Major\":\"undefined\",\"StartWeek\":-1,\"TutorID\":\"undefined\",\"TutorName\":\"Robert\",\"dayOfWeek\":3,\"finalExam\":\"Aug 8, 2019 19:09:50\",\"isClass\":true,\"quantity\":2,\"startTime\":\"9:00\"},{\"CourseCode\":\"undefined\",\"CourseName\":\"ProjectManagement\",\"EndWeek\":-1,\"EventName\":\"DeadLine Reading \",\"Location\":\"undefined\",\"Major\":\"undefined\",\"StartWeek\":-1,\"TutorID\":\"undefined\",\"TutorName\":\"Robert\",\"dayOfWeek\":-1,\"finalExam\":\"Aug 8, 2019 19:09:50\",\"isClass\":false,\"quantity\":2,\"startTime\":\"undefined\"},{\"CourseCode\":\"undefined\",\"CourseName\":\"ProjectManagement\",\"EndWeek\":-1,\"EventName\":\"Reading Book\",\"Location\":\"undefined\",\"Major\":\"undefined\",\"StartWeek\":-1,\"TutorID\":\"undefined\",\"TutorName\":\"Robert\",\"dayOfWeek\":-1,\"finalExam\":\"Aug 8, 2019 19:09:50\",\"isClass\":false,\"quantity\":2,\"startTime\":\"undefined\"},{\"CourseCode\":\"undefined\",\"CourseName\":\"ProjectManagement\",\"EndWeek\":-1,\"EventName\":\"ProjectManagement\",\"Location\":\"Petone\",\"Major\":\"undefined\",\"StartWeek\":-1,\"TutorID\":\"undefined\",\"TutorName\":\"Robert\",\"dayOfWeek\":5,\"finalExam\":\"Aug 8, 2019 19:09:50\",\"isClass\":true,\"quantity\":2,\"startTime\":\"11:00\"}],\"quantity\":-1,\"tutor\":\"Robert\"}";
         v=v.replaceAll("8:00","08:00");
         v=v.replaceAll("9:00","09:00");
         CourseInfo info2 = g.fromJson(v,CourseInfo.class);
@@ -182,6 +183,7 @@ public class STPController {
             info.setCourseName(ciresp.getCourseName());
             info.setTutor(ciresp.getTutorName());
             info.setEvents(eventlist);
+            info.setFinalExam(ciresp.getFinalExam());
             CourseEvent classInfo = new CourseEvent(info);
             classInfo.setEventName(ciresp.getCourseName());
             classInfo.setLocation(ciresp.getLocation());
@@ -191,6 +193,7 @@ public class STPController {
             classInfo.setCourseName(ciresp.getCourseName());
             classInfo.setTutorName(ciresp.getTutorName());
             classInfo.setClass(true);
+            classInfo.setFinalExam(ciresp.getFinalExam());
             eventlist.add(classInfo);
             if (i == 0) {
                 if (!ciresp.getAssignment1Name().equals(" ")) {
@@ -253,6 +256,7 @@ public class STPController {
         cr.setLocation(ltm.get("Location") + "");
 //        cr.setTutorID(Integer.parseInt(ltm.get("TutorID")+""));
         cr.setTutorName(ltm.get("TutorName") + "");
+        cr.setFinalExam(ltm.get("finalExam") + "");
         cr.setStartWeek((int) Double.parseDouble((ltm.get("StartWeek") + "")));
         cr.setEndWeek((int) Double.parseDouble(ltm.get("EndWeek") + ""));
         cr.setStartTime(ltm.get("StartTime") + "");

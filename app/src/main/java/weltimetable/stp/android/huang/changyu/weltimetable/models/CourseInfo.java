@@ -7,6 +7,28 @@ public class CourseInfo {
     private String courseID = "undefined";
     private String tutor = "undefined";
     private String endWeekOfYear = "undefined";
+
+    public String getFinalExam() {
+        return finalExam;
+    }
+
+    public void setFinalExam(String finalExam) {
+        this.finalExam = finalExam;
+    }
+
+    private String finalExam = "undefined";
+
+    public long getSaveDate() {
+        return saveDate;
+    }
+
+    public void setSaveDate(int saveDate) {
+        this.saveDate = saveDate;
+    }
+
+
+    private int saveDate = -1;
+
     private ArrayList<CourseEvent> events = new ArrayList<>();
     private int quantity = -1;
 
@@ -62,4 +84,7 @@ public class CourseInfo {
     public void removeEvent(CourseEvent selectedEvent) {
         events.remove(selectedEvent);
     }
+
+
+
 }
