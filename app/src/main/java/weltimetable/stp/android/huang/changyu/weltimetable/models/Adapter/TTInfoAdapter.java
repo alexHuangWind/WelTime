@@ -169,6 +169,7 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
             @Override
             public void onClick(View view) {
 //                SharedPreferences prefs = mActivity.getSharedPreferences(SharedPreferences.TAG_prd, mActivity.MODE_PRIVATE);
+                refreshAssignments();
                 CourseInfo asinfo = STPHelper.getAssmtInfo(mActivity);
                 Boolean Task2choose = false;
                 if(asinfo!=null&&asinfo.getEvents().size()!=0){
@@ -215,6 +216,14 @@ public class TTInfoAdapter extends ArrayAdapter<TimeTableInfo> {
         });
         hidePopUpMenu(holder);
         return cardView;
+    }
+
+    private void refreshAssignments() {
+        CourseInfo assignmentInfo = STPHelper.getAssmtInfo(STPHelper.getInstance().getContext());
+        CourseInfo  courseInfo = STPHelper.getCourseInfo(STPHelper.getInstance().getContext());
+        if (assignmentInfo!=null&&Integer.parseInt(STPHelper.getWeekofyear()) != assignmentInfo.getSaveDate()) {
+            STPHelper.parseCourseingoSaveAssinfo(STPHelper.getInstance().getContext(), courseInfo);
+        }
     }
 
     private boolean checkBlockState(TimeTableInfo mTTInfo, HashMap<Integer, ArrayList<Integer>> myBlockInfo) {

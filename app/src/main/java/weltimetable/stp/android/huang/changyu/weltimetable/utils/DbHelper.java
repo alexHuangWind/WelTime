@@ -15,6 +15,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -302,22 +303,34 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void insertCourseInfo(CourseInfo cinfo) {
         for (CourseEvent event : cinfo.getEvents()) {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.DAY_OF_WEEK, event.getDayOfWeek());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String date = sdf.format(cal.getTime());
             if (event.isClass()) {
-                TimeTableInfo info = STPHelper.getUnAssignedItem();
-                info.setFragment(STPHelper.String2Fragment(event.getDayOfWeek()-1 + ""));
-                info.setFromTime(event.getStartTime());
-                info.setItemID(date + ":" + event.getStartTime());
-                info.setDate(date);
-                info.setSubject(event.getEventName());
-                info.setTeacher(event.getTutorName());
-                info.setRoom(event.getLocation());
-                long time = STPHelper.getTimeMillisByTiem(event.getStartTime() + ":" + "00 " + date);
-                info.setFromtimeMillis(time);
-                insertTimeTableInfo(info);
+                Calendar cal1 = Calendar.getInstance();
+                if(event.getStartWeek()<cal1.get(Calendar.WEEK_OF_YEAR)){
+                    event.setStartWeek(cal1.get(Calendar.WEEK_OF_YEAR));
+                    cal1=null;
+                }
+                for (int j = event.getStartWeek(); j <= event.getEndWeek(); j++) {
+                    Calendar cal = Calendar.getInstance();
+                    //get the date of class in each week
+                    cal.add(Calendar.WEEK_OF_YEAR,j-event.getStartWeek());
+                    cal.add(Calendar.DAY_OF_WEEK, event.getDayOfWeek()-cal.get(Calendar.DAY_OF_WEEK)+1);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date d = cal.getTime();
+                    String date = sdf.format(d);
+                    TimeTableInfo info = STPHelper.getUnAssignedItem();
+                    info.setFragment(STPHelper.String2Fragment(event.getDayOfWeek() + ""));
+                    info.setFromTime(event.getStartTime());
+                    info.setItemID(date + ":" + event.getStartTime());
+                    info.setDate(date);
+                    info.setWeekofyear(j+"");
+                    info.setSubject(event.getEventName());
+                    info.setTeacher(event.getTutorName());
+                    info.setRoom(event.getLocation());
+                    long time = STPHelper.getTimeMillisByTiem(event.getStartTime() + ":" + "00 " + date);
+                    info.setFromtimeMillis(time);
+                    insertTimeTableInfo(info);
+                    cal=null;
+                }
             }
         }
     }
