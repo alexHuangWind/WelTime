@@ -468,4 +468,33 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         return TimeTableInfoList;
     }
+
+    /**
+     * Methods for getTimetableinfo of this week
+     **/
+    public ArrayList<TimeTableInfo> getTTinfoOfThisWeek() {
+        SQLiteDatabase db = null;
+        ArrayList<TimeTableInfo> TimeTableInfoList = new ArrayList<>();
+
+        Cursor cursor2 = null;
+        ArrayList<String> list = new ArrayList<>();
+
+        try {
+            db = this.getWritableDatabase();
+            cursor2 = db.rawQuery("SELECT * FROM ( SELECT * FROM " + TIMETABLE + " ORDER BY " + TimeTableInfo_FROM_TIME + " ) WHERE " + TimeTableInfo_WOY + " = '" + STPHelper.getWeekofyear() + "'", null);
+
+            while (cursor2.moveToNext()) {
+                TimeTableInfoList.add(setTimeTableInfo(cursor2));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            if (cursor2 != null) {
+                cursor2.close();
+            }
+            db.close();
+        }
+        return TimeTableInfoList;
+    }
 }
