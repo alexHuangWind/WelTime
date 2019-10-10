@@ -24,9 +24,9 @@
             android:icon="@drawable/moodleweltec"
             android:title="@string/Sync" />
         <item
-            android:id="@+id/AddCourse"
+            android:id="@+id/UpLoad"
             android:icon="@drawable/moodleweltec"
-            android:title="@string/add_Course" />
+            android:title="@string/upload" />
         <item
             android:id="@+id/LoginOrLogoff"
             android:icon="@drawable/moodleweltec"

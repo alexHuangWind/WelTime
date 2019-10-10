@@ -34,7 +34,7 @@
     <string name="moodle_website">moodle website</string>
     <string name="moodle_Signin">Login</string>
     <string name="login">Login</string>
-    <string name="add_Course">AddCourse</string>
+    <string name="upload">Upload</string>
     <string name="weekly_report">Weekly Report</string>
     <string name="Sync">Sync(calendar)</string>
     <string name="weltec_website">https://moodle.weltec.ac.nz/login/index.php</string>

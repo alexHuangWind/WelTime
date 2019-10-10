@@ -168,11 +168,12 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
                 }
                 return true;
             case R.id.report:
-                String Report = "https://weltec.ac.nz";
-                if (!TextUtils.isEmpty(Report)) {
-                    BrowserUtil.openUrlInChromeCustomTab(getApplicationContext(), Report);
+                String Report = "http://127.0.0.1:8003/ReportServer/Pages/ReportViewer.aspx?%2fStudentTimePlanner%2fGetTimeTable&rs:Command=Render&studentID=";
+                UserInfo userInfo = STPHelper.getInstance().getUserInfo();
+                if (!TextUtils.isEmpty(Report)&&userInfo!=null&&userInfo.getStudentID()!=null) {
+                    BrowserUtil.openUrlInChromeCustomTab(getApplicationContext(), Report+userInfo.getStudentID());
                 } else {
-                    Snackbar.make(navigationView, R.string.school_website_snackbar, Snackbar.LENGTH_SHORT).show();
+                    STPHelper.toast(TimeTableActivity.this,"ERR");
                 }
                 return true;
             case R.id.sync:
@@ -192,7 +193,7 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
                 }
                 return true;
 
-            case R.id.AddCourse:
+            case R.id.UpLoad:
 //                STPHelper.toast(TimeTableActivity.this, " add course popwindow");
 //                doUploadData();
                 Test();
@@ -268,8 +269,6 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
                             DbHelper db = new DbHelper(TimeTableActivity.this);
                             STPHelper.saveCourseInfo(TimeTableActivity.this, info);
                             db.insertCourseInfo(info);
-
-
                         } else {
                             STPHelper.toast(TimeTableActivity.this, "CODE NOT MATCT ANY COURSE");
                         }
