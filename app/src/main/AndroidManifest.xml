@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-
     package="weltimetable.stp.android.huang.changyu.weltimetable">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -9,16 +8,20 @@
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <application
-        android:allowBackup="true"
         android:name=".components.Myapplication"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ReportActivity"
+            android:label="@string/title_activity_report"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".components.activitys.NotificationActivity"
             android:label="NotificationActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".components.activitys.RegisterActivity"
             android:label="@string/title_activity_register"

@@ -1,5 +1,6 @@
 package weltimetable.stp.android.huang.changyu.weltimetable.components.activitys;
 
+import weltimetable.stp.android.huang.changyu.weltimetable.ReportActivity;
 import weltimetable.stp.android.huang.changyu.weltimetable.components.fragments.FragmentFactory;
 import weltimetable.stp.android.huang.changyu.weltimetable.components.ui.login.LoginActivity;
 import weltimetable.stp.android.huang.changyu.weltimetable.R;
@@ -170,8 +171,9 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
             case R.id.report:
                 String Report = "http://127.0.0.1:8003/ReportServer/Pages/ReportViewer.aspx?%2fStudentTimePlanner%2fGetTimeTable&rs:Command=Render&studentID=";
                 UserInfo userInfo = STPHelper.getInstance().getUserInfo();
+                STPHelper.startActivity(TimeTableActivity.this, ReportActivity.class);
                 if (!TextUtils.isEmpty(Report)&&userInfo!=null&&userInfo.getStudentID()!=null) {
-                    BrowserUtil.openUrlInChromeCustomTab(getApplicationContext(), Report+userInfo.getStudentID());
+//                    BrowserUtil.openUrlInChromeCustomTab(getApplicationContext(), Report+userInfo.getStudentID());
                 } else {
                     STPHelper.toast(TimeTableActivity.this,"ERR");
                 }
@@ -195,8 +197,8 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
 
             case R.id.UpLoad:
 //                STPHelper.toast(TimeTableActivity.this, " add course popwindow");
-//                doUploadData();
-                Test();
+                doUploadData();
+//                Test();
                 return true;
 
             case R.id.LoginOrLogoff:
@@ -415,7 +417,7 @@ public class TimeTableActivity extends AppCompatActivity implements NavigationVi
     @Override
     protected void onResume() {
         super.onResume();
-        doUploadData();
+//        doUploadData();
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         if(day!=date){

@@ -47,6 +47,9 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.google.firebase:firebase-database:16.1.0'
     testImplementation 'junit:junit:4.12'
+    testImplementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
+    implementation 'com.github.lecho:hellocharts-android:v1.5.8'
+
     testImplementation "org.mockito:mockito-core:2.8.9"
     androidTestImplementation "org.mockito:mockito-android:2.8.9"
 
