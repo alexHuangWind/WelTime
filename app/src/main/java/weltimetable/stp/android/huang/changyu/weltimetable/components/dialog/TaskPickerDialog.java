@@ -91,6 +91,7 @@ public class TaskPickerDialog extends DialogFragment {
         DbHelper db = new DbHelper(STPHelper.getInstance().getContext());
         ArrayList<TimeTableInfo> ttinfos = db.getTTinfoOfThisWeek();
         CourseInfo info = STPHelper.getAssmtInfo(STPHelper.getInstance().getContext());
+        ArrayList<CourseEvent> events = new ArrayList<>();
         for (CourseEvent event: info.getEvents()) {
             for(int i = 0;i<info.getEvents().size();i++){
             TimeTableInfo timeTableInfo = getRandomAvailableTime(ttinfos);
@@ -101,8 +102,13 @@ public class TaskPickerDialog extends DialogFragment {
             timeTableInfo.setColor(Color.parseColor("#FBFBFB"));
             timeTableInfo.setDuration("01 Hour");
             db.updateTimeTableInfo(timeTableInfo);
+            events.add(event);
             }
         }
+        for (CourseEvent event: events) {
+            info.removeEvent(event);
+        }
+        STPHelper.saveAssmtInfo(STPHelper.getInstance().getContext(),info);
     }
 
     private TimeTableInfo getRandomAvailableTime(ArrayList<TimeTableInfo> ttinfos) {
